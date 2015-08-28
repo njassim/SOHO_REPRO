@@ -1,0 +1,1510 @@
+body {
+    font-family: Arial;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    line-height: auto;
+    color: #5c5c5c;
+    overflow-x: hidden;
+}
+#header {
+    min-height: 60px;
+    width:auto;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 22px;
+}
+#footer {
+    width: auto;
+    border-top:  1px solid #ccc;
+    margin-top: 20px;
+}
+a {
+    font-weight: bold;
+    color:#1833CC;
+}
+a:hover {
+    color: #CD6501;
+}
+.loadGrid td a {
+    color:#CC0000 !important;
+}
+.loadGrid td a:hover {
+    color:#CD6501 !important;
+}
+#footer {
+    padding-left: 30px;
+}
+#footer a {
+    font-weight: normal;
+}
+#footer ul {
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+}
+#footer p {
+    margin-left: 10px;
+    color: #666;
+    margin-top: 3px;
+}
+#footer ul li {
+    list-style: none;
+    float: left;
+    margin-right: 15px;
+}
+#contentHolder {
+    padding:10px;
+    width: auto;
+    margin-left: 30px;
+}
+#header .logo {
+    height:40px;
+    margin-top:10px;
+    margin-left:43px;
+}
+#registrationWapper, #loginWapper, #profileWapper, #orderWapper, .orderWapper {
+    background-color: #fff;
+    width:auto;
+    min-height: 233px;
+    float: left;
+}
+#orderWapper, .orderWapper {
+    width:100%;    
+}
+.orderWapper {
+    padding: 20px;
+}
+.orderWapper h2, .orderWapper h3 {
+    padding: 0;
+    margin: 0;
+    font-weight: normal;
+}
+.orderWapper h2 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.orderWapper h3 {
+    font-weight: bold;
+}
+#profileWapper {
+    min-height:300px;
+}
+#registrationWapper {
+    padding: 5px;
+}
+#loginHelpText h2 {
+    font-weight: normal;
+}
+#loginHelpText h3 {
+    margin-bottom: -10px;
+}
+#loginHelpText {
+    float: right;
+    margin-left: 30px;
+    width:297px;
+}
+#loginWapper h2 {
+    margin-bottom: 15px;
+}
+#loginWapper label {
+    font-size: 16px;
+    font-family: arial;
+}
+#loginWapper .frInput {
+    border: 1px solid #ccc;
+    font-size: 18px;
+    width:266px;
+}
+#user_message {
+    width: auto;
+    margin-bottom: 10px;
+}
+#user_message .error {
+    border: 1px solid #CC0000;
+    padding:5px;
+    color: #CC0000;
+    background-color: #FFDFDF;
+    font-weight: bold;
+    border-left: 0;
+    border-right: 0;
+    padding-left: 40px;
+}
+#user_message .notice {
+    border: 1px solid #FFCC00;
+    padding:5px;
+    background-color: #FFFFCC;
+    border-left: 0;
+    border-right: 0;
+    padding-left: 40px;
+}
+#profileMenu {
+    float:right;
+    background-color: #EEE;
+    color:#1F3E99;
+    font-weight: bold;
+    padding: 3px;
+    padding-left: 50px;
+    padding-right: 30px;
+    -webkit-border-bottom-left-radius: 25px;
+    -moz-border-radius-bottomleft: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+#prfileMenu a {
+    color:#1F3E99;
+}
+#navigationBar {
+    background-color: #1F3E99;
+    width: auto;
+    -moz-box-shadow: -5px 5px 13px #ccc;
+    -webkit-box-shadow: -5px 5px 13px #ccc;
+    box-shadow: -5px 5px 13px #ccc;
+}
+#navigationBar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+#navigationBar a:hover {
+    color: #C3D9FF;
+}
+#navigationBar .primaryMenu {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    margin-left: 42px;
+}
+#navigationBar .primaryMenu li {
+    list-style: none;
+    float: left;
+    padding: 3px;
+    padding-right: 20px;
+    padding-left: 20px;
+    border-right: 1px solid #C3D9FF;
+}
+#navigationBar .primaryMenu li.first {
+    border-left: 1px solid #C3D9FF;
+}
+.systemForm ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.systemForm ul li {
+    list-style: none;
+    padding: 5px;
+    padding-left: 1px;
+    padding-bottom: 10px;
+    
+}
+.systemForm ul li button {
+    float: right;
+    margin-right: 5% !important;
+    margin-bottom: 20px;
+}
+.systemForm label {
+    font-size: 13px !important;
+    display: block;
+    /*font-weight: bold;*/
+    font-family: arial;
+    margin-bottom: 4px;
+}
+.systemForm input {
+    width: 95%;
+    border: 1px solid #ccc;
+    font-size: 14px !important;
+    margin-bottom: 10px;
+    margin-top: -1px !important;
+}
+.systemForm li.focused {
+    /*background-color: #f9f2a4;*/
+}
+.systemForm .errorinput {
+    color: #CC0000;
+}
+.systemForm input.errorinput {
+    border: 1px solid #CC0000;
+}
+.systemForm .phone_areanum,
+.systemForm .phone_extnum,
+.systemForm .phone_geonum,
+.systemForm .phone_localnum {
+    width: 80px;
+    float: left;
+    margin-right: 20px;
+}
+.systemForm .phone_areanum input,
+.systemForm .phone_extnum input,
+.systemForm .phone_geonum input,
+.systemForm .phone_localnum input {
+    width: 75px;
+}
+.systemForm select {
+    width: 80%;
+    border:1px solid #ccc;
+    padding:3px;
+    padding-bottom: 0;
+    background-color: #fff;
+}
+.systemForm option {
+    font-size: 15px;
+}
+
+.forgotpassForm ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.forgotpassForm ul li {
+    list-style: none;
+    padding: 5px;
+    padding-left: 20px;
+    padding-bottom: 10px;
+    margin-left: -20px;
+}
+.forgotpassForm ul li button {
+    float: right;
+    margin-right: 5% !important;
+    margin-bottom: 20px;
+}
+.forgotpassForm label {
+    font-size: 13px !important;
+    display: block;
+    font-weight: bold;
+}
+.forgotpassForm input {
+    width: 95%;
+    border: 1px solid #ccc;
+    font-size: 14px !important;
+}
+.forgotpassForm .errorinput {
+    color: #CC0000;
+}
+.forgotpassForm input.errorinput {
+    border: 1px solid #CC0000;
+}
+.forgotpassForm select {
+    width: 80%;
+    border:1px solid #ccc;
+    padding:3px;
+    padding-bottom: 0;
+}
+.forgotpassForm option {
+    font-size: 15px;
+}
+.forgotpassForminnerdiv{
+    background-color: #BFC5CD;
+    padding-top: 7px;
+    padding-bottom: 18px;
+    padding-left: 10px;
+}
+.forgotpassFormouterdiv{
+    margin-top: 135px;
+    margin-bottom: 135px;
+    margin-left: 180px;
+    margin-right: 180px;
+}
+
+div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-close {
+    background-color: #000000 !important;
+    color: #fff;
+    font-weight: bold;
+    -moz-box-shadow: 0px 0px 24px #000;
+    -webkit-box-shadow: 0px 0px 24px #000;
+    box-shadow: 0px 0px 24px #000;
+}
+#jGrowl .ui-state-highlight {
+    background: none;
+    border-color: #fff;
+}
+.jGrowl-notification .close {
+    width:10px;
+    float: right;
+}
+.jGrowl-notification ul {
+    padding: 0;
+    margin: 0;
+}
+.jGrowl-notification ul li{
+    padding: 0;
+    margin: 0;
+    margin-bottom: 5px;
+    font-weight: normal;
+    list-style: none;
+}
+.jGrowl-closer {
+    background-color: #000000 !important;
+    color: #fff !important;
+}
+ul.errors {
+   display: none;
+}
+div.ui-dialog {
+    -moz-box-shadow: 0px 0px 24px #000;
+    -webkit-box-shadow: 0px 0px 24px #000;
+    box-shadow: 0px 0px 24px #000;
+}
+.loadGrid {
+    font-size: 12px;
+}
+.loadGrid td {
+    padding: 2px;
+}
+.sohotab .ui-widget-header {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+.sohotab .ui-tabs-nav li {
+    border: 1px solid #ccc !important;
+}
+.sohotab {
+    border:0 !important;
+}
+.sohotab .ui-tabs-panel {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+#Profile_dialog {
+    overflow: hidden !important;
+    padding: 0;
+}
+#profileDisplay {
+    width:98%
+}
+#profileDisplay td {
+    padding:5px;
+    font-size: 14px;
+}
+#profileDisplay td.label {
+    font-weight: bold;
+}
+#profileAddressWapper {
+    float: right;
+    padding-left: 20px;
+    width:250px;
+    font-size: 12px;
+    border-left:1px solid #ccc;
+    margin-bottom: 20px;
+}
+#profileWapper h3 {
+    color:#FF7E00;
+    font-weight:bold;
+    margin-top:10px;
+    text-transform:uppercase;
+}
+#profileAddressWapper hr, #profileWapper hr {
+    color: #fff;
+    background-color: #fff;
+}
+#profileAddressWapper a {
+    font-weight: bold;
+}
+#userAddressMap {
+    width:auto;
+    height:150px;
+}
+#profileTabWapper {
+    float: left;
+    margin-top: 20px;
+    width:100%;
+}
+#profileAddressWapper ul {
+    list-style: none;
+    padding:0;
+    margin: 0;
+}
+#profileAddressWapper ul li{
+    list-style: none;
+    margin-bottom: 5px;
+}
+#profileAddressWapper ul li a {
+    font-size: 12px;
+}
+#profileEditFormWapper {
+    width: auto;
+    height: 770px;
+    overflow: hidden;
+    background-color: #EDF3FE;
+    padding-top: 7px;
+    padding-left: 23px; 
+}
+#profileEditFormWapper input {
+    font-size: 16px !important;
+}
+#profileditform {
+    padding:0;
+}
+.orderform #jobref {
+    width:40%;
+}
+
+.orderDetailsFormtable {
+    width:100%;
+    font-size: 12px;
+}
+
+.orderDetailsFormtable thead tr {
+    background-color: #fff;
+}
+.orderDetailsFormtable th {
+    padding:5px;
+    text-align: left !important;
+    font-size: 12px;
+    font-weight: normal;
+}
+.orderDetailsFormtable td {
+    padding:5px;
+    text-align: left !important;
+}
+
+.orderDetailsFormtable {
+    border-bottom: 1px solid #ccc;
+}
+.orderform hr {
+    width:100% !important;
+}
+.clear {
+    clear:both;
+}
+.cartOrderActionWapper {
+    float:right;
+}
+.actionButton {
+    float:right;
+    margin-top: 0px !important;
+}
+.storecart {
+    margin-top: 22px !important;
+}
+.OrderItemWapper {
+    width:auto;
+    background-color: #fff;
+    border: 0px solid #ccc;
+    padding: 0px;
+    margin-bottom: 20px;
+}
+.orderItemMetaData {
+    padding: 10px;
+    width: auto;
+    border:1px solid #eee;
+    margin-bottom: 10px;
+}
+.oim_jobtype {
+    font-size: 16px;
+}
+.oim_jobDetails {
+    width:auto;
+    border:1px solid #eee;
+    margin-bottom: 10px;
+}
+.omi_jobAdditionalData {
+    width: auto;
+    padding: 10px;
+    border:1px solid #eee;
+    margin-bottom: 10px;
+}
+.omi_jobAdditionalDataWapper {
+    float:left;
+    width:200px;
+    border: 0;
+    padding-right: 10px;
+}
+.omi_specialInstructionWapper {
+    width: auto;
+    padding: 10px;
+    border:1px solid #eee;
+    margin-bottom: 10px;
+}
+#orderWapper p {
+    padding-left: 0px;
+}
+
+.sidemenuWapper {
+    border-right:1px solid #ccc;
+    width:180px;
+}
+.sidemenuWapper ul {
+    padding: 0;
+    margin: 0;
+}
+.sidemenuWapper ul li {
+    list-style: none;
+    padding: 8px;
+    border-bottom:1px dotted #ccc;
+    text-align: right;
+    padding-right: 10px;
+}
+.sideheadline .sideheadline-white {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color:#5C5C5C;
+    font-family: Arial; 
+    font-weight: bold; 
+    font-size: 11px;
+    line-height: 14px;
+}
+
+.sideheadline-white {
+    color:#fff;
+    font-weight: bold; 
+}
+.Structurewapper {
+    font-size: 12px;
+    width: 100%;
+}
+.deliveryOptions {
+    float:right;
+    width:210px;
+    min-height:100px;
+    background-color: #fff;
+    margin-left: 10px;
+}
+
+.deliveryOptions ul {
+    padding: 0;
+    margin: 0;
+}
+.deliveryOptions li {
+    list-style: none;
+}
+.shippingDetailsTable td {
+    padding: 3px;
+}
+
+.pickupdetails ul {
+    margin: 0;
+    padding: 0;
+}
+.pickupdetails li {
+    list-style: none;
+}
+.orderActionLink li {
+    padding: 3px;
+    border-bottom: 1px dotted #ccc;
+}
+.orderActionLink li.last {
+    border-bottom: 0;
+}
+#addressbookform, #addressbookmoreform, #notificationsettingform {
+    padding: 0;
+}
+#addressbookform ul li button,
+#addressbookmoreform  ul li button, 
+#notificationsettingform ul li button
+{
+    margin-bottom: 0;
+}
+#copyshop li span label {
+    width: 200px;
+    float: left;
+}
+button.ui-multiselect {
+    /*float:left !important;*/
+}
+ul.ui-multiselect-checkboxes li {
+    padding:0;
+}
+#staffnotification label {
+    font-weight: normal;
+    
+}
+.fancyMultiselect {
+    margin-bottom: 35px;
+}
+#notificationsettingform .formSaveButton
+{
+    position: absolute;
+    right: 0;
+    top: 233px !important;
+}
+.changepasswordWapper {
+    min-height:100px !important;
+}
+.changepasswordWapper h2 {
+    margin-left: 20px;
+    font-weight: normal;
+    font-family: arial;
+    font-size: 20px;
+    border-bottom: 1px solid #ccc;
+    margin-right: 35px;
+}
+.productCatWapper {
+    width:auto;
+    padding:20px;
+    padding-top: 5px;
+    border-bottom: 1px dotted #ccc;
+    margin-left: 20px;
+}
+.productCatWapper p {
+    padding:0 !important;
+    margin-top: 5px !important;
+}
+.productCatWapper h3 {
+    margin-bottom: 0;
+}
+.productCatWapper ul li{
+    list-style: none;
+    width:45%;
+    float: left;
+    padding: 3px;
+}
+#storeeditdeliveryoptions, #addproductcategoryform, #addproductgroupform, #addproductform, #editproductform, #editproductcategoryform, #editproductgroupform {
+    padding: 0;
+    overflow: hidden;
+    padding-top: 10px;
+}
+#storeeditdeliveryoptions textarea {
+    width:454px;
+}
+
+#storeeditdeliveryoptions li span label {
+    width: 220px;
+    float: left;
+    font-weight: normal;
+}
+
+#addressbookentry .extensionsublabel {
+    margin-left: 2% !important;
+}
+
+#supplystoreordereditform {
+    padding: 0;
+    padding-right: 15px;
+    overflow: hidden;
+}
+#supplystoreorderdeliveryeditform {
+    padding: 0;
+    overflow: hidden;
+}
+
+#supplystoreorderdeliveryeditform textarea{
+     width:454px;
+}
+
+#deliverydetailsform {
+    padding: 0;
+    overflow: hidden;
+}
+.logininput {
+    margin: 0 14px;
+    width: 166px;
+    border-bottom: 1px solid #e4e4e4;
+    padding:3.5px;
+    margin-bottom: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #717171;
+}
+/**
+input.logininput {
+        
+}
+**/
+#panalLoginHelp {
+    padding:10px;
+    border-top:1px solid #e4e4e4 ;
+    margin-top:20px;
+}
+#panalLoginHelp h2 {
+    font-weight: normal;
+    font-size: 18px;
+}
+#panalLoginHelp a {
+    color: #eee !important;
+}
+.hDivBox table {
+    
+}
+.ui-accordion-header a {
+    font-size: 14px !important;
+    font-weight: bold !important;
+}
+.ui-accordion .ui-accordion-content {
+    padding:0 !important;
+}
+.sectionTotal {
+    width:auto;
+    padding:10px;
+    text-align: right;
+    font-size: 18px;
+    padding-right: 20px;
+   
+}
+.inPageCartBlock {
+    width: auto;
+    padding: 10px;
+    text-align: right;
+    font-size: 22px;
+    padding-right: 20px;
+    color: #000;
+    margin-bottom: 10px;
+}
+.headingSubTotal {
+    float: right;
+    font-size: 16px;
+    margin-right: 17px;
+    margin-top: 5px;
+    font-weight: bold;
+    color:#FF7E00;
+}
+.ui-state-default .headingSubTotal {
+    display:block;
+}
+.ui-state-active .headingSubTotal {
+    display:none !important;
+} 
+
+#storeOrderQuqe {
+    padding: 10px;
+    background-color: #ccc;
+    /*margin-top: -20px;*/
+    display:none;
+}
+#storeOrderQuqeControl {
+    float: right;
+    padding: 3px;
+    font-size: 15px;
+    margin-top: -20px;
+}
+
+input.qsbox {
+    padding:3px;
+    border:1px solid #ccc;
+}
+.distributionObjectTable {
+    width:100%;
+    margin-top: 15px;
+    font-weight: normal !important;
+    font-size: 14px;
+    border-bottom: 1px solid #ccc;
+}
+.distributionObjectTable td {
+    padding: 5px;
+    font-weight: normal !important;
+}
+
+.distributionObjectTable th {
+    padding: 5px;
+    text-align: left;
+}
+.deliverShippingOptions {
+    display:none;
+}
+.orderReviewWapper {
+    width:auto;
+}
+.orderReviewWapper h2 {
+    font-weight: normal;
+    color: #666;
+    float: right;
+    clear: both;
+    font-size: 19px;
+    letter-spacing: -1px;
+}
+.serviceOrderReviewAddress {
+    width:auto;
+    border:1px solid #ccc;
+    margin-bottom: 15px;
+    min-height: 100px;
+}
+
+.serviceOrderReviewAddress table {
+    width:100%;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+}
+.serviceOrderReviewAddress table td{
+    padding:8px;    
+    text-align: center;
+    font-size: 16px;
+}
+.serviceOrderReviewAddress table th {
+    background-color: #ccc;
+    padding: 5px;
+}
+.orderJobSpecificReview {
+    padding:10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 48px;
+}
+#submitOrderForProcessing {
+    float: right;
+    margin-top: -20px !important;
+}
+#user-links ul {
+    margin: 0;
+    padding: 0;
+}
+
+#user-links ul li{
+    margin: 0;
+    padding: 5px;
+    list-style: none;
+    border-top: 1px dotted #8b7d6b;
+}
+
+#user-links ul li a{
+    font-size: 14px;
+}
+
+#user-links ul li.first{
+    border-top: 0;
+}
+.newSingleOrderWapper {
+    width:auto;
+    background-color: #eee9e9;
+    border:1px solid #ccc;
+    padding:5px;
+    margin-bottom: 35px;
+}
+.originalOrderGrid {
+    width:365px;
+    border: 1px solid #ccc;
+    float: left;
+}
+
+.orginalOrdermetaDetails {
+    width:337px;
+    background-color: #fff;
+    border:1px solid #ccc;
+    float: left;
+    margin-right: 10px;
+    padding: 5px;
+    height:120px;
+    overflow: auto;
+    font-size: 13px;
+}
+
+.orginalOrdermetaDetails li {
+    margin-bottom: 5px;
+}
+.jobMetaOptions {
+    width:auto;
+    margin-top: 10px;
+}
+
+.jobMetaOptions .item {
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    width: 228px;
+    margin-bottom: 3px;
+}
+.orderDistributionGrid {
+    width:auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    min-height: 75px;
+}
+.ui-dialog .formSaveButton {
+    margin-bottom: 0;
+}
+.order-wrapper {
+    background-color: #EEE9E9;
+    padding: 10px;
+}
+.order-data-header div {
+    float: left;
+    font-weight: bold;
+    margin-right: 30px;
+}
+.order-data-header {
+    background-color: #FFF;
+    height: 15px;
+    border-left: 3px solid #D6D6D6;
+    border-right: 3px solid #D6D6D6;
+    border-top: 3px solid #D6D6D6;
+    padding: 5px;
+}
+.order-item-table {
+    width:100%;
+    padding: 0;
+    border-collapse: collapse;
+}
+
+.order-item-table a {
+    font-weight: bold !important;
+}
+
+
+
+.order-item-table th {
+    background-color: #E5E5E6;
+}
+.order-item-table td {
+    background-color: #FFF;
+}
+.order-item-table th, .order-item-table td {
+    border: 2px solid #D6D6D6;
+    padding: 3px;
+}
+
+.order-sub-total {
+    float: right;
+    background-color: #FFF;
+    border-collapse: collapse;
+    font-weight: bold;
+   
+}
+.order-sub-total td {
+    border: 2px solid #D6D6D6;
+    padding: 3px;
+    border-top: 0;
+}
+
+.order-distribution-table th{
+    background-color: #E5E5E6;
+}
+
+.order-distribution-table a {
+    font-weight: bold !important;
+}
+
+.order-distribution-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.order-distribution-table th, .order-distribution-table td {
+    border: 2px solid #D6D6D6;
+    padding: 3px;
+}
+
+.order-distribution-table td {
+    background-color: #FFF;
+}
+
+.order-distribution-table .even td {
+    background-color: #F2F2F2;
+}
+
+.distribution {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+th {
+    text-align: left;
+}
+
+#serviceProductmanageTabs, #serviceProductmanageTabs div {
+    padding:0;
+}
+#serviceProductmanageTabs .ui-tabs-nav {
+    padding:0 !important;
+}
+#serviceProductmanageTabs .ui-widget-header {
+    background: none !important;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+#serviceProductmanageTabs{
+    border: 0 !important;
+}
+#serviceProductmanageTabs div.x-component {
+    padding: 5px !important;
+}
+
+.srSlikGrid {
+    margin-top: 10px;
+    border: 1px solid #eee;
+    border-bottom: 10px solid #eee;
+    
+}
+
+.srSlikGrid .ui-state-default input {
+    width:58px;
+}
+.srSlikGrid .slick-header .ui-state-default{
+    padding: 3px !important;
+    font-size: 10px;
+    font-weight: bold;
+}
+.srSlikGrid  .slick-cell {
+    font-size: 11px;
+    padding: 3px !important;
+    
+}
+#serviceProductmanageTabs .ui-tabs-nav a {
+    font-size: 12px !important;
+    font-weight: normal;
+}
+.adminPSmanageWapHeader {
+    width:auto;
+    padding:5px;
+    text-align: right;
+    margin-top: 5px;
+}
+.footerSRwapper {
+    width: 976px;
+}
+#serviceListGridGroupWidget {
+    width:auto;
+    margin-top:10px;
+}
+.groupOptionpaddingsetter {
+    padding:10px !important;
+    background-color: #eee;
+}
+.ui-multiselect {
+    border: 1px solid #ccc !important;
+}
+.slick-cell.selected {
+    background-color: #fffacd;
+}
+.slick-headerrow-column.ui-state-default {
+    padding:0 !important;
+}
+#serviceOrderGrid {
+    border-bottom: 1px solid #ccc !important;
+    margin-top: 0 !important;
+}
+#addNewServiceHolder {
+    width: auto;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    display: none;
+}
+
+.addOrderItemTable {
+    width:100%;
+}
+
+.addOrderItemTable thead{ 
+    background-color: #eee;
+}
+
+.addOrderItemTable thead th, .addOrderItemTable tbody td { 
+   padding:5px;
+}
+.srSlikGrid .editor-text {
+    width:100%;
+}
+.mdbfields {
+    margin-right: 5px;
+}
+#serviceOrderGrid .r9, #serviceOrderGrid .r8 {
+    text-align: right;
+}
+#formmanager {
+    border-bottom: 1px solid #ccc !important;
+}
+.orderDistributionTable {
+    width:100%;
+}
+.orderDistributionTable th {
+    background: #ccc;
+    color: #666;
+    padding: 3px;
+}
+.orderDistributionTable td {
+    background: #fff;
+    padding: 3px;
+}
+#servicecustomprice {
+    overflow: hidden;
+}
+#productListGrid .slick-row .l3 {
+    text-align: right;
+}
+#productListGrid .slick-row .l4 {
+    text-align: right;
+}
+#productListGrid .slick-row .l5 {
+    text-align: right;
+}
+#serviceListGrid .slick-row .l5 {
+    text-align:right;
+}
+#serviceListGrid .slick-row .l6 {
+    text-align:right;
+}
+#serviceListGrid .slick-row .l7 {
+    text-align:right;
+}
+#discountListGrid .slick-row .l4 {
+    text-align: right;
+}
+#discountListGrid .slick-row .l5 {
+    text-align: right;
+}
+#discountListGrid .slick-row .l6 {
+    text-align: right;
+}
+#supplyListGrid .slick-row .l3 {
+    text-align: right;
+}
+#supplyListGrid .slick-row .l4 {
+    text-align: right;
+}
+#supplyListGrid .slick-row .l5 {
+    text-align: right;
+}
+#profileditform {
+    padding-left:0px;
+    margin-top:0px;
+}
+#headerCompanyNavigation {
+    width:auto;
+    background-color: #eee;
+    border:1px solid #ccc;
+    padding: 8px;
+    margin-top: -20px;
+    margin-bottom: 15px;
+}
+.customerProfileTable td{
+    padding: 4px;
+}
+.customerProfileTable tr {
+     background-color: #fff;
+}
+.customerProfileTable td.label {
+    font-weight: bold;
+}
+
+.adresssameasbillingtoo {
+	padding-left: '20px';
+	font-size: '8px';
+}
+.serviceOrderSetTable {
+    width: 100%;
+}
+.serviceOrderSetTable td, .serviceOrderSetTable th {
+    padding: 3px;
+    border-bottom: 1px solid #ccc;
+}
+.serviceOrderSetTable tr.odd td {
+    background-color: #eee;
+}
+.serviceOrderSetTable tr.even td {
+    background-color: #fff;
+}
+.serviceOrderSetWapperInternal {
+    margin-bottom: 20px;
+}
+.serviceOrderSetWapper {
+    border-top: 1px solid #FF7E00;
+    border-bottom: 1px solid #FFFFFF;
+    padding-top: 5px;
+}
+.serviceOrderSetWapper h2 {
+    font-weight: normal;
+    color: #FF7E00;
+    font-size: 15px;
+    text-decoration: underline;
+}
+
+.serviceOrderSetUL li {
+    width: 235px;
+    float: left;
+}
+.serviceOrderSetUL .k-widget {
+    width: 220px !important;
+}
+.deliveryTypeWapper ul {
+    padding: 0;
+    margin: 0;
+}
+
+.deliveryTypeWapper li {
+    list-style: none;
+    margin-bottom: 10px;
+}
+.dmlWapper {
+   /* padding: 10px 10px 10px;*/
+   /* border: 1px solid #ccc;*/
+   /* background-color: #fffaf0;*/
+    line-height: 15px;
+    
+}
+.dmlWapper ol li {
+    margin-top: -8px;
+}
+.dmlWapper .send_to {
+    /*padding: 10px;*/
+    padding-top:8px;
+    border-top-width:1px;
+    border-style:solid;
+    border-top-color: #FF7E00;
+    margin-top: 4px;
+    margin-bottom:20px;
+    width:720px;
+}
+
+.md_distribution_table {
+    width:100%;
+}
+
+.md_distribution_table th {
+    /*background-color: #ccc;*/
+    padding-bottom: 5px;
+    font-weight: bold;
+    border-bottom: solid 1px #CCCCCC;
+   
+}
+
+.md_distribution_table td {
+    /*background-color: #eee;*/
+    padding: 8px 8px 8px;
+    font-size: 13px;
+}
+
+.when_needed {
+    width: auto;
+    /*padding: 10px;*/
+    font-weight: bold;
+    padding-top: 25px;
+    
+}
+.serviceOrderSetDIV {
+    width:auto;
+}
+
+.serviceOrderSetDIV div {
+    margin-right: 15px;
+    float: left;
+    margin-bottom: 20px;
+}
+
+.continute_service_shopping {
+    font-size: 12px;
+    float: left;
+    margin-top: -4px;
+}
+
+.continute_service_shopping select {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.serviceOrderSetWapper {
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+.orderBreadCrumb {
+    margin-bottom: 20px;
+    margin-top: -40px;
+    font-size: 12px;
+    font-weight: bold;
+    border-top:1px dotted #ccc;
+    border-bottom:1px dotted #ccc;
+    padding: 5px;
+    background: #eee;
+}
+.tdedit {
+    background: #f8f8ff;
+}
+#addServiceForm table, #additionalProductFormwapper table {
+    width:100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+#addServiceForm th, #addServiceForm td, #addProductForm th, #addProductForm td {
+    padding-left: 5px;
+    border: 1px solid #fff;
+    font-size: 12px;
+}
+#addServiceForm th, #addProductForm th {
+    background-color: #FF7E00;
+    color: #fff;
+}
+#addServiceForm td, #addProductForm td {
+    background-color: #fff;
+    padding: 5px;
+}
+#addServiceForm input, #addProductForm input {
+    border: 1px solid #ccc;
+}
+
+.uploadfileholder {
+    width:726px !important;
+    margin-bottom: 10px !important;
+    border:0px solid #ccc;
+    margin-left: 0px !important;
+    padding: 0px !important;
+}
+
+.uploadfileholder h3 {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.k-file {
+    background-color: #EEEEEE;
+    margin-bottom: 10px;
+    margin-left: 2px !important;
+    width: 665px !important;
+    border: 1px solid #ccc;
+}
+.k-progress  {
+     width: 100% !important;
+     padding-bottom: 1px;
+}
+.k-filename {
+    min-width: 80% !important;
+    max-width: 80% !important;
+}
+.k-progress-status {
+    border-color: #CD6501 !important; 
+}
+
+.navPlotting {
+    padding-right: 10px !important;
+}
+.navPlotting a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navLargeFormat {
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+}
+.navLargeFormat a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navFineArts {
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+}
+.navFineArts a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navCopyshop {
+    padding-right: 15px !important;
+    padding-top: 5px !important;
+    border-left: 0 !important;
+    border-bottom: 0 !important;
+}
+.navCopyshop a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navMounting {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+    padding-top: 5px !important;
+    border-bottom: 0 !important;
+}
+.navMounting a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navBinding {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+    padding-top: 5px !important;
+    border-bottom: 0 !important;
+}
+.navBinding a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navScanning {
+    padding-right: 15px !important;
+    padding-left: 15px !important;
+    padding-top: 5px !important;
+    border-bottom: 0 !important;
+}
+.navScanning a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+.navOffset {
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    padding-top: 5px !important;
+    border-bottom: 0 !important;
+}
+.navOffset a {
+    font-size: 15px;
+    color:#666 !important;
+}
+
+ul.navigation li a:hover {
+    text-decoration: underline !important;
+}
+
+  #copyshop .addproductActionLink { 
+     margin-top: -68px !important;
+  }
+  #copyshop .addNewOrderSet {
+     margin-top: -14px !important; 
+  }
+  #plotting .addproductActionLink  {
+       margin-top: -68px !important; 
+  }
+  #finearts .addproductActionLink  {
+       margin-top: -68px !important; 
+  }
+  #lamination .addproductActionLink  {
+       margin-top: -68px !important; 
+  }
+  #largeformat .addproductActionLink  {
+       margin-top: -68px !important; 
+  }
+  #binding .addproductActionLink  {
+       margin-top: -68px !important; 
+  }
+  #scanning .addNewOrderSet  {
+       display:none !important;
+  }
+  #scanning #instruction {
+      width: 374px;
+      height: 86px;
+  }
+  #scanning .optional {
+      width: 200px;
+  }
+  #copyshop #pick {
+       margin-left: -84px !important;      
+  }
+  #copyshop #drop {
+       margin-left: -60px !important;      
+  }
+   #copyshop .splins {
+       margin-bottom: 37px !important;
+       margin-top: 5px !important; 
+  }
+  #copyshop #sp_inst {
+       margin-top: 45px !important;      
+  }
+  #copyshop .uploadfile {
+       margin-top: 17px !important;      
+  }
+  #plotting #body_content {
+      margin-bottom: 0px !important;
+  }
+  /*.dropdown_selector {
+   /*min-width: 80px;*/
+   /*height: 23px;*/
+   /*overflow: none;*/
+   /*background: url(/public/images/db1.png) no-repeat right #fff;
+   margin-left: -28px;
+   padding-right:6px;
+   width: 18px;
+   border-top: 1px solid #ccc;
+   border-bottom: 1px solid #ccc;
+   float:right;
+  }*/
+  .dropdown_selector select {
+   background: transparent;
+   -webkit-appearance: none;
+   /*min-width: 80px;*/
+   padding: 5px;
+   border: 1px solid #ccc;
+   height: 26px;
+}

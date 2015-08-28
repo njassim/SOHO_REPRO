@@ -1,0 +1,25 @@
+[24-Mar-2014 04:51:10 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 04:59:54 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 05:01:53 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 05:05:44 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 05:05:44 America/Denver] PHP Fatal error:  Uncaught exception 'phpmailerException' with message 'Invalid address: mohamedjassim5@gmail.com,jasim@colanonline.com,mohamedjassim5@outlook.com' in /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php:462
+Stack trace:
+#0 /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php(408): PHPMailer->AddAnAddress('to', 'mohamedjassim5@...', '')
+#1 /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php(67): PHPMailer->AddAddress('mohamedjassim5@...')
+#2 {main}
+  thrown in /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php on line 462
+[24-Mar-2014 05:07:40 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 05:07:40 America/Denver] PHP Warning:  trim() expects parameter 1 to be string, array given in /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php on line 457
+[24-Mar-2014 05:07:40 America/Denver] PHP Fatal error:  Uncaught exception 'phpmailerException' with message 'Invalid address: ' in /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php:462
+Stack trace:
+#0 /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php(408): PHPMailer->AddAnAddress('to', Array, '')
+#1 /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php(67): PHPMailer->AddAddress(Array)
+#2 {main}
+  thrown in /home2/cipldevc/public_html/soho-repro/mailer/class.phpmailer.php on line 462
+[24-Mar-2014 05:11:45 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 05:14:34 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 05:16:55 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 08:25:45 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 08:28:14 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[24-Mar-2014 08:29:24 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11
+[13-Aug-2014 03:14:02 America/Denver] PHP Notice:  Undefined variable: message in /home2/cipldevc/public_html/soho-repro/mailer/test/testemail.php on line 11

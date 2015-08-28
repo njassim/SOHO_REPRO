@@ -1,0 +1,20 @@
+<?php if(isset($_SESSION['sohorepro_userid'])) { ?>
+<div >
+    <ul class="navigation primary" style="float:right !important;"><li class="navPlotting" style=" border-bottom: none !important; "><a href="#">WELCOME <?php echo strtoupper($_SESSION['sohorepro_username']); ?></a></li>
+                                                                                                                        <li class="navLargeFormat" style=" border-bottom: none !important;"><a href="logout.php">LOGOUT</a></li>
+                                                                                                                    </ul>
+                                                                                                                    <div style="clear:both"></div> 
+</div>                                                                                                                    
+<?php } ?>                                                                                                                    
+
+<div id="content_output-navigation">
+                                                                                                                    <ul class="navigation primary"><li class="navPlotting"><a href="#" class=" ">PLOTTING &amp; ARCHITECTURAL COPIES</a></li>
+                                                                                                                        <li class="navLargeFormat"><a href="#" class=" ">LARGE FORMAT COLOR &amp; BW</a></li>
+                                                                                                                        <li class="navFineArts"><a href="#" class=" ">FINE ART PRINTING</a></li>
+                                                                                                                        <li class="navCopyshop"><a href="#" class=" ">COPY SHOP</a></li>
+                                                                                                                        <li class="navMounting"><a href="#" class=" ">MOUNTING &amp; LAMINATING</a></li>
+                                                                                                                        <li class="navBinding"><a href="#" class=" ">BINDING</a></li>
+                                                                                                                        <li class="navScanning"><a href="#" class=" ">SCANNING</a></li>
+                                                                                                                        <li class="navOffset"><a href="#" class=" ">OFFSET PRINTING</a></li>
+                                                                                                                    </ul>
+                                                                                                                    <div style="clear:both"></div>                                        				</div>

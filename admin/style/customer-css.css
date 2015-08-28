@@ -1,0 +1,44 @@
+h1, h2,h3,h4,h5,h6{ font-weight: normal;}
+.super_cat{ background:#fff; border-bottom: 1px solid #c8c8c8; font-size: 14px; color:#757575; line-height: 28px;  height:28px;clear:both;}
+.super_cat h1{ font-size: 14px; padding-left: 15px; width:700px; line-height: 28px; cursor: pointer;}
+.main_catg{ background:#e2e2e2; color:#505050; cursor: pointer; width: 100%; line-height: 28px;  height:28px;}
+.main_catg h2{ padding-left: 18px; font-size: 14px;}
+.sub_catg{ color:#4c4c4c; background:#f7f7f7; padding-left: 18px; font-size: 14px; cursor: pointer; line-height: 28px;  height:28px; }
+.inf{width:150px;}
+.hide{display: none;}
+.none{display:none;}
+.mas_h3{padding-left:12px; font-weight: normal; font-size: 16px; color:#f68210;}
+.spl_tbl{margin:10px 0px;border: 2px solid #F99B3E;font-family:arial;}
+.spl_h3{padding-left:12px; font-weight: normal; font-size: 16px; color:#f68210;}
+.spl_h3_td{background-color: #f1f1f1;}
+.spl_tr{background-color: #F9F2DE;border-bottom: 1px solid #FF7E00; color:#fff;}
+.spl_span{color:#007F2A;font-size: 12px;}
+.spl_tr_in{background-color: #F9F2DE;}
+.spl_td{text-align: center; background-color:#f68210}
+.spl_td_in{text-align: center;}
+.spl_td_action{width:80px;}
+.div1{width:25px; margin-left:45px; float:left;}
+.div2{margin-bottom: 10px; display: none;}
+.tr1{background-color: #F9F2DE;border-bottom: 1px solid #FF7E00; color:#fff;}
+.tr1bg{background-color:#f68210;}
+.tr2{background-color: #F9F2DE;}
+.tr2td{text-align: center;}
+.tr2td1{text-align:right;padding-right: 35px;}
+.cust_edit_tab{padding-top: 5px;}
+.cust_edit_tab td span{padding-left: 10px;}
+.cust_edit_tab td input{margin-left: 10px; padding-left: 5px;}
+.cus_manager_bk{background-color: #F9F2DE;font-weight: bold;}
+.cus_adm_succ{color:#007F2A;font-size: 13px;}
+.manager_input{margin-left: 16px !important;}
+.cus_btn_edit{ background: url(images/btn_small.jpg) no-repeat; padding-left:0px !important; margin-right:5px; font-size:12px; font-weight:bold; float:left; width:59px; height:29px; border:0px; font-family:arial; text-transform: uppercase; color:#fff; text-align: center; line-height: 26px; cursor: pointer;}
+.content_1{
+    display:block; 
+    height:240px; 
+    /* overflow-y:scroll;  */
+    overflow-x: hidden; 
+    float: left;}
+.acc-cat{cursor: pointer;}
+.inline-text-cus{height: 20px;}
+
+
+ 
