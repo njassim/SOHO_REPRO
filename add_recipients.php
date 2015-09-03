@@ -496,6 +496,30 @@ padding-bottom: 0px !important;
      }
  }
  
+ function everything_return_arch()
+ {
+     var everything_return = document.getElementById('everything_return').checked;
+     if(everything_return == true){ 
+         $.ajax
+                ({
+                    type: "POST",
+                    url: "everything_return.php",
+                    data: "everything_return=1_99",
+                    beforeSend: loadStart,
+                    complete: loadStop,
+                    success: function(option)
+                    {  
+                        $('#multi_recipients').slideDown();
+                        $('#multi_recipients').html(option);
+                        $('#add_recipients').slideUp();
+                    }
+                });
+     }else{
+         $('#multi_recipients').slideUp();
+         $('#add_recipients').slideUp();
+     }
+ }
+ 
  function send_everything_to()
  {
      var send_everything_to = document.getElementById('send_everything_to').checked;
@@ -714,7 +738,7 @@ padding-bottom: 0px !important;
      
      var need_sets              =   $(".need_sets").val();
      var avl_sets               =   $(".avl_sets").val();
-     
+     var arch_exist             =   $("#arch_exist").val();
      var preffer_del            = document.getElementById('preffer_del').checked;  
          
      var arrange_del            = document.getElementById('arrange_del').checked;
@@ -754,6 +778,11 @@ padding-bottom: 0px !important;
      }
      
      if(need_sets != avl_sets){
+         add_recipients();
+         return false;
+     }
+     
+     if(arch_exist > 0){
          add_recipients();
          return false;
      }

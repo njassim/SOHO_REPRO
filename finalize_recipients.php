@@ -338,6 +338,7 @@ padding-bottom: 0px !important;
                                         //$cust_original_oo       = EnteredPlotRecipients($user_session_comp, $user_session);
                     
                                         $cust_needed_originals_oo  = $cust_original_order_final[0]['origininals'];
+                                        $cust_needed_originals_oo_1  = $cust_original_order_final[1]['origininals'];
                                         
                                         ?>
                                         <table border="1" style="width: 100%;">
@@ -351,6 +352,7 @@ padding-bottom: 0px !important;
                                                 <td style="font-weight: bold;">Binding</td>
                                                 <td style="font-weight: bold;">Folding</td>
                                             </tr>
+                                            <?php if($cust_original_order[0]['plot_needed'] != '0'){ ?>
                                             <tr bgcolor="#F8F8F8">
                                                 <td><?php echo $cust_needed_originals_oo; ?></td>
                                                 <td><?php echo $total_plot_needed; ?></td>
@@ -361,6 +363,19 @@ padding-bottom: 0px !important;
                                                 <td><?php echo $cust_original_order[0]['binding']; ?></td>
                                                 <td><?php echo $cust_original_order[0]['folding']; ?></td>
                                             </tr>
+                                            <?php } ?>
+                                            <?php if($cust_original_order[1]['arch_needed'] == '1'){ ?>
+                                            <tr bgcolor="#F8F8F8">
+                                                <td><?php echo $cust_needed_originals_oo_1; ?></td>
+                                                <td><?php echo $cust_needed_originals_oo_1; ?></td>
+                                                <td><?php echo 'Architectural Copies'; ?></td>                            
+                                                <td><?php echo $cust_original_order[1]['arch_size']; ?></td>
+                                                <td><?php echo $cust_original_order[1]['arch_output']; ?></td>
+                                                <td><?php echo $cust_original_order_final[1]['arch_media']; ?></td>
+                                                <td><?php echo $cust_original_order[1]['arch_binding']; ?></td>
+                                                <td><?php echo $cust_original_order[1]['arch_folding']; ?></td>
+                                            </tr>
+                                            <?php } ?>
                                         </table>
 
                                     </div>
@@ -486,6 +501,11 @@ padding-bottom: 0px !important;
                         $plot_folding = ($entered_sets['folding'] == '0') ? '' : ','.$entered_sets['folding'];
                         $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ','.$entered_sets['arch_binding'];
                         $arch_folding = ($entered_sets['arch_folding'] == '0') ? '' : ','.$entered_sets['arch_folding'];
+                        $size         = ($entered_sets['size'] == 'undefined') ? $entered_sets['arch_size'] : $entered_sets['size'];
+                        $output       = ($entered_sets['output'] == 'undefined') ? $entered_sets['arch_output'] : $entered_sets['output'];
+                        $media        = ($entered_sets['media'] == 'undefined') ? $entered_sets['arch_media'] : $entered_sets['media'];
+                        $binding      = ($entered_sets['binding'] == 'undefined') ? $entered_sets['arch_binding'] : $entered_sets['binding'];
+                        $folding      = ($entered_sets['folding'] == 'undefined') ? $entered_sets['arch_folding'] : $entered_sets['folding'];
                     ?> 
                         <div style="float: left;" class="shaddows">
                             <div class="ribbon" id="ribbon_final"><span>RECIPIENT <?php echo $r; ?></span></div>
@@ -518,15 +538,32 @@ padding-bottom: 0px !important;
                             <td style="font-weight: bold;">Binding</td>
                             <td style="font-weight: bold;">Folding</td>
                         </tr>
+                        <?php
+                        if ($entered_sets['plot_needed'] == '1') {
+                        ?>
                         <tr bgcolor="#F8F8F8">
                             <td><?php echo $needed_sets; ?></td>
                             <td><?php echo $order_type; ?></td>                            
-                            <td><?php echo $entered_sets['size']; ?></td>
-                            <td><?php echo $entered_sets['output']; ?></td>
-                            <td><?php echo $entered_sets['media']; ?></td>
-                            <td><?php echo $entered_sets['binding']; ?></td>
-                            <td><?php echo $entered_sets['folding']; ?></td>
+                            <td><?php echo $size; ?></td>
+                            <td><?php echo $output; ?></td>
+                            <td><?php echo $media; ?></td>
+                            <td><?php echo $binding; ?></td>
+                            <td><?php echo $folding; ?></td>
                         </tr>
+                        <?php                         
+                        }
+                        if ($entered_sets['plot_needed'] == '0') {
+                        ?>
+                        <tr bgcolor="#F8F8F8">
+                            <td><?php echo $needed_sets; ?></td>
+                            <td><?php echo $order_type; ?></td>                            
+                            <td><?php echo $size; ?></td>
+                            <td><?php echo $output; ?></td>
+                            <td><?php echo $media; ?></td>
+                            <td><?php echo $binding; ?></td>
+                            <td><?php echo $folding; ?></td>
+                        </tr>
+                        <?php } ?>
                     </table>
                     
                     <!--   1. <?php // echo $entered_sets['plot_needed'] . '&nbsp;Sets Plotting on Bond,' . $entered_sets['size'] . ',' . $entered_sets['output'] . $plot_binding . $plot_folding; ?></br>-->

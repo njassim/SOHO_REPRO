@@ -554,6 +554,11 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                         $plot_folding = ($entered_sets['folding'] == '0') ? '' : ','.$entered_sets['folding'];
                         $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ','.$entered_sets['arch_binding'];
                         $arch_folding = ($entered_sets['arch_folding'] == '0') ? '' : ','.$entered_sets['arch_folding'];
+                        $size         = ($entered_sets['size'] == 'undefined') ? $entered_sets['arch_size'] : $entered_sets['size'];
+                        $output       = ($entered_sets['output'] == 'undefined') ? $entered_sets['arch_output'] : $entered_sets['output'];
+                        $media        = ($entered_sets['media'] == 'undefined') ? $entered_sets['arch_media'] : $entered_sets['media'];
+                        $binding      = ($entered_sets['binding'] == 'undefined') ? $entered_sets['arch_binding'] : $entered_sets['binding'];
+                        $folding      = ($entered_sets['folding'] == 'undefined') ? $entered_sets['arch_folding'] : $entered_sets['folding'];
                     ?> 
                             
                         <div style="float: left;" class="shaddows">
@@ -593,11 +598,11 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                         <tr bgcolor="#F8F8F8">
                             <td><?php echo $needed_sets; ?></td>
                             <td><?php echo $order_type; ?></td>                            
-                            <td><?php echo $entered_sets['size']; ?></td>
-                            <td><?php echo $entered_sets['output']; ?></td>
-                            <td><?php echo $entered_sets['media']; ?></td>
-                            <td><?php echo $entered_sets['binding']; ?></td>
-                            <td><?php echo $entered_sets['folding']; ?></td>
+                            <td><?php echo $size; ?></td>
+                            <td><?php echo $output; ?></td>
+                            <td><?php echo $media; ?></td>
+                            <td><?php echo $binding; ?></td>
+                            <td><?php echo $folding; ?></td>
                         </tr>
                     </table>
                     
