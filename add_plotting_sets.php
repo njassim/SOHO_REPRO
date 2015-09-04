@@ -28,10 +28,23 @@ if ($_POST['service_plotting_add'] == '1') {
     $user_name_val = $_POST['user_name_val'];
     $password_val = $_POST['password_val'];
     $size_custom = $_POST['size_custom'];
+    
+    
+    $sql_option_id = mysql_query("SELECT options FROM sohorepro_plotting_set WHERE company_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0' ORDER BY options ASC LIMIT 1");
+    $object_option = mysql_fetch_assoc($sql_option_id);
+
+        if (count($object_option['options']) > 0) {
+            $options = ($object_option['options'] + 1);
+        } 
+        else{
+            $options = '1';
+        }
+    
 
     $query = "INSERT INTO sohorepro_plotting_set
 			SET     referece_id     = '" . $job_reference . "',
                                 origininals     = '" . $original . "',
+                                options         = '" . $options ."',  
                                 print_ea        = '" . $print_ea . "',
                                 size            = '" . $size . "',
                                 custome_details = '" . $size_custom . "',    

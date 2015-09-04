@@ -263,7 +263,10 @@ padding-bottom: 0px !important;
   <h2 class="headline-interior orange">
 	Delivery Job Reference: <?php echo $_SESSION['ref_val']; ?>
   </h2>
-
+<?php
+$number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+?>
+<h3>Number of Sets: <?php echo count($number_of_sets); ?></h3>
   <div class="bkgd-stripes-orange">
     &nbsp;
   </div>
