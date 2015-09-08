@@ -372,10 +372,10 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                     <?php
                     $cust_original_order    = EnteredPlotRecipients($user_session_comp, $user_session);
                     
-                    $cust_needed_originals  = $cust_original_order[0]['origininals'];
+                    //$cust_needed_originals  = $cust_original_order[0]['origininals'];
                     
-                    $cust_needed_sets       = ($cust_original_order[0]['print_ea'] != '0') ? $cust_original_order[0]['print_ea'] : $cust_original_order[0]['arch_needed'];
-                    $cust_order_type        = ($cust_original_order[0]['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';
+                    //$cust_needed_sets       = ($cust_original_order[0]['print_ea'] != '0') ? $cust_original_order[0]['print_ea'] : $cust_original_order[0]['arch_needed'];
+                    //$cust_order_type        = ($cust_original_order[0]['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';
                     $option                 = ($cust_original_order[0]['plot_arch'] == '0') ? 'Pickup Options:' : 'File Options:';  
                     ?>
                     <table border="1" style="width: 100%;">
@@ -389,16 +389,28 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                             <td style="font-weight: bold;">Binding</td>
                             <td style="font-weight: bold;">Folding</td>
                         </tr>
+                        <?php
+//                        echo '<pre>';
+//                        print_r($cust_original_order);
+//                        echo '</pre>';
+                        
+                        foreach ($cust_original_order as $original){                            
+                            $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
+                            $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';   
+                        ?>
                         <tr bgcolor="#F8F8F8">
-                            <td><?php echo $cust_needed_originals; ?></td>
+                            <td><?php echo $original['origininals']; ?></td>
                             <td><?php echo $cust_needed_sets; ?></td>
                             <td><?php echo $cust_order_type; ?></td>                            
-                            <td><?php echo $cust_original_order[0]['size']; ?></td>
-                            <td><?php echo $cust_original_order[0]['output']; ?></td>
-                            <td><?php echo $cust_original_order[0]['media']; ?></td>
-                            <td><?php echo $cust_original_order[0]['binding']; ?></td>
-                            <td><?php echo $cust_original_order[0]['folding']; ?></td>
+                            <td><?php echo $original['size']; ?></td>
+                            <td><?php echo $original['output']; ?></td>
+                            <td><?php echo $original['media']; ?></td>
+                            <td><?php echo $original['binding']; ?></td>
+                            <td><?php echo $original['folding']; ?></td>
                         </tr>
+                        <?php
+                        }
+                        ?>
                     </table>
                    
                 </div>

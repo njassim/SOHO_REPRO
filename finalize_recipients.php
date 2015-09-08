@@ -324,7 +324,7 @@ padding-bottom: 0px !important;
                                     <div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">PACKING LIST: </div>
                                     <div style="float: left;width: 80%;margin-left: 30px;margin-top: 5px;">
                                         <?php
-                                        $cust_original_order    = SetsOrderedFinalize($job_reference_final[0]['id']);
+                                        $cust_original_order    = EnteredPlotRecipientsMulti($user_session_comp, $user_session, $job_reference_final[0]['id']);
                                         $cust_original_order_final = SetsOrderedFinalizeOriginal($job_reference_final[0]['id']);
                                         
                                         $total_sets_plott       =  SetsOrderedFinalizeCountOfSets($job_reference_final[0]['id']); 
@@ -352,28 +352,20 @@ padding-bottom: 0px !important;
                                                 <td style="font-weight: bold;">Binding</td>
                                                 <td style="font-weight: bold;">Folding</td>
                                             </tr>
-                                            <?php if($cust_original_order[0]['plot_needed'] != '0'){ ?>
+                                            <?php
+                                            foreach ($cust_original_order as $original){
+                                                $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
+                                                $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';   
+                                            ?>
                                             <tr bgcolor="#F8F8F8">
-                                                <td><?php echo $cust_needed_originals_oo; ?></td>
-                                                <td><?php echo $total_plot_needed; ?></td>
+                                                <td><?php echo $original['origininals']; ?></td>
+                                                <td><?php echo $cust_needed_sets; ?></td>
                                                 <td><?php echo $cust_order_type; ?></td>                            
-                                                <td><?php echo $cust_original_order[0]['size']; ?></td>
-                                                <td><?php echo $cust_original_order[0]['output']; ?></td>
-                                                <td><?php echo $cust_original_order_final[0]['media']; ?></td>
-                                                <td><?php echo $cust_original_order[0]['binding']; ?></td>
-                                                <td><?php echo $cust_original_order[0]['folding']; ?></td>
-                                            </tr>
-                                            <?php } ?>
-                                            <?php if($cust_original_order[1]['arch_needed'] == '1'){ ?>
-                                            <tr bgcolor="#F8F8F8">
-                                                <td><?php echo $cust_needed_originals_oo_1; ?></td>
-                                                <td><?php echo $cust_needed_originals_oo_1; ?></td>
-                                                <td><?php echo 'Architectural Copies'; ?></td>                            
-                                                <td><?php echo $cust_original_order[1]['arch_size']; ?></td>
-                                                <td><?php echo $cust_original_order[1]['arch_output']; ?></td>
-                                                <td><?php echo $cust_original_order_final[1]['arch_media']; ?></td>
-                                                <td><?php echo $cust_original_order[1]['arch_binding']; ?></td>
-                                                <td><?php echo $cust_original_order[1]['arch_folding']; ?></td>
+                                                <td><?php echo $original['size']; ?></td>
+                                                <td><?php echo $original['output']; ?></td>
+                                                <td><?php echo $original['media']; ?></td>
+                                                <td><?php echo $original['binding']; ?></td>
+                                                <td><?php echo $original['folding']; ?></td>
                                             </tr>
                                             <?php } ?>
                                         </table>

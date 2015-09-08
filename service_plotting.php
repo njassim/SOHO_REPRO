@@ -274,6 +274,28 @@ color: red;
 .ref_div_star{
     color:red; margin-top: -5px;font-size: 16px;font-weight: bold;
     }
+    
+    .asap_orange{
+    cursor: pointer;
+    display: inline-block;
+    background: #F99B3E;
+    color: #FFF;
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-top: 3px;
+    font-weight: bold;
+}
+
+.asap_green{
+    cursor: pointer;
+    display: inline-block;
+    background: #019E59;
+    color: #FFF;
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-top: 3px;
+    font-weight: bold;
+}
  </style>
  
 <link rel="stylesheet" href="js/jquery-ui.css" />
@@ -1014,7 +1036,7 @@ $(document).ready(function () {
                                 <div style="width: 34%;float: left;"> 
 
                                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                                        <span style="cursor: pointer;display: inline-block;background: #F99B3E;color: #000;padding: 5px 20px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return asap();">READY NOW</span>
+                                        <span id="asap_status" class="asap_orange" onclick="return asap();">READY NOW</span>
                                     </div>
 
                                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
@@ -1095,7 +1117,7 @@ $(document).ready(function () {
                             <div style="width: 34%;float: left;"> 
 
                                 <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                                    <span style="cursor: pointer;display: inline-block;background: #F99B3E;color: #000;padding: 5px 20px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return asap_arc();">READY NOW</span>
+                                    <span id="asap_status_arch" class="asap_orange" onclick="return asap_arc();">READY NOW</span>
                                 </div>
 
                                 <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
@@ -1649,6 +1671,11 @@ function go_set_form()
 
 function asap()
 {
+    var current_status  =   $("#asap_status").attr('class');
+    var change_status   =   (current_status == "asap_orange") ? 'asap_green' : 'asap_orange';
+    $("#asap_status").removeClass(current_status);
+    $("#asap_status").addClass(change_status);
+    
     $("#date_for_alt").val("ASAP");
     $("#time_for_alt").val("ASAP");
     $("#date_for_alt_arc").val("ASAP");
@@ -1659,6 +1686,12 @@ function asap()
 
 function asap_arc()
 {   
+    
+    var current_status  =   $("#asap_status_arch").attr('class');
+    var change_status   =   (current_status == "asap_orange") ? 'asap_green' : 'asap_orange';
+    $("#asap_status_arch").removeClass(current_status);
+    $("#asap_status_arch").addClass(change_status);
+    
     $("#date_for_alt_arc").val("ASAP");
     $("#time_for_alt_arc").val("ASAP");
     $("body").append("<div class='modal-overlay js-modal-close'></div>");
