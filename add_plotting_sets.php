@@ -30,7 +30,7 @@ if ($_POST['service_plotting_add'] == '1') {
     $size_custom = $_POST['size_custom'];
     
     
-    $sql_option_id = mysql_query("SELECT options FROM sohorepro_plotting_set WHERE company_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0' ORDER BY options ASC LIMIT 1");
+    $sql_option_id = mysql_query("SELECT options FROM sohorepro_plotting_set WHERE company_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0' ORDER BY options DESC LIMIT 1");
     $object_option = mysql_fetch_assoc($sql_option_id);
 
         if (count($object_option['options']) > 0) {
