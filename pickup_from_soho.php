@@ -5,6 +5,7 @@ error_reporting(0);
 
 if ($_POST['pickup_from_soho'] == '1') {
     $pickup_from_soho_add = $_POST['pickup_from_soho_add'];
+    $current_option = CurrentOption($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $rem_avl_options = AvlOptionsRemaining($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     ?>
@@ -37,7 +38,8 @@ if ($_POST['pickup_from_soho'] == '1') {
                             <td style="font-weight: bold;">Folding</td>
                         </tr> 
                         <?php
-                        $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        //$enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        $enteredPlot = EnteredPlotRecipientsCurrentOption($current_option[0]['id']);
                         $i = 1;
                         foreach ($enteredPlot as $entered) {
                             $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
@@ -46,7 +48,7 @@ if ($_POST['pickup_from_soho'] == '1') {
                             $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Copies';
                             $type = ($entered['plot_arch'] == '1') ? '1' : '0';
                             $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeeded($company_id_view_plot, $user_id_add_set) : ArchSetsNeeded($company_id_view_plot, $user_id_add_set);
+                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
                             $plot_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1');
                             $copy_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
                             ?>

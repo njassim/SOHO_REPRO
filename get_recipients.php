@@ -62,7 +62,7 @@ if ($_POST['recipients'] == '1') {
                             $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Architectural Copies';
                             $type = ($entered['plot_arch'] == '1') ? '1' : '0';
                             $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeeded($company_id_view_plot, $user_id_add_set) : ArchSetsNeeded($company_id_view_plot, $user_id_add_set);
+                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
                             $plot_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1');
                             $copy_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
                            
@@ -424,7 +424,13 @@ if ($_POST['recipients'] == '1') {
     $entered_needed_sets = NeededSets($user_session_comp, $user_session);
     $r = 1;
     foreach ($entered_needed_sets as $entered_sets) {
-        $shipp_add = SelectIdAddressService($entered_sets['shipp_id']);
+        if($entered_sets['shipp_id'] == "P1"){
+            $shipp_add = AddressBookPickupSohoCap("P1");
+        }elseif ($entered_sets['shipp_id'] == "P2") {
+            $shipp_add = AddressBookPickupSohoCap("P2");
+        }  else{
+            $shipp_add = SelectIdAddressService($entered_sets['shipp_id']);
+        }
         $plot_binding = ($entered_sets['binding'] == '0') ? '' : ',' . $entered_sets['binding'];
         $plot_folding = ($entered_sets['folding'] == '0') ? '' : ',' . $entered_sets['folding'];
         $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ',' . $entered_sets['arch_binding'];
@@ -448,7 +454,10 @@ if ($_POST['recipients'] == '1') {
                     $add_2      = ($shipp_add[0]['address_2'] == '') ? '' : $shipp_add[0]['address_2'] . '<br>';
                     $add_3      = ($shipp_add[0]['address_3'] == '') ? '' : $shipp_add[0]['address_3'] . '<br>';                    
                     //echo $shipp_add[0]['company_name'] . '<br>' . $shipp_add[0]['address_1'] . ',<br>' . $add_2 . $shipp_add[0]['city'] . ',&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip'].'<br>'.'Attention to:  '.$entered_sets['attention_to'];
-                    ?>
+                    if(($entered_sets['shipp_id'] == "P1") || ($entered_sets['shipp_id'] == "P2")){
+                    echo $shipp_add[0]['address']; 
+                    }else{
+                    ?>                    
                     <span style="width:100%;float: left;"><?php echo $comp_name; ?></span>
                     <span style="width:100%;float: left;">Attention:  <?php echo $entered_sets['attention_to']; ?></span>
                     <?php if($entered_sets['contact_ph'] != ""){ ?>
@@ -462,7 +471,7 @@ if ($_POST['recipients'] == '1') {
                     <span style="width:100%;float: left;"><?php echo $add_3; ?></span>
                     <?php } ?>
                     <span style="width:100%;float: left;"><?php echo $shipp_add[0]['city'] . ',&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip']; ?></span>
-                    
+                    <?php } ?>
                 </div>
                 <!-- Address Show End -->
 
@@ -647,7 +656,7 @@ if ($_POST['recipients'] == '1') {
                             $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Architectural Copies';
                             $type = ($entered['plot_arch'] == '1') ? '1' : '0';
                             $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeeded($company_id_view_plot, $user_id_add_set) : ArchSetsNeeded($company_id_view_plot, $user_id_add_set);
+                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
                             $needed_all_sets = ($entered['plot_arch'] == '1') ? EnteredSetsAll($entered['options'],$company_id_view_plot, $user_id_add_set) : EnteredSetsAll($entered['options'],$company_id_view_plot, $user_id_add_set);
                             ?>
                             <?php

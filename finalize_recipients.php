@@ -355,17 +355,22 @@ padding-bottom: 0px !important;
                                             <?php
                                             foreach ($cust_original_order as $original){
                                                 $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
-                                                $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';   
+                                                $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';  
+                                                $size         = ($original['size'] == 'undefined') ? $original['arch_size'] : $original['size'];
+                                                $output       = ($original['output'] == 'undefined') ? $original['arch_output'] : $original['output'];
+                                                $media        = ($original['media'] == 'undefined') ? $original['arch_media'] : $original['media'];
+                                                $binding      = ($original['binding'] == 'undefined') ? $original['arch_binding'] : $original['binding'];
+                                                $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];    
                                             ?>
                                             <tr bgcolor="#F8F8F8">
                                                 <td><?php echo $original['origininals']; ?></td>
                                                 <td><?php echo $cust_needed_sets; ?></td>
                                                 <td><?php echo $cust_order_type; ?></td>                            
-                                                <td><?php echo $original['size']; ?></td>
-                                                <td><?php echo $original['output']; ?></td>
-                                                <td><?php echo $original['media']; ?></td>
-                                                <td><?php echo $original['binding']; ?></td>
-                                                <td><?php echo $original['folding']; ?></td>
+                                                <td><?php echo $size; ?></td>
+                                                <td><?php echo $output; ?></td>
+                                                <td><?php echo $media; ?></td>
+                                                <td><?php echo $binding; ?></td>
+                                                <td><?php echo $folding; ?></td>
                                             </tr>
                                             <?php } ?>
                                         </table>

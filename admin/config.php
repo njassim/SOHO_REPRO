@@ -2600,7 +2600,7 @@ function EnteredPlot($comp_id, $user_id) {
 }
 
 function EnteredPlotRecipients($comp_id, $user_id) {
-    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' GROUP BY plot_arch ORDER BY plot_arch DESC" ;
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' ORDER BY plot_arch DESC" ;
     $details       = mysql_query($select_fav);
     while ($object = mysql_fetch_assoc($details)):
         $value[] = $object;
@@ -2609,7 +2609,7 @@ function EnteredPlotRecipients($comp_id, $user_id) {
 }
 
 function EnteredPlotRecipientsMulti($comp_id, $user_id, $order_id) {
-    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '".$order_id."' GROUP BY plot_arch ORDER BY plot_arch DESC" ;
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '".$order_id."' ORDER BY plot_arch DESC" ;
     $details       = mysql_query($select_fav);
     while ($object = mysql_fetch_assoc($details)):
         $value[] = $object;
@@ -2687,6 +2687,14 @@ function PlotSetsNeeded($comp_id, $user_id) {
     return $catg;
 }
 
+function PlotSetsNeededNew($comp_id, $user_id, $option_id) {
+    $select_price = "SELECT SUM(plot_needed) as needed_plot FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed_plot'];
+    return $catg;
+}
+
 function ArchSetsNeeded($comp_id, $user_id) {
     $select_price = "SELECT SUM(arch_needed) as needed_arch FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."'  AND order_id = '0' " ;
     $price = mysql_query($select_price);
@@ -2695,6 +2703,13 @@ function ArchSetsNeeded($comp_id, $user_id) {
     return $catg;
 }
 
+function ArchSetsNeededNew($comp_id, $user_id, $option_id) {
+    $select_price = "SELECT SUM(arch_needed) as needed_arch FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."'  AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed_arch'];
+    return $catg;
+}
 
 function CheckSerials($comp_id, $user_id,$serial) {
     $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND set_serial = '".$serial."' " ;
