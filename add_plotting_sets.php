@@ -28,10 +28,23 @@ if ($_POST['service_plotting_add'] == '1') {
     $user_name_val = $_POST['user_name_val'];
     $password_val = $_POST['password_val'];
     $size_custom = $_POST['size_custom'];
+    
+    
+    $sql_option_id = mysql_query("SELECT options FROM sohorepro_plotting_set WHERE company_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0' ORDER BY options DESC LIMIT 1");
+    $object_option = mysql_fetch_assoc($sql_option_id);
+
+        if (count($object_option['options']) > 0) {
+            $options = ($object_option['options'] + 1);
+        } 
+        else{
+            $options = '1';
+        }
+    
 
     $query = "INSERT INTO sohorepro_plotting_set
 			SET     referece_id     = '" . $job_reference . "',
                                 origininals     = '" . $original . "',
+                                options         = '" . $options ."',  
                                 print_ea        = '" . $print_ea . "',
                                 size            = '" . $size . "',
                                 custome_details = '" . $size_custom . "',    
@@ -366,19 +379,20 @@ if ($_POST['service_plotting_add'] == '1') {
                             <!--FTP Details Start-->
 
                             <!--Pickup Details Start-->
-                            <div id="date_time" style="padding-top: 10px;border: 1px #FF7E00 solid;margin-top: 7px;float: left;width: 30%;padding-bottom: 10px;display:none;">
-                                <div style="width: 100%;">
-                                    <input style="margin-left: 75px;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" name="ready_now" value="READY NOW" id="ready_now" onclick="return ready_now();" />
-                                </div>                      
+                            <div id="date_time" style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;display:none;">
+                                <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />                                
+                                <div style="width: 34%;float: left;"> 
 
-                                <div style="border: 1px #CCC solid;width: 95%;margin-left: 5px;margin-bottom: 10px;"></div>
+                                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
+                                        <span id="asap_status" class="asap_orange" onclick="return asap();">READY NOW</span>
+                                    </div>
 
-                                <div style="padding: 5px;">
-                                    <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />
-                                    <input type="text" name="date_for_alt" id="date_for_alt" style="width: 30%;margin-left: 5px;" class="date_for_alt picker_icon" onclick="return date_revele();" />                        
+                                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
+                                        <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt" style="width: 75px;" onclick="date_reveal();" />
+                                        <input id="time_for_alt" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
+                                    </div>
 
-                                    <input id="time_for_alt" type="text" style="width: 30%;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" />
-                                </div>                        
+                                </div>
                             </div>
                             <!--Pickup Details End-->
 
@@ -430,20 +444,20 @@ if ($_POST['service_plotting_add'] == '1') {
                             <!--Pickup Details Start-->
 
                             <div id="date_time_arch" style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;display:none;">
-                                <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />                                
-                                <div style="width: 34%;float: left;"> 
+                            <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />                                
+                            <div style="width: 34%;float: left;"> 
 
-                                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                                        <span style="cursor: pointer;display: inline-block;background: #F99B3E;color: #000;padding: 5px 20px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return asap_arc();">READY NOW</span>
-                                    </div>
-
-                                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                                        <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 75px;" onclick="date_reveal();" />
-                                        <input id="time_for_alt_arc" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
-                                    </div>
-
+                                <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
+                                    <span id="asap_status_arch" class="asap_orange" onclick="return asap_arc();">READY NOW</span>
                                 </div>
+
+                                <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
+                                    <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 75px;" onclick="date_reveal();" />
+                                    <input id="time_for_alt_arc" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
+                                </div>
+
                             </div>
+                        </div>
                             <!--Pickup Details End-->
 
                             <!--Drop off Details Start-->

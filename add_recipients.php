@@ -263,6 +263,9 @@ padding-bottom: 0px !important;
   <h2 class="headline-interior orange">
 	Delivery Job Reference: <?php echo $_SESSION['ref_val']; ?>
   </h2>
+<?php
+$number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+?>
 
   <div class="bkgd-stripes-orange">
     &nbsp;
@@ -496,6 +499,30 @@ padding-bottom: 0px !important;
      }
  }
  
+ function everything_return_arch()
+ {
+     var everything_return = document.getElementById('everything_return').checked;
+     if(everything_return == true){ 
+         $.ajax
+                ({
+                    type: "POST",
+                    url: "everything_return.php",
+                    data: "everything_return=1_99",
+                    beforeSend: loadStart,
+                    complete: loadStop,
+                    success: function(option)
+                    {  
+                        $('#multi_recipients').slideDown();
+                        $('#multi_recipients').html(option);
+                        $('#add_recipients').slideUp();
+                    }
+                });
+     }else{
+         $('#multi_recipients').slideUp();
+         $('#add_recipients').slideUp();
+     }
+ }
+ 
  function send_everything_to()
  {
      var send_everything_to = document.getElementById('send_everything_to').checked;
@@ -608,6 +635,8 @@ padding-bottom: 0px !important;
      
      var shipp_att              = $("#shipp_att").val();
      
+     var option_id              =   $("#option_id").val();
+     
      var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
      
      var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
@@ -663,14 +692,19 @@ padding-bottom: 0px !important;
         ({
             type: "POST",
             url: "get_recipients.php",                  
-            data: "recipients=9&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph),
+            data: "recipients=9&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id),
             beforeSend: loadStart,
             complete: loadStop,
             success: function(option)
             {  
+                var element = option.split("~");
+                if(element[0] == element[1]){
+                window.location = "view_all_recipients.php";  
+                }else{
                 $('#multi_recipients').slideDown();
-                $('#multi_recipients').html(option);
+                $('#multi_recipients').html(element[2]);
                 $('#add_recipients').slideDown();
+                }
             }
         });
  }
@@ -714,6 +748,12 @@ padding-bottom: 0px !important;
      
      var need_sets              =   $(".need_sets").val();
      var avl_sets               =   $(".avl_sets").val();
+     var arch_exist             =   $("#arch_exist").val();     
+    
+     var tot_avl_options        =   $("#tot_avl_options").val();
+     var rem_avl_options        =   $("#rem_avl_options").val();
+     
+     var option_id              =   $("#option_id").val();
      
      var preffer_del            = document.getElementById('preffer_del').checked;  
          
@@ -734,7 +774,7 @@ padding-bottom: 0px !important;
             var shipp_comp_3_f  =   '0';
      }      
      
-     
+     //alert(tot_avl_options+' '+rem_avl_options);
      if(shipping_id == '0'){
          alert('Please select send to address');
          $("#address_book_rp").focus();
@@ -758,6 +798,13 @@ padding-bottom: 0px !important;
          return false;
      }
      
+     if(tot_avl_options != rem_avl_options){       
+         add_recipients();
+         return false;
+     }else{
+         return true;
+     }
+     
      if(preffer_del == true){
         var bill_number = $("#bill_number").val(); 
         if(bill_number ==''){
@@ -771,7 +818,7 @@ padding-bottom: 0px !important;
         ({
             type: "POST",
             url: "get_recipients.php",                  
-            data: "recipients=9&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph),
+            data: "recipients=9&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id),
             beforeSend: loadStart,
             complete: loadStop,
             success: function(option)

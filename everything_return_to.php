@@ -5,8 +5,15 @@ error_reporting(0);
 
 if ($_POST['everything_return_to'] == '1') {
     $address_book_se = $_POST['address_book_se'];
+    $current_option = CurrentOption($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
+    $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
+    $rem_avl_options = AvlOptionsRemaining($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     ?>
-<div style="border: 1px #F99B3E solid;margin-bottom: 20px;padding-bottom: 20px;width: 100%;float: left;">
+    <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
+        <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo $current_option[0]['options']; ?></div>
+        <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo $current_option[0]['options'] . '/' . count($number_of_sets); ?></div>
+    </div>
+    <div style="border: 1px #F99B3E solid;margin-bottom: 20px;padding-bottom: 20px;width: 100%;float: left;">
         <div style="width: 100%;float: left;margin-top: 10px;">
             <div style="float: left;width: 48%;margin-left: 10px;font-weight: bold;">RECIPIENT 1</div>
             <div style="float: right;width: 20%;font-weight: bold;cursor: pointer;" title="Delete Recipient" alt="Delete Recipient" onclick="return delete_recipient_empty();"><span style="background: #D84B36;color: #FFF;padding: 2px 8px;border-radius: 5px;margin-top: 3px;font-weight: bold;">Delete</span></div>
@@ -31,7 +38,8 @@ if ($_POST['everything_return_to'] == '1') {
                             <td style="font-weight: bold;">Folding</td>
                         </tr> 
                         <?php
-                        $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        //$enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        $enteredPlot = EnteredPlotRecipientsCurrentOption($current_option[0]['id']);
                         $i = 1;
                         foreach ($enteredPlot as $entered) {
                             $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
@@ -40,13 +48,14 @@ if ($_POST['everything_return_to'] == '1') {
                             $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Copies';
                             $type = ($entered['plot_arch'] == '1') ? '1' : '0';
                             $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeeded($company_id_view_plot, $user_id_add_set) : ArchSetsNeeded($company_id_view_plot, $user_id_add_set);
+                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
                             $plot_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1');
                             $copy_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
                             ?>
                             <?php
                             if ($entered['plot_arch'] == '1') {
                                 ?>
+                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
                                 <tr bgcolor="#ffeee1">
                                     <td>Plotting on Bond</td>
                                     <td><?php echo $available_order[0]['origininals']; ?></td>
@@ -61,10 +70,11 @@ if ($_POST['everything_return_to'] == '1') {
                                 <?php
                             }
                             ?>
-                            
+
                             <?php
                             if ($entered['plot_arch'] == '0') {
                                 ?>
+                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
                                 <tr bgcolor="#ffeee1">
                                     <td>Architectural Copies</td>
                                     <td><?php echo $available_order[0]['origininals']; ?></td>
@@ -79,17 +89,17 @@ if ($_POST['everything_return_to'] == '1') {
                                 <?php
                             }
                             ?>
-                                <?php
+                            <?php
                             $i++;
                         }
                         ?>
                     </table>
                 </div>
-                
+
                 <div style="width: 99%;float: left;margin-top: 5px;">
-                        <?php 
-                    if($entered['size'] == 'Custom'){
-                    ?>
+                    <?php
+                    if ($entered['size'] == 'Custom') {
+                        ?>
                         <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
                             <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
                                 Custom Size Details
@@ -99,57 +109,60 @@ if ($_POST['everything_return_to'] == '1') {
                                 <?php echo $entered['custome_details']; ?>
                             </div>
                         </div>
-                    <?php }
-                    if($entered['output'] == 'Both'){
-                    ?>
+                    <?php
+                    }
+                    if ($entered['output'] == 'Both') {
+                        ?>
                         <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
                             <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
                                 Color Page Numbers
                             </div>
                             <div style="padding-top: 3px;width: 100%;float: left;">
                                 <input type="hidden" name="output_page_details" id="output_page_details" value="<?php echo $entered['output_both']; ?>" />
-                                <?php echo $entered['output_both']; ?>
+        <?php echo $entered['output_both']; ?>
                             </div>
                         </div>
-                    <?php }
-                    if($entered['spl_instruction'] != ''){
-                    ?> 
+                    <?php
+                    }
+                    if ($entered['spl_instruction'] != '') {
+                        ?> 
                         <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
                             <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
                                 Special Instructions
                             </div>
                             <div style="padding-top: 3px;width: 100%;float: left;">
                                 <input type="hidden" name="spl_instruction" id="spl_instruction" value="<?php echo $entered['spl_instruction']; ?>" />
-                                <?php echo $entered['spl_instruction']; ?>
+                        <?php echo $entered['spl_instruction']; ?>
                             </div>
                         </div>
-                    <?php
-                    }if($entered['plot_arch'] == '0'){
-                        if($entered['pick_up_time'] != '0'){
-                    ?>
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Pickup Option
+                        <?php
+                    }if ($entered['plot_arch'] == '0') {
+                        if ($entered['pick_up_time'] != '0') {
+                            ?>
+                            <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
+                                <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
+                                    Pickup Option
+                                </div>
+                                <div style="padding-top: 3px;width: 100%;float: left;">
+                                    <input type="hidden" name="pick_up_time" id="pick_up_time" value="<?php echo $entered['pick_up_time']; ?>" />
+                            <?php echo $entered['pick_up'] . ' ' . $entered['pick_up_time']; ?>
+                                </div>
                             </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="pick_up_time" id="pick_up_time" value="<?php echo $entered['pick_up_time']; ?>" />
-                                <?php echo $entered['pick_up'].' '.$entered['pick_up_time']; ?>
+        <?php }if ($entered['drop_off'] != '0') { ?>
+                            <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
+                                <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
+                                    Pickup Option
+                                </div>
+                                <div style="padding-top: 3px;width: 100%;float: left;">
+                                    <input type="hidden" name="drop_off" id="drop_off" value="<?php echo $entered['drop_off']; ?>" />
+                            <?php echo $entered['drop_off']; ?>
+                                </div>
                             </div>
-                        </div>
-                        <?php }if($entered['drop_off'] != '0'){ ?>
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Pickup Option
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="drop_off" id="drop_off" value="<?php echo $entered['drop_off']; ?>" />
-                                <?php echo $entered['drop_off']; ?>
-                            </div>
-                        </div>
-                        <?php } } ?>
+                    <?php }
+                } ?>
                 </div>
-                                
-                <?php 
+
+                <?php
                 $all_days_off = AllDayOff();
                 foreach ($all_days_off as $days_off_split) {
                     $all_days_in[] = $days_off_split['date'];
@@ -163,41 +176,41 @@ if ($_POST['everything_return_to'] == '1') {
             <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
                 <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">                    
                     <?php
-                    $address_book       = AddressBookCompanySentTo($address_book_se);
-                    $address_book_drop  = AddressBookCompanyService($company_id_view_plot);
-                    
-                    foreach ($address_book_drop as $address) {                       
+                    $address_book = AddressBookCompanySentTo($address_book_se);
+                    $address_book_drop = AddressBookCompanyService($company_id_view_plot);
+
+                    foreach ($address_book_drop as $address) {
                         ?>                                                                                        
-                    <option value="<?php echo $address['id']; ?>" <?php if($address['id'] == $address_book_se){ ?> selected="selected" <?php } ?>><?php echo $address['company_name']; ?></option>
-                        <?php
-                    }
-                    ?>
+                        <option value="<?php echo $address['id']; ?>" <?php if ($address['id'] == $address_book_se) { ?> selected="selected" <?php } ?>><?php echo $address['company_name']; ?></option>
+        <?php
+    }
+    ?>
                 </select>
             </div>
             <!-- Address Show Start -->
             <div id="show_address" style="float: left;width: 56%;padding: 6px;border: 1px #F99B3E solid;margin-top: 10px;margin-left: 5px;height: 20px;font-weight: bold;">
                 <?php
-                $address_1 = ($address_book[0]['address_1'] != '') ? $address_book[0]['address_1'].',' : '';
-                $address_2 = ($address_book[0]['address_2'] != '') ? $address_book[0]['address_2'].',' : '';
-                echo $address_1.$address_2.$address_book[0]['city'].', '.StateName($address_book[0]['state']).' '.$address_book[0]['zip'];
+                $address_1 = ($address_book[0]['address_1'] != '') ? $address_book[0]['address_1'] . ',' : '';
+                $address_2 = ($address_book[0]['address_2'] != '') ? $address_book[0]['address_2'] . ',' : '';
+                echo $address_1 . $address_2 . $address_book[0]['city'] . ', ' . StateName($address_book[0]['state']) . ' ' . $address_book[0]['zip'];
                 ?>
             </div>
-            
-<!--            <div style="float: left;width: 100%;margin-top: 10px;">
-                <div style="float: right;width: 61%;font-weight: bold;">Attention to: </div>
-            </div>
-            <div style="float: left;width: 100%;margin-top: 10px;">
-                <div style="float: right;width: 61%;">
-                    <div id="show_address_att" style="float: left;width: 50%;border: 1px #F99B3E solid;padding: 5px;height: 25px;">
-                        <input type="text" name="shipp_att" id="shipp_att" value="<?php echo $address_book[0]['attention_to']; ?>" style="background-color: #F3FA2F; font-weight: bold; font-size: 20px !important;" />
-                    </div>
-                </div>
-            </div>-->   
+
+            <!--            <div style="float: left;width: 100%;margin-top: 10px;">
+                            <div style="float: right;width: 61%;font-weight: bold;">Attention to: </div>
+                        </div>
+                        <div style="float: left;width: 100%;margin-top: 10px;">
+                            <div style="float: right;width: 61%;">
+                                <div id="show_address_att" style="float: left;width: 50%;border: 1px #F99B3E solid;padding: 5px;height: 25px;">
+                                    <input type="text" name="shipp_att" id="shipp_att" value="<?php echo $address_book[0]['attention_to']; ?>" style="background-color: #F3FA2F; font-weight: bold; font-size: 20px !important;" />
+                                </div>
+                            </div>
+                        </div>-->   
             <div style="float: left;width: 100%;margin-top: 5px;">   
                 <div style="float: left;width: 40%;">
                     &nbsp;
                 </div>
-            <!-- Attention To Start -->
+                <!-- Attention To Start -->
                 <div style="float: left;width: 30%;">
                     <div style="float: left;width: 100%;margin-top: 10px;">
                         <div style="float: right;width: 100%;font-weight: bold;">Attention to:   </div>
@@ -224,8 +237,8 @@ if ($_POST['everything_return_to'] == '1') {
                         </div>
                     </div>
                 </div>
-                 <!-- Contact Phone End -->
-                  </div>
+                <!-- Contact Phone End -->
+            </div>
 
             <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
                 <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />
@@ -236,7 +249,7 @@ if ($_POST['everything_return_to'] == '1') {
 
                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
                         <span id="asap_status" class="asap_orange" onclick="return asap();">ASAP</span> 
-                   </div>
+                    </div>
 
                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
                         <input class="picker_icon" value="" type="text" name="date_needed" id="date_needed" style="width: 75px;" onclick="date_reveal();" />
@@ -252,7 +265,7 @@ if ($_POST['everything_return_to'] == '1') {
                     <div style="padding: 10px 20px;background: #EFEFEF;border-radius: 5px;width: 225px;margin-right: 10px;float: left;">
                         <input type="checkbox" name="arrange_del" id="arrange_del" checked style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px;" onclick="uncheck_delivery();" /><span style="text-transform: uppercase;">Soho to arrange delivery</span>
                     </div>              
-                
+
                 </div>
                 <div style="width: 265px;margin-right: 10px;float: left;margin-right: 10px;">
 

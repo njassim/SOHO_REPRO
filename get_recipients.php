@@ -14,7 +14,16 @@ error_reporting(0);
 // Made the Repository 
 
 if ($_POST['recipients'] == '1') {
+            $current_option     = CurrentOption($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']); 
+            $number_of_sets     = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+            $rem_avl_options    = AvlOptionsRemaining($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
     ?>
+    <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
+            <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo $current_option[0]['options']; ?></div>
+            <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo $current_option[0]['options'].'/'.count($number_of_sets); ?></div>
+    </div>
+    <input type="hidden" name="tot_avl_options" id="tot_avl_options" value="<?php echo count($number_of_sets); ?>" />
+    <input type="hidden" name="rem_avl_options" id="rem_avl_options" value="<?php echo count($rem_avl_options); ?>" />
     <div style="border: 1px #F99B3E solid;margin-bottom: 20px;padding-bottom: 20px;width: 100%;float: left;">
         <div style="width: 100%;float: left;margin-top: 10px;">
             <div style="float: left;width: 48%;margin-left: 10px;font-weight: bold;">RECIPIENT 1</div>
@@ -40,7 +49,11 @@ if ($_POST['recipients'] == '1') {
                             <td style="font-weight: bold;">Folding</td>
                         </tr> 
                         <?php
-                        $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                       // $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        $enteredPlot = EnteredPlotRecipientsCurrentOption($current_option[0]['id']);
+//                        echo '<pre>';
+//                        print_r($enteredPlot);
+//                        echo '</pre>';
                         $i = 1;
                         foreach ($enteredPlot as $entered) {
                             $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
@@ -49,22 +62,13 @@ if ($_POST['recipients'] == '1') {
                             $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Architectural Copies';
                             $type = ($entered['plot_arch'] == '1') ? '1' : '0';
                             $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeeded($company_id_view_plot, $user_id_add_set) : ArchSetsNeeded($company_id_view_plot, $user_id_add_set);
+                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
                             $plot_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1');
                             $copy_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            ?>
-                        <!-- <tr bgcolor="<?php echo $rowColor; ?>">
-                                <td><?php echo $order_type; ?></td>
-                                <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_<?php echo $i; ?>" class="avl_sets" id="avl_sets_<?php echo $i; ?>"  value="<?php echo ($available_order[0]['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_<?php echo $i; ?>" class="need_sets" id="need_sets_<?php echo $i; ?>" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty('<?php echo $i; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty('<?php echo $i; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
-                                <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $i; ?>" value="<?php echo $binding; ?>" /></td>
-                                <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $i; ?>" value="<?php echo $folding; ?>" /></td>
-                            </tr>-->
-                            <?php
+                           
                             if ($entered['plot_arch'] == '1') {
                                 ?>
+                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
                                 <tr bgcolor="#ffeee1">
                                     <td>Plotting on Bond</td>
                                     <td><?php echo $available_order[0]['origininals']; ?></td>
@@ -83,6 +87,7 @@ if ($_POST['recipients'] == '1') {
                             <?php
                             if ($entered['plot_arch'] == '0') {
                                 ?>
+                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
                                 <tr bgcolor="#ffeee1">
                                     <td>Architectural Copies</td>
                                     <td><?php echo $available_order[0]['origininals']; ?></td>
@@ -366,12 +371,15 @@ if ($_POST['recipients'] == '1') {
     $attention_to               = $_POST['attention_to'];
     
     $contact_ph                 = $_POST['contact_ph'];
+    
+    $option_id                  = $_POST['option_id'];
 
     $query = "INSERT INTO sohorepro_sets_needed
 			SET     comp_id         = '" . $user_session_comp . "',
                                 usr_id          = '" . $user_session . "',
                                 plot_needed     = '" . $need_sets_1 . "',
                                 size            = '" . $size_sets_1 . "',
+                                option_id       = '" . $option_id ."',  
                                 custome_details     = '" . $size_custom_details. "',
                                 output              = '" . $output_sets_1 . "',
                                 output_page_number  = '" . $output_page_details."',
@@ -394,12 +402,35 @@ if ($_POST['recipients'] == '1') {
                                 shipp_comp_1    = '" . $shipp_comp_1_f . "',
                                 shipp_comp_2    = '" . $shipp_comp_2_f . "',
                                 shipp_comp_3    = '" . $shipp_comp_3_f . "' ";
-    $sql_result = mysql_query($query);
-
+    $sql_result             = mysql_query($query);
+    $enteredSetsOptions     = EnteredOptionsSet($option_id);
+    $current_option         = CurrentOption($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']); 
+    $current_option_check   = $current_option[0]['print_ea'];
+    $sumOfplott             = SumOffPlott($option_id);
+    $sumOfArch              = SumOffArch($option_id);
+    
+    $enteredSetsOptionsSets = ($enteredSetsOptions[0]['plot_needed'] != '0') ? $sumOfplott : $sumOfArch;
+    
+    if($current_option_check == $enteredSetsOptionsSets){
+    $update_recipient_set = "UPDATE sohorepro_plotting_set SET recipients_set = '1' WHERE company_id = '".$user_session_comp."' AND user_id = '".$user_session."' AND order_id = '0' AND recipients_set = '0' ORDER BY options ASC LIMIT 1";
+    mysql_query($update_recipient_set);
+    }
+    
+    $number_of_sets     = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+    $rem_avl_options    = AvlOptionsRemaining($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+    echo count($number_of_sets).'~'.count($rem_avl_options).'~';
+    ?>
+    <?php
     $entered_needed_sets = NeededSets($user_session_comp, $user_session);
     $r = 1;
     foreach ($entered_needed_sets as $entered_sets) {
-        $shipp_add = SelectIdAddressService($entered_sets['shipp_id']);
+        if($entered_sets['shipp_id'] == "P1"){
+            $shipp_add = AddressBookPickupSohoCap("P1");
+        }elseif ($entered_sets['shipp_id'] == "P2") {
+            $shipp_add = AddressBookPickupSohoCap("P2");
+        }  else{
+            $shipp_add = SelectIdAddressService($entered_sets['shipp_id']);
+        }
         $plot_binding = ($entered_sets['binding'] == '0') ? '' : ',' . $entered_sets['binding'];
         $plot_folding = ($entered_sets['folding'] == '0') ? '' : ',' . $entered_sets['folding'];
         $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ',' . $entered_sets['arch_binding'];
@@ -423,7 +454,10 @@ if ($_POST['recipients'] == '1') {
                     $add_2      = ($shipp_add[0]['address_2'] == '') ? '' : $shipp_add[0]['address_2'] . '<br>';
                     $add_3      = ($shipp_add[0]['address_3'] == '') ? '' : $shipp_add[0]['address_3'] . '<br>';                    
                     //echo $shipp_add[0]['company_name'] . '<br>' . $shipp_add[0]['address_1'] . ',<br>' . $add_2 . $shipp_add[0]['city'] . ',&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip'].'<br>'.'Attention to:  '.$entered_sets['attention_to'];
-                    ?>
+                    if(($entered_sets['shipp_id'] == "P1") || ($entered_sets['shipp_id'] == "P2")){
+                    echo $shipp_add[0]['address']; 
+                    }else{
+                    ?>                    
                     <span style="width:100%;float: left;"><?php echo $comp_name; ?></span>
                     <span style="width:100%;float: left;">Attention:  <?php echo $entered_sets['attention_to']; ?></span>
                     <?php if($entered_sets['contact_ph'] != ""){ ?>
@@ -437,7 +471,7 @@ if ($_POST['recipients'] == '1') {
                     <span style="width:100%;float: left;"><?php echo $add_3; ?></span>
                     <?php } ?>
                     <span style="width:100%;float: left;"><?php echo $shipp_add[0]['city'] . ',&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip']; ?></span>
-                    
+                    <?php } ?>
                 </div>
                 <!-- Address Show End -->
 
@@ -566,8 +600,17 @@ if ($_POST['recipients'] == '1') {
         <?php
         $r++;
     }
-    ?>
-
+            $current_option     = CurrentOption($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']); 
+            $number_of_sets     = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+            $rem_avl_options    = AvlOptionsRemaining($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+        ?>
+        <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
+            <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo $current_option[0]['options']; ?></div>
+            <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo $current_option[0]['options'].'/'.count($number_of_sets); ?></div>
+        </div>
+        <input type="hidden" name="tot_avl_options" id="tot_avl_options" value="<?php echo count($number_of_sets); ?>" />
+        <input type="hidden" name="rem_avl_options" id="rem_avl_options" value="<?php echo count($rem_avl_options); ?>" />
+        
     <!-- New Recipients Start -->
     <div style="border: 1px #F99B3E solid;margin-top: 5px;margin-bottom: 20px;padding-bottom: 20px;width: 100%;float: left;">
         <div style="width: 100%;float: left;margin-top: 10px;">
@@ -598,7 +641,13 @@ if ($_POST['recipients'] == '1') {
                             <td style="font-weight: bold;">Folding</td>
                         </tr> 
                         <?php
-                        $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        //$enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
+                        $enteredPlot    = EnteredPlotRecipientsCurrentOption($current_option[0]['id']);
+                        $setted_option  = SettedOptions($company_id_view_plot,$user_id_add_set);
+                        $print_ea_tot   = $enteredPlot[0]['print_ea'];
+//                        echo '<pre>';
+//                        print_r($enteredPlot);
+//                        echo '</pre>';
                         $i = 1;
                         foreach ($enteredPlot as $entered) {
                             $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
@@ -607,15 +656,17 @@ if ($_POST['recipients'] == '1') {
                             $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Architectural Copies';
                             $type = ($entered['plot_arch'] == '1') ? '1' : '0';
                             $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeeded($company_id_view_plot, $user_id_add_set) : ArchSetsNeeded($company_id_view_plot, $user_id_add_set);
+                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
+                            $needed_all_sets = ($entered['plot_arch'] == '1') ? EnteredSetsAll($entered['options'],$company_id_view_plot, $user_id_add_set) : EnteredSetsAll($entered['options'],$company_id_view_plot, $user_id_add_set);
                             ?>
                             <?php
                             if ($entered['plot_arch'] == '1') {
                                 ?>
+                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
                                 <tr bgcolor="#ffeee1">
                                     <td>Plotting on Bond</td>
                                     <td><?php echo $available_order[0]['print_ea']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_1" class="avl_sets"  value="<?php echo ($available_order[0]['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
+                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_1" class="avl_sets"  value="<?php echo ($entered['print_ea']- $needed_all_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_1" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty('<?php echo $i; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty('<?php echo $i; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
                                     <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
@@ -630,6 +681,7 @@ if ($_POST['recipients'] == '1') {
                             <?php
                             if ($entered['plot_arch'] == '0') {
                                 ?>
+                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
                                 <tr bgcolor="#ffeee1">
                                     <td>Architectural Copies</td>
                                     <td><?php echo $available_order[0]['print_ea']; ?></td>
@@ -872,7 +924,7 @@ if ($_POST['recipients'] == '1') {
     <!-- New Recipients End -->
 
     <?php
-} elseif ($_POST['recipients'] == '8') {
+ } elseif ($_POST['recipients'] == '8') {
 
     $delete_rec_id = $_POST['delete_rec_id'];
     $user_session = $_POST['user_session'];
@@ -3009,7 +3061,7 @@ if ($_POST['recipients'] == '1') {
     }
 } elseif ($_POST['recipients'] == '0_0') {
 
-    $reference = $_SESSION['ref_val'];
+    $reference = strtoupper($_SESSION['ref_val']);
 
     $sql_order_sequence = mysql_query("SELECT id,order_sequence FROM sohorepro_order_master ORDER BY id DESC LIMIT 1");
     $object_order_sequence = mysql_fetch_assoc($sql_order_sequence);
@@ -3022,6 +3074,13 @@ if ($_POST['recipients'] == '1') {
 			SET     order_sequence         = '" . $new_sequence . "' WHERE id = '" . $sequence_id . "'";
     mysql_query($query_update);
     
+    //Funcionality for Auto Load Reference Start.
+    $chk_reference    = CheckReference($_SESSION['sohorepro_companyid'],$reference);
+    if(count($chk_reference) == 0){
+    $ref_sql = "INSERT INTO sohorepro_reference SET company_id = '".$_SESSION['sohorepro_companyid']."', user_id = '".$_SESSION['sohorepro_userid']."', reference = '".$reference."' ";
+    mysql_query($ref_sql);
+    }
+    //Funcionality for Auto Load Reference End.
 
     $customer_name              = getCompName($_SESSION['sohorepro_companyid']);
 

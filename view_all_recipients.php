@@ -372,10 +372,10 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                     <?php
                     $cust_original_order    = EnteredPlotRecipients($user_session_comp, $user_session);
                     
-                    $cust_needed_originals  = $cust_original_order[0]['origininals'];
+                    //$cust_needed_originals  = $cust_original_order[0]['origininals'];
                     
-                    $cust_needed_sets       = ($cust_original_order[0]['print_ea'] != '0') ? $cust_original_order[0]['print_ea'] : $cust_original_order[0]['arch_needed'];
-                    $cust_order_type        = ($cust_original_order[0]['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';
+                    //$cust_needed_sets       = ($cust_original_order[0]['print_ea'] != '0') ? $cust_original_order[0]['print_ea'] : $cust_original_order[0]['arch_needed'];
+                    //$cust_order_type        = ($cust_original_order[0]['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';
                     $option                 = ($cust_original_order[0]['plot_arch'] == '0') ? 'Pickup Options:' : 'File Options:';  
                     ?>
                     <table border="1" style="width: 100%;">
@@ -389,16 +389,33 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                             <td style="font-weight: bold;">Binding</td>
                             <td style="font-weight: bold;">Folding</td>
                         </tr>
+                        <?php
+//                        echo '<pre>';
+//                        print_r($cust_original_order);
+//                        echo '</pre>';
+                        
+                        foreach ($cust_original_order as $original){                            
+                            $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
+                            $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';                               
+                            $size         = ($original['size'] == 'undefined') ? $original['arch_size'] : $original['size'];
+                            $output       = ($original['output'] == 'undefined') ? $original['arch_output'] : $original['output'];
+                            $media        = ($original['media'] == 'undefined') ? $original['arch_media'] : $original['media'];
+                            $binding      = ($original['binding'] == 'undefined') ? $original['arch_binding'] : $original['binding'];
+                            $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];                            
+                        ?>
                         <tr bgcolor="#F8F8F8">
-                            <td><?php echo $cust_needed_originals; ?></td>
+                            <td><?php echo $original['origininals']; ?></td>
                             <td><?php echo $cust_needed_sets; ?></td>
                             <td><?php echo $cust_order_type; ?></td>                            
-                            <td><?php echo $cust_original_order[0]['size']; ?></td>
-                            <td><?php echo $cust_original_order[0]['output']; ?></td>
-                            <td><?php echo $cust_original_order[0]['media']; ?></td>
-                            <td><?php echo $cust_original_order[0]['binding']; ?></td>
-                            <td><?php echo $cust_original_order[0]['folding']; ?></td>
+                            <td><?php echo $size; ?></td>
+                            <td><?php echo $output; ?></td>
+                            <td><?php echo $media; ?></td>
+                            <td><?php echo $binding; ?></td>
+                            <td><?php echo $folding; ?></td>
                         </tr>
+                        <?php
+                        }
+                        ?>
                     </table>
                    
                 </div>
@@ -554,6 +571,11 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                         $plot_folding = ($entered_sets['folding'] == '0') ? '' : ','.$entered_sets['folding'];
                         $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ','.$entered_sets['arch_binding'];
                         $arch_folding = ($entered_sets['arch_folding'] == '0') ? '' : ','.$entered_sets['arch_folding'];
+                        $size         = ($entered_sets['size'] == 'undefined') ? $entered_sets['arch_size'] : $entered_sets['size'];
+                        $output       = ($entered_sets['output'] == 'undefined') ? $entered_sets['arch_output'] : $entered_sets['output'];
+                        $media        = ($entered_sets['media'] == 'undefined') ? $entered_sets['arch_media'] : $entered_sets['media'];
+                        $binding      = ($entered_sets['binding'] == 'undefined') ? $entered_sets['arch_binding'] : $entered_sets['binding'];
+                        $folding      = ($entered_sets['folding'] == 'undefined') ? $entered_sets['arch_folding'] : $entered_sets['folding'];
                     ?> 
                             
                         <div style="float: left;" class="shaddows">
@@ -593,11 +615,11 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                         <tr bgcolor="#F8F8F8">
                             <td><?php echo $needed_sets; ?></td>
                             <td><?php echo $order_type; ?></td>                            
-                            <td><?php echo $entered_sets['size']; ?></td>
-                            <td><?php echo $entered_sets['output']; ?></td>
-                            <td><?php echo $entered_sets['media']; ?></td>
-                            <td><?php echo $entered_sets['binding']; ?></td>
-                            <td><?php echo $entered_sets['folding']; ?></td>
+                            <td><?php echo $size; ?></td>
+                            <td><?php echo $output; ?></td>
+                            <td><?php echo $media; ?></td>
+                            <td><?php echo $binding; ?></td>
+                            <td><?php echo $folding; ?></td>
                         </tr>
                     </table>
                     

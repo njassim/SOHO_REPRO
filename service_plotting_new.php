@@ -71,16 +71,15 @@ function delete_plot(ID)
     overflow: hidden;
     padding: 10px;
     position: absolute;
-    /*right: 0;*/
+    right: 0;
     text-align: left;
-    top: 24px;
+    top: 19px;
     width: 185px;
 }
 
 .auto_reference{
     cursor: pointer;
-    /*list-style-type: none !important;*/
-    list-style: none !important;
+    list-style-type: none;
 }
 
 .auto_reference li:hover
@@ -98,9 +97,6 @@ function delete_plot(ID)
 }
 .none{
     display: none;
-}
-.dec:focus #result_ref{
-display: block !important;
 }
 /*.progress { position:relative; width:100%; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
 .bar { background-color: #F99B3E; width:0%; height:20px; border-radius: 3px; }
@@ -278,28 +274,6 @@ color: red;
 .ref_div_star{
     color:red; margin-top: -5px;font-size: 16px;font-weight: bold;
     }
-    
-    .asap_orange{
-    cursor: pointer;
-    display: inline-block;
-    background: #F99B3E;
-    color: #FFF;
-    padding: 5px 20px;
-    border-radius: 5px;
-    margin-top: 3px;
-    font-weight: bold;
-}
-
-.asap_green{
-    cursor: pointer;
-    display: inline-block;
-    background: #019E59;
-    color: #FFF;
-    padding: 5px 20px;
-    border-radius: 5px;
-    margin-top: 3px;
-    font-weight: bold;
-}
  </style>
  
 <link rel="stylesheet" href="js/jquery-ui.css" />
@@ -766,16 +740,17 @@ $(document).ready(function () {
                     <label style="font-weight: bold;" for="jobref" class="optional">
                       Job Reference<span class="ref_div_star">*</span>
                     </label>
-                    <div style="position: relative;">                        
+                    <span style="position: relative;">                        
                         <input aria-haspopup="true" aria-autocomplete="list" role="textbox" autocomplete="off" class="ui-autocomplete-input dec" style="padding:3px;width: 195px;text-transform: uppercase;" name="jobref" id="jobref" type="text" value="<?php echo $_SESSION['ref_val']; ?>" />
-                        <div id="result_ref" class="records_reference"></div>
+                        <div id="result_ref">
+                        </div>
                         <input type="hidden" name="user_session" id="user_session" value="<?php echo $_SESSION['sohorepro_userid']; ?>" />
                         <input type="hidden" name="user_session_comp" id="user_session_comp" value="<?php echo $_SESSION['sohorepro_companyid']; ?>" />
                         <input type="hidden" name="jobref_id" id="jobref_id" value="" />
                         <input type="hidden" name="company_id" id="company_id" value="" />   
                         <input type="hidden" name="drop_off_select_val" id="drop_off_select_val" value="" />
                         <input type="hidden" name="continue_ok" id="continue_ok" value="0" />
-                    </div>
+                    </span>
                   </li>
                     <div  id="set">
                         <input type="hidden" name="pri_inc_val" id="pri_inc_val" value="1" />
@@ -1039,7 +1014,7 @@ $(document).ready(function () {
                                 <div style="width: 34%;float: left;"> 
 
                                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                                        <span id="asap_status" class="asap_orange" onclick="return asap();">READY NOW</span>
+                                        <span style="cursor: pointer;display: inline-block;background: #F99B3E;color: #000;padding: 5px 20px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return asap();">READY NOW</span>
                                     </div>
 
                                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
@@ -1120,7 +1095,7 @@ $(document).ready(function () {
                             <div style="width: 34%;float: left;"> 
 
                                 <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                                    <span id="asap_status_arch" class="asap_orange" onclick="return asap_arc();">READY NOW</span>
+                                    <span style="cursor: pointer;display: inline-block;background: #F99B3E;color: #000;padding: 5px 20px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return asap_arc();">READY NOW</span>
                                 </div>
 
                                 <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
@@ -1615,9 +1590,6 @@ $("#jobref").keyup(function()
     var searchid = $(this).val();
     var user_id = document.getElementById("user_session").value;
     var comp_id = document.getElementById("user_session_comp").value;
-    if(searchid == ''){
-    $(".records_reference").hide();    
-    }
     var dataString = 'search=' + searchid + '&user_id=' + user_id + '&comp_id=' + comp_id;
     if (searchid != '')
     {
@@ -1628,11 +1600,10 @@ $("#jobref").keyup(function()
             cache: false,
             success: function(html)
             {
-                if (html != '') {                   
-                    $(".records_reference").show();
-                    $(".records_reference").html(html);
+                if (html != '') {
+                    $("#result_ref").html(html).show();
                 } else {
-                    $(".records_reference").hide();
+                    $("#result_ref").hide();
                 }
             }
         });
@@ -1678,11 +1649,6 @@ function go_set_form()
 
 function asap()
 {
-    var current_status  =   $("#asap_status").attr('class');
-    var change_status   =   (current_status == "asap_orange") ? 'asap_green' : 'asap_orange';
-    $("#asap_status").removeClass(current_status);
-    $("#asap_status").addClass(change_status);
-    
     $("#date_for_alt").val("ASAP");
     $("#time_for_alt").val("ASAP");
     $("#date_for_alt_arc").val("ASAP");
@@ -1693,12 +1659,6 @@ function asap()
 
 function asap_arc()
 {   
-    
-    var current_status  =   $("#asap_status_arch").attr('class');
-    var change_status   =   (current_status == "asap_orange") ? 'asap_green' : 'asap_orange';
-    $("#asap_status_arch").removeClass(current_status);
-    $("#asap_status_arch").addClass(change_status);
-    
     $("#date_for_alt_arc").val("ASAP");
     $("#time_for_alt_arc").val("ASAP");
     $("body").append("<div class='modal-overlay js-modal-close'></div>");

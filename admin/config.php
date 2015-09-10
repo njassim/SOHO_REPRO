@@ -2349,7 +2349,7 @@ function CheckReference($company_id,$referece)
 //Auto Reference
 function AutoRef($company_id,$referece)
 {
-    $select_checkout = "SELECT * FROM sohorepro_reference WHERE company_id = '".$company_id."' AND reference like '%$referece%' ORDER BY reference ASC";
+    $select_checkout = "SELECT * FROM sohorepro_reference WHERE company_id = '".$company_id."' AND reference like '%$referece%' ORDER BY reference ASC LIMIT 10";
     $product = mysql_query($select_checkout);
     while ($object = mysql_fetch_assoc($product)):
         $value[] = $object;
@@ -2600,12 +2600,37 @@ function EnteredPlot($comp_id, $user_id) {
 }
 
 function EnteredPlotRecipients($comp_id, $user_id) {
-    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' GROUP BY plot_arch ORDER BY plot_arch DESC" ;
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' ORDER BY plot_arch DESC" ;
     $details       = mysql_query($select_fav);
     while ($object = mysql_fetch_assoc($details)):
         $value[] = $object;
     endwhile;
     return $value;
+}
+
+function EnteredPlotRecipientsMulti($comp_id, $user_id, $order_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '".$order_id."' ORDER BY plot_arch DESC" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function EnteredSetsAll($option_id,$comp_id, $user_id) {
+    $select_price = "SELECT SUM(plot_needed) as needed_plot FROM sohorepro_sets_needed WHERE option_id = '". $option_id ."' AND comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed_plot'];
+    return $catg;
+}
+
+function EnteredSetsAllArch($option_id,$comp_id, $user_id) {
+    $select_price = "SELECT SUM(arch_needed) as needed_plot FROM sohorepro_sets_needed WHERE option_id = '". $option_id ."' AND comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed_plot'];
+    return $catg;
 }
 
 function EnteredPlotttingPrimary($comp_id, $user_id) {
@@ -2662,6 +2687,14 @@ function PlotSetsNeeded($comp_id, $user_id) {
     return $catg;
 }
 
+function PlotSetsNeededNew($comp_id, $user_id, $option_id) {
+    $select_price = "SELECT SUM(plot_needed) as needed_plot FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed_plot'];
+    return $catg;
+}
+
 function ArchSetsNeeded($comp_id, $user_id) {
     $select_price = "SELECT SUM(arch_needed) as needed_arch FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."'  AND order_id = '0' " ;
     $price = mysql_query($select_price);
@@ -2670,6 +2703,13 @@ function ArchSetsNeeded($comp_id, $user_id) {
     return $catg;
 }
 
+function ArchSetsNeededNew($comp_id, $user_id, $option_id) {
+    $select_price = "SELECT SUM(arch_needed) as needed_arch FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."'  AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed_arch'];
+    return $catg;
+}
 
 function CheckSerials($comp_id, $user_id,$serial) {
     $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND set_serial = '".$serial."' " ;
@@ -2949,5 +2989,76 @@ function CheckOrderidInvoice($order_id){
     return $value;  
 }
 
+//CUrrent Option 
+function CurrentOption($company_id, $user_id){
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' ORDER BY options ASC LIMIT 1" ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
 
+
+function EnteredOptionsSet($option_id){
+    $plotting_set = "SELECT * FROM sohorepro_sets_needed WHERE option_id = '".$option_id."' AND order_id = '0' " ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+function AvlOptionsRemaining($company_id, $user_id){
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '1'" ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+
+function EnteredPlotRecipientsCurrentOption($id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE id = '".$id."' GROUP BY plot_arch ORDER BY plot_arch DESC" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function SettedOptions($company_id, $user_id) {
+    $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE comp_id = '".$company_id."' AND usr_id = '".$user_id."' AND order_id = '0'" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function ExistSetsWithoutRecipients($company_id, $user_id){
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' ORDER BY options ASC LIMIT 1" ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+function SumOffPlott($id) {
+    $select_price = "SELECT sum(plot_needed) as plott FROM sohorepro_sets_needed WHERE option_id = '".$id."' AND order_id = '0'" ;    
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['plott'];
+    return $catg;
+}
+
+function SumOffArch($id) {
+    $select_price = "SELECT sum(arch_needed) as arch FROM sohorepro_sets_needed WHERE option_id = '".$id."' AND order_id = '0'" ;    
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['arch'];
+    return $catg;
+}
 ?>
