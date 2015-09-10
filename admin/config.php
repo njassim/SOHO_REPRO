@@ -2349,7 +2349,7 @@ function CheckReference($company_id,$referece)
 //Auto Reference
 function AutoRef($company_id,$referece)
 {
-    $select_checkout = "SELECT * FROM sohorepro_reference WHERE company_id = '".$company_id."' AND reference like '%$referece%' ORDER BY reference ASC LIMIT 10";
+    $select_checkout = "SELECT * FROM sohorepro_reference WHERE company_id = '".$company_id."' AND reference like '%$referece%' ORDER BY reference ASC";
     $product = mysql_query($select_checkout);
     while ($object = mysql_fetch_assoc($product)):
         $value[] = $object;
