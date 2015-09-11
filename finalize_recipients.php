@@ -343,6 +343,7 @@ padding-bottom: 0px !important;
                                         ?>
                                         <table border="1" style="width: 100%;">
                                             <tr bgcolor="#BFC5CD">
+                                                <td style="font-weight: bold;">Option</td> 
                                                 <td style="font-weight: bold;">Originals</td> 
                                                 <td style="font-weight: bold;">Sets</td> 
                                                 <td style="font-weight: bold;">Order Type</td>                            
@@ -363,6 +364,7 @@ padding-bottom: 0px !important;
                                                 $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];    
                                             ?>
                                             <tr bgcolor="#F8F8F8">
+                                                <td><?php echo $original['options']; ?></td>
                                                 <td><?php echo $original['origininals']; ?></td>
                                                 <td><?php echo $cust_needed_sets; ?></td>
                                                 <td><?php echo $cust_order_type; ?></td>                            
@@ -395,7 +397,7 @@ padding-bottom: 0px !important;
                                     ?>
                                     <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
                                         <div style="font-weight: bold;width: 100%;float: left;">
-                                            Page Number: 
+                                            Color Page Number : 
                                         </div>
                                         <div style="padding-top: 3px;">                    
                                             <?php echo $cust_original_order[0]['output_page_number']; ?>  
@@ -432,21 +434,26 @@ padding-bottom: 0px !important;
                                         ?>
 
                                         <?php
-                                        if($cust_original_order_final[0]['ftp_link'] != '0'){?>
+                                        if($cust_original_order_final[0]['ftp_link'] != '0'){
+                                            $link       = ($cust_original_order_final[0]['ftp_link'] != '0') ? $cust_original_order_final[0]['ftp_link'] : '';
+                                            $user_name  = ($cust_original_order_final[0]['user_name'] != '0') ? $cust_original_order_final[0]['user_name'] : '';
+                                            $password   = ($cust_original_order_final[0]['password'] != '0') ? $cust_original_order_final[0]['password'] : '';
+                                            
+                                            ?>
                                         <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;font-weight:bold;">
                                             Provide Link to File
                                         </div>
 
                                         <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
-                                            FTP Link: <?php echo $cust_original_order_final[0]['ftp_link']; ?>
+                                            FTP Link: <?php echo $link; ?>
                                         </div>
 
                                         <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
-                                            User Name: <?php echo $cust_original_order_final[0]['user_name']; ?>
+                                            User Name: <?php echo $user_name; ?>
                                         </div>
 
                                         <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
-                                            Password: <?php echo $cust_original_order_final[0]['password']; ?>
+                                            Password: <?php echo $password; ?>
                                         </div>
                                         <?php
                                         }
@@ -492,7 +499,8 @@ padding-bottom: 0px !important;
                             }else{
                                 $shipp_add = editAddressServices($entered_sets['shipp_id']);  
                             }
-                        $needed_sets  = ($entered_sets['plot_needed'] != '0') ? $entered_sets['plot_needed'] : $entered_sets['arch_needed'];    
+                        $needed_options  =   $entered_sets['option_id'];
+                        $needed_sets  = ($entered_sets['plot_needed'] != '0') ? $entered_sets['plot_needed'] : $entered_sets['arch_needed'];
                         $order_type   = ($entered_sets['arch_needed'] != '0') ? 'Architectural Copies' : 'Plotting on Bond';
                         $plot_binding = ($entered_sets['binding'] == '0') ? '' : ','.$entered_sets['binding'];
                         $plot_folding = ($entered_sets['folding'] == '0') ? '' : ','.$entered_sets['folding'];
@@ -527,6 +535,7 @@ padding-bottom: 0px !important;
                     
                     <table border="1" style="width: 100%;">
                         <tr bgcolor="#BFC5CD">
+                            <td style="font-weight: bold;">Option</td> 
                             <td style="font-weight: bold;">Sets</td> 
                             <td style="font-weight: bold;">Order Type</td>                            
                             <td style="font-weight: bold;">Size</td>
@@ -539,6 +548,7 @@ padding-bottom: 0px !important;
                         if ($entered_sets['plot_needed'] == '1') {
                         ?>
                         <tr bgcolor="#F8F8F8">
+                            <td><?php echo $needed_options; ?></td>
                             <td><?php echo $needed_sets; ?></td>
                             <td><?php echo $order_type; ?></td>                            
                             <td><?php echo $size; ?></td>
@@ -552,6 +562,7 @@ padding-bottom: 0px !important;
                         if ($entered_sets['plot_needed'] == '0') {
                         ?>
                         <tr bgcolor="#F8F8F8">
+                            <td><?php echo $needed_options; ?></td>
                             <td><?php echo $needed_sets; ?></td>
                             <td><?php echo $order_type; ?></td>                            
                             <td><?php echo $size; ?></td>
@@ -585,7 +596,7 @@ padding-bottom: 0px !important;
                 ?>
                 <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
                     <div style="font-weight: bold;width: 100%;float: left;">
-                        Page Number:
+                        Color Page Number :
                     </div>
                     <div style="padding-top: 3px;">                    
                         <?php echo $entered_sets['output_page_number']; ?>

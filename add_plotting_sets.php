@@ -117,12 +117,16 @@ if ($_POST['service_plotting_add'] == '1') {
                             }
                             ?>
                         </div>
-                    <?php } elseif ($plot['ftp_link'] != '0') { ?>
+                    <?php } elseif ($plot['ftp_link'] != '0') {
+                            $link       = ($plot['ftp_link'] != '0') ? $plot['ftp_link'] : '';
+                            $user_name  = ($plot['user_name'] != '0') ? $plot['user_name'] : '';
+                            $password   = ($plot['password'] != '0') ? $plot['password'] : '';
+                        ?>
                         <div style="float: left;width: 100%;">
                             <div style="float: left;width: 100%;text-decoration: underline;">Provide Link to File</div>
-                            <div style="float: left;width: 100%;">FTP Link  : <?php echo $plot['ftp_link']; ?></div>
-                            <div style="float: left;width: 100%;">User Name : <?php echo $plot['user_name']; ?></div>
-                            <div style="float: left;width: 100%;">Password  : <?php echo $plot['password']; ?></div>
+                            <div style="float: left;width: 100%;">FTP Link  : <?php echo $link; ?></div>
+                            <div style="float: left;width: 100%;">User Name : <?php echo $user_name; ?></div>
+                            <div style="float: left;width: 100%;">Password  : <?php echo $password; ?></div>
                         </div>
                     <?php } elseif ($plot['pick_up'] != '0') { ?>
                         <div style="float: left;width: 100%;">
