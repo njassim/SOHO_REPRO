@@ -3061,4 +3061,64 @@ function SumOffArch($id) {
     $catg = $object['arch'];
     return $catg;
 }
+/* Invoice Section Function Added By Rabeek 11-09-2015 Friday */
+
+//Group By Company Name And Reference in Invoice Table
+
+function CheckInvoiceCompanyFilter() {    
+    $select_orders = "SELECT * FROM sohorepro_invoice WHERE inv_status = '1' GROUP BY company_name ORDER BY id"; 
+    $orders = mysql_query($select_orders);
+    while ($object = mysql_fetch_assoc($orders)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+} 
+
+//Group by Order Id
+function InvoiceOrders_Reference($id) {    
+    $select_orders = "SELECT * FROM sohorepro_invoice WHERE inv_status = '1' AND company_name = '".$id."' GROUP BY order_id"; 
+    $orders = mysql_query($select_orders);
+    while ($object = mysql_fetch_assoc($orders)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+//GET PRODUCT DETAILS FROM INVOICE table
+function GetInvoiceviewOrders($id) {
+    //return $id;
+    $select_orders = "SELECT * FROM sohorepro_invoice WHERE order_id = '".$id."'" ;
+    $price = mysql_query($select_orders);
+    while ($object = mysql_fetch_assoc($price)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+//GET TOTAL INVOICE
+function getTotalInvoice($id) {
+    //return $id;
+    $select_orders = "SELECT SUM(line_cost) as grant_total FROM sohorepro_invoice INNER JOIN sohorepro_company ON sohorepro_invoice.customer_id = sohorepro_company.comp_id WHERE sohorepro_invoice.inv_status = '1' and sohorepro_company.comp_id = '".$id."'" ;
+    $price = mysql_query($select_orders);
+    while ($object = mysql_fetch_assoc($price)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+//GET Subtotal of in INVOICE table
+function getInvoicePrice($id) {
+    $select_price = "SELECT sum(line_cost) as sub_total FROM sohorepro_invoice WHERE order_id = '".$id."'" ;
+    $price = mysql_query($select_price);
+    while ($object = mysql_fetch_assoc($price)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+//GET INVOICE ID
+function GetInvoice_ID($id) {
+    $select_user = "SELECT * FROM sohorepro_invoice WHERE customer_id = '".$id."' and inv_status = '1' ORDER BY id DESC ";
+    $user = mysql_query($select_user);
+    while ($object = mysql_fetch_assoc($user)):
+        $value[] = $object;
+    endwhile;
+   return $value;
+}
 ?>

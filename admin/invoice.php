@@ -1,6 +1,7 @@
 <?php
 include './config.php';
 include './auth.php';
+
 $sort_date = ($_REQUEST['sort'] == 'a') ? 'd' : 'a';
 $sort_date_img = ($_REQUEST['sort'] == 'a') ? 'down' : 'up';
 
@@ -48,23 +49,77 @@ if ($_GET['tax_status']) {
 	
 	extract($_POST);
 	
-	//print_r($invoice_order_id); exit;
+	// print_r($invoice_order_id); exit;
 	
 	$comp_id = getCustomeInfo($company_id);
-	//$inv_id = GetInvoice_ID($invoice_order_id);
+	// $inv_id = GetInvoice_ID($invoice_order_id);
 	$comp_bussiness_add_1 =$comp_id[0]['comp_business_address1'];
     $comp_bussiness_add_2 =$comp_id[0]['comp_business_address2'];
+	$Invoice_Type =$comp_id[0]['invoice_type'];
 	 $comp_name =str_replace(" ","_",$comp_id[0]['comp_name']);
+	 $rand_number = rand(10500,25700);
+	 $date = date('m-d-Y');
+	 
+	$sum = getTotalInvoice($company_id);
+	foreach($sum as $product)
+	{
+	 $TotalInvoice_price = $product['grant_total'];
+	 $Total_tax_value = TaxValue();
+	 $Total_tax_rate = $Total_tax_value;
+	 $TotalInvoice_total_tax = ($Total_tax_rate * ($TotalInvoice_price / 100));
+	 $TotalInvoice_net_amount = ($TotalInvoice_price +  $TotalInvoice_total_tax);
+	 // echo "<pre>";
+	 // print_r($TotalInvoice_total_tax);
+	 // echo "</pre>";
+	}
+	// exit;
 	
+	 
+	  $mpdf = new mPDF('utf-8','A4-L','18');
+      $pgThree = 'Page {PAGENO}';
+	  
+      $mpdf->setHTMLFooter('{PAGENO}'); 
+	 
+	   
 	
-	$mpdf = new mPDF();
-	    
-		
+	$message_header ='<table align ="right" width="65%" style="border:1px solid black;">';
+
+     $message_header .= '<tr>';
+	  $message_header .='<td><b>Invoice Number : '.$rand_number.'</b></td>';
+	   $message_header .='<td><b>'.$pgThree.'</b></td>';
+	   $message_header .= '</tr>';
+	   $message_header .= '<tr>';
+	  $message_header .='<td><b>Date : '.$date.'</b></td>';
+	   $message_header .='<td><b>Terms: Net '.$Invoice_Type.' Days</b></td>';
+	   $message_header .= '</tr>';  
+	  
+
+    $message_header .='</table>';
+	
+    $message_header.= '<h3 style="text-align:left; width:50%;">'.$comp_bussiness_add_1.'<br>'.$comp_bussiness_add_2.'</h3>';
+	$message_header .='<table>';
+	        $message_header .='<tr>';
+			$message_header .='<th align="center" style="padding-left:5%;font-size:14px; width: 25%;"> JobNumber </th>';
+			$message_header .='<th align="center" style="padding-left:-2 %;font-size:14px; width: 25%;">Date</th>';		
+			$message_header .='<th align="center" style="padding:10px;font-size:14px; width: 25%;">Item Description</th>';
+			$message_header .='<th align="center" style="padding-left:4%;font-size:14px; width: 25%;">Quantity</th>';
+			$message_header .='<th align="center" style="padding-left:4%;font-size:14px; width: 25%;">Unit Price</th>';
+			$message_header .='<th align="center" style="padding-left:6%;font-size:14px; width: 25%;">Extended Price</th>';
+			$message_header .='<th align="center" style="padding-left:6%;font-size:14px; width: 25%;">Tax</th>';
+			$message_header .='<th align="center" style="padding-left:3%;font-size:14px; width: 25%;">Total</th>';
+			$message_header .=	'</tr>';
+			$message_header .='</table>';
+	 
+	 $mpdf->SetHTMLHeader($message_header);	
+	 
+	  
+	
 	$message = '<tr>';
 	$message .= '<td align="left" valign="top">';
+	
          	
-		 $message .='<h3 style="text-align:left; width:50%;">'.$comp_bussiness_add_1.'<br>'.$comp_bussiness_add_2.'</h3>';    
-		$message .='<table style="width:100%;border:1px solid black;">';
+		 // $message .='<h3 style="text-align:left; width:50%;">'.$comp_bussiness_add_1.'<br>'.$comp_bussiness_add_2.'</h3>';    
+		$message .='<table style="width:100%;">';
 		
 
         
@@ -76,68 +131,69 @@ if ($_GET['tax_status']) {
 		foreach ($invoice_orders as $invoice){
 			$rowColor = ($i % 2 != 0) ? '#dfdfdf' : '#eeeeee';
 			$company_name = $invoice['customer_company_name'];
-			$order          = InvoiceOrders($invoice['customer_company_name']);
-			//$current_date = date("m/d", strtotime($inv_id[0]['created_date']));
+			$order          = InvoiceOrders_Reference($invoice['company_name']);
+			// $current_date = date("m/d", strtotime($inv_id[0]['created_date']));
            $current_date = date("m/d", strtotime($invoice['created_date']));			
-		   //print_r($current_date); exit;
+		   // print_r($current_date); exit;
             			 
         
 							  
 		
-			foreach ($order as $inv_prod){
-			$invoice_order_id = $inv_prod['order_id']; 
+			foreach ($order as $inv_prod_invoice){
+			$Invoice_products = GetInvoiceviewOrders($inv_prod_invoice['order_id']);
+			$sql = mysql_query("SELECT DISTINCT order_sequence,created_date from sohorepro_invoice where order_id = '".$inv_prod_invoice['order_id']."'");
+			 $result = mysql_fetch_assoc($sql);
+			 $order_sequence = array($result['order_sequence']);
+			 $date = array(date("m/d", strtotime($result['created_date'])));
 			
 			
-			//echo 'REFERENCE : '.$inv_prod['order_id'].'<br>';                                           
-			$GetInvProd = GetOrderIdInvoice($inv_prod['order_id'],$inv_prod['customer_name'],$inv_prod['customer_company']);
-			//print_r($GetInvProd);exit;
-                       
-			foreach ($GetInvProd as $order_number){ 
-			 $Invoice_products = viewOrders($order_number['id']);
+			// echo 'REFERENCE : '.$inv_prod['order_id'].'<br>';  exit;                                         
+			// $GetInvProd = GetOrderIdInvoice($inv_prod['order_id'],$inv_prod['customer_name'],$inv_prod['customer_company']);
+			// print_r($GetInvProd);exit;
+			// foreach ($GetInvProd as $order_number){ 
+			 // $Invoice_products = viewOrders($order_number['id']);
 			 
 	    
 						 
 		
-			$message .='<tr>';
-			$message .='<th style="text-align:center;width: 10%;"> JobNumber </th>';
-			$message .='<th style="text-align:center;width: 10%;">Date</th>';		
-			$message .='<th style="text-align:center;width: 10%;">Item Description</th>';
-			$message .='<th style="text-align:center;width: 10%;">Quantity</th>';
-			$message .='<th style="text-align:center;width: 10%;">Unit Price</th>';
-			$message .='<th style="text-align:center;width: 10%;">Extended Price</th>';
-			$message .='<th style="text-align:center;width: 10%;">Tax</th>';
-			$message .='<th style="text-align:center;width: 10%;">Total</th>';
-			$message .=	'</tr>';
+			
+			
+			
 			
 		  $message .='<tr>';
-		  $message .='<th style="text-align:center;width:50%;">Reference:'.$invoice_order_id.'</th>';
+		  $message .='<th style="text-align:center;width:10%;padding:10px;">Reference:'.$inv_prod_invoice['job_reference'].'</th>';
 		  $message .='</tr>';
-			    $j=1;	
-				   foreach($Invoice_products as $product) {
-					$product_name = $product['product_name'];
-					$product_price = $product['product_price'];
-					$product_quantity = $product['product_quantity'];
-					$unit_price = ($product_price * $product_quantity);
-					$tax_value = TaxValue();
-					$tax_rate = $tax_value;
-					$tax = ($tax_rate * ($unit_price/100));
-					$grand_tot = ($unit_price + $tax ); 
-					$subtotal_price = getPrice($order_number['id']);											  
-				
+		  
+		        $k=0;
+			    $j=1;
+				foreach($Invoice_products as $product) {
+			   
+				$product_name = $product['product_name'];
+				$product_price = $product['product_price'];
+				$product_quantity = $product['product_qty'];
+				$unit_cost = $product['line_cost']; 
+
+				 $tax_value = TaxValue();
+				 $tax_rate = $tax_value;
+				 $tax = ($tax_rate * ($unit_cost/100));
+				 $grand_tot = ($unit_cost + $tax ); 
+				 $subtotal_price = getInvoicePrice($product['order_id']);
+                   				
+				              
 						  
 		$message .='<tr>';
 				 
-		$message .= '<td style="text-align:center;width: 10%;">'.$order_number['order_number'].'</td>';
-		$message .= '<td style="text-align:center;width: 10%;">'.$current_date.'</td>';
-		$message .= '<td style="text-align:center;width: 10%;">'.$product_name.'</td>';
-		$message .=	'<td style="text-align:center;width: 10%;">'.$product_quantity.'</td>';
-		$message .=	'<td style="text-align:center;width: 10%;">'.'$'.$product_price.'</td>';
-		$message .=	'<td style="text-align:center;width: 10%;">'.'$' . number_format($unit_price,2, '.', '').'</td>';
+		$message .= '<td align="center" style="width: 20%;">'.$order_sequence[$k].'</td>';
+		$message .= '<td align="center" style="width: 20%;">'.$date[$k].'</td>';
+		$message .= '<td align="center" style="width: 20%;">'.$product_name.'</td>';
+		$message .=	'<td align="center" style="width: 30%;">'.$product_quantity.'</td>';
+		$message .=	'<td align="center" style="width: 20%;">'.'$'.$product_price.'</td>';
+		$message .=	'<td align="center" style="width: 30%;">'.'$' . number_format($unit_cost,2, '.', '').'</td>';
 					
-		$message .=	'<td style="text-align:center;width: 10%;">'.'$'. number_format($tax,2, '.', '').'</td>';
-		$message .=	'<td style="text-align:center;width: 10%;">'. '$' . number_format($grand_tot,2, '.', '').'</td>';
+		$message .=	'<td align="center" style="width: 20%;">'.'$'. number_format($tax,2, '.', '').'</td>';
+		$message .=	'<td align="center" style="width: 20%;">'. '$' . number_format($grand_tot,2, '.', '').'</td>';
 		$message .='</tr>';
-					
+					 $k++;
 						  } $j++;
 						 
 						  
@@ -146,24 +202,41 @@ if ($_GET['tax_status']) {
 						   
 							   $total_tax = ($tax_rate * ($subtotal_price[0]['sub_total'] / 100));
 							   $net_amount = ($subtotal_price[0]['sub_total'] +  $total_tax);
+							   
+							  
+							  
 						 
 						   
 					
 						 $message .= '<tr>';
 						 $message .='<td colspan="4"></td>';
+						 
 						 $message .='<td style="text-align:center;width: 10%;"><b>Subtotal</b></td>';
 						 $message .='<td style="text-align:center;width: 10%;"><b>'.'$' . number_format($subtotal_price[0]['sub_total'],2, '.', '').'<b></td>';
 						 $message .='<td style="text-align:center;width: 10%;"><b>'.'$' . number_format($total_tax,2, '.', '').'</b></td>';
 						 $message .='<td style="text-align:center;width: 10%;"><b>'.'$' . number_format($net_amount,2, '.', '').'</b></td>';
 						  
+						  $message .='</tr><br><br>';
+						  
+						    
+						  // } 
+						  
+						  
+						  } 
+						
+						 $message .= '<tr>';
+						 
+						 $message .='<td colspan="4"></td>';
+						 // $message .='<hr style="width:50%;text-align:right;">';
+						 $message .='<td style="text-align:center;width: 10%;"><b>Total Invoice</b></td>';
+						
+						 $message .='<td style="text-align:center;width: 10%;"><b>'.'$' . number_format($TotalInvoice_price,2, '.', '').'<b></td>';
+						 $message .='<td style="text-align:center;width: 10%;"><b>'.'$' . number_format($TotalInvoice_total_tax,2, '.', '').'<b></td>';
+						 $message .='<td style="text-align:center;width: 10%;"><b>'.'$' . number_format($TotalInvoice_net_amount,2, '.', '').'<b></td>';
+						  
 						  $message .='</tr>';
 						  
-						  } 
-						  
-						  
-						  } 
-						  
-						  
+						   
 						$message .='</table>';
 				
 				$message .='</td>';
@@ -176,18 +249,23 @@ if ($_GET['tax_status']) {
 	
 	$message .='</td>';
 $message .='</tr>';
-	
+
+						
+	 
 	$mpdf->WriteHTML($message);
 
-	 
-
+	
+    
+	
+    //$path = "../admin/PDF/product/".$comp_name.".pdf";
 	$mpdf->Output($comp_name.'.pdf','D');
 	
 	 
 				$i++;
 				}
-			
+		
 	exit;
+	
 	}
 
 ?>
@@ -387,6 +465,9 @@ exit;
 				height:29px;
 				padding:4px 6px;
 				text-shadow:#FE6 0 1px 0
+				
+				
+				
 						}
         </style>
         <!-- Add fancyBox main JS and CSS files -->
@@ -554,24 +635,28 @@ exit;
                                                 <div style="float: left;width:100%;text-align: center;margin-top: 5px;margin-bottom: 5px;font-weight:bold;text-transform: uppercase;">Company Name</div>
                                             </div>
                                             <?php
-                                            $invoice_orders = InvoiceOrdersFilter();
+                                            $invoice_orders = CheckInvoiceCompanyFilter();
 
                                             $i=1;
                                             foreach ($invoice_orders as $invoice){
                                                 $rowColor = ($i % 2 != 0) ? '#dfdfdf' : '#eeeeee';
-                                                $order          = InvoiceOrders($invoice['customer_company_name']);
+                                                $order          = InvoiceOrders_Reference($invoice['company_name']);
+											   
+											    $reference = $invoice['job_reference'];
+												$order_sequence = $invoice['order_sequence'];
 												$current_date = date("m/d", strtotime($invoice['created_date']));												
-												$company_name = getCustomeInfo($invoice['customer_company']);
+												$company_name = getCustomeInfo($invoice['customer_id']);
 												$company_add_1 =($company_name[0]['comp_business_address1'] != '') ? $company_name[0]['comp_business_address1'] : '';
 												$company_add_2 =($company_name[0]['comp_business_address2'] != '') ? $company_name[0]['comp_business_address2'] : '';
 											    $company_id = $company_name[0]['comp_id'];
-												//$invoice_order_id = $invoice['order_id']
+											
+													
                                             ?>
                                           <tr class="trigger"  id="<?php echo $invoice['order_id']; ?>">
 						
 							<td>
 								<div style="width:100%; background-color:<?php echo $rowColor;?>; text-align:center;padding: 10px; box-sizing: border-box;">
-								<b><?php echo $invoice['customer_company_name']; ?></b>
+								<b><?php echo $invoice['company_name']; ?></b>
 								</div>
 								
 								
@@ -582,33 +667,8 @@ exit;
 				
 								<td colspan="4" align="center">  
 								<table style="width:100%;border:1px solid black;">
-									  <h3 style="text-align:left;"><?php echo $company_add_1.'<br>'.$company_add_2; ?>
-									  <form name="pdf" id="pdf" method="post">
-									    
-									  <input type="submit" name="submit" value="Download PDF" class="styled-button-1" >
-									  
-									  </h3>
-									 
-									  
-									 <?php
-									        
-                                            foreach ($order as $inv_prod){
-											
-                                            //echo 'REFERENCE : '.$inv_prod['order_id'].'<br>';                                           
-                                            $GetInvProd = GetOrderIdInvoice($inv_prod['order_id'],$inv_prod['customer_name'],$inv_prod['customer_company']);
-										     
-
-											
-											 
-                                              foreach ($GetInvProd as $order_number){
-                                                  $Invoice_products = viewOrders($order_number['id']);
-                                                   $k == 1;
-                                                   
-                                                
-                                                ?>
-                                                                    
-									<tr>$Invoice_products
-										<th style="padding: 10px;">Job Number</th>
+								<tr>
+										<th style="padding: 10px;"> JobNumber</th>
 										<th style="padding: 10px;">Date</th>		
 										<th style="padding: 10px;">Item Description</th>
 										<th style="padding: 10px;">Quantity</th>
@@ -617,37 +677,70 @@ exit;
 										<th style="padding: 10px;">Tax</th>
 										<th style="padding: 10px;">Total</th>
 									  </tr>
+									  <h3 style="text-align:left;"><?php echo $company_add_1.'<br>'.$company_add_2; ?>
+									  <form name="pdf" id="pdf" method="post">
+									    
+									  <input type="submit" name="submit" value="Download PDF" class="styled-button-1" >
+									  
+									  </h3>
+									    
+									  
+									       <?php
+									        
+                                            foreach ($order as $inv_prod_invoice){
+											
+                                           // echo 'REFERENCE : '.$inv_prod_invoice['job_reference'].'<br>';                                            
+                                          
+											  $Invoice_products = GetInvoiceviewOrders($inv_prod_invoice['order_id']);
+											    // echo "SELECT DISTINCT order_sequence from sohorepro_invoice_section where order_id = '".$inv_prod_invoice['order_id']."'";
+												 $sql = mysql_query("SELECT DISTINCT order_sequence,created_date from sohorepro_invoice where order_id = '".$inv_prod_invoice['order_id']."'");
+												 $result = mysql_fetch_assoc($sql);
+												 $order_sequence = array($result['order_sequence']);
+												 $date = array(date("m/d", strtotime($result['created_date'])));
+												        
+												 //print_r($order_sequence);
+                                                
+											?>
+													
+												
+                                           
+									
 									  
 									<input type="hidden" name="company_id" value="<?php echo $company_id;?> " />
-									<input type="hidden" name="invoice_order_id" value="<?php echo $order_number['id'];?> " />
+									<input type="hidden" name="invoice_order_id" value="<?php echo $invoice['order_id'];?> " />
 									</form>
-									 
+									  
 									  <tr>
-									  <th style="padding: 10px;">Reference:&nbsp;&nbsp;&nbsp;<?php echo $inv_prod['order_id']; ?></th>
+									  
+									  <th style="padding: 10px;">Reference:&nbsp;&nbsp;&nbsp;<?php echo $inv_prod_invoice['job_reference']; ?></th>
+									  
 									  </tr>
-									  <?php  $j=1;	
-									           foreach($Invoice_products as $product) {
-											   
-												$product_name = $product['product_name'];
-												$product_price = $product['product_price'];
-												$product_quantity = $product['product_quantity'];
-												$unit_price = ($product_price * $product_quantity);
-												$tax_value = TaxValue();
-												$tax_rate = $tax_value;
-												$tax = ($tax_rate * ($unit_price/100));
-												$grand_tot = ($unit_price + $tax ); 
-												$subtotal_price = getPrice($order_number['id']);											  
+									  
+									  <?php    $k = 0;
+									           $j=1;
                                                 
+                  					            foreach($Invoice_products as $product) {
+											  	$product_name = $product['product_name'];
+											    $product_price = $product['product_price'];
+												$product_quantity = $product['product_qty'];
+ 									            $unit_cost = $product['line_cost']; 
+ 
+                                                 $tax_value = TaxValue();
+												 $tax_rate = $tax_value;
+												 $tax = ($tax_rate * ($unit_cost/100));
+												 $grand_tot = ($unit_cost + $tax ); 
+												 $subtotal_price = getInvoicePrice($product['order_id']);
+												 
 									  ?>
 								      
 									  <tr>
 									 
-                                                                              <td style="text-align:center;padding: 10px;"><span <?php if (in_array($j, $series)) { ?>style="display: none;"<?php } ?>><?php echo $order_number['order_number'].'JASS'.$k; ?></span></td>
-										<td style="text-align:center;padding: 10px;"><?php echo $current_date; ?></td>
+										<td style="text-align:center;padding: 10px;"><?php echo $order_sequence[$k]; ?></td>
+										<td style="text-align:center;padding: 10px;"><?php echo $date[$k]; ?></td>
 										<td style="text-align:center;padding: 10px;"><?php echo $product_name;  ?></td>
 										<td style="text-align:center;padding: 10px;"><?php echo $product_quantity;  ?></td>
 										<td style="text-align:center;padding: 10px;"><?php echo '$'.$product_price;  ?></td>
-										<td style="text-align:center;padding: 10px;"><?php echo '$' . number_format($unit_price,2, '.', '');  ?></td>
+										<td style="text-align:center;padding: 10px;"><?php echo '$'.$unit_cost;  ?></td>
 										
 										<td style="text-align:center;padding: 10px;"><?php echo '$' . number_format($tax,2, '.', '');  ?></td>
 										<td style="text-align:center;padding: 10px;"><?php echo '$' . number_format($grand_tot,2, '.', ''); ?></td>
@@ -655,19 +748,11 @@ exit;
 										
 									  </tr>
 									  
-									  
-									  <?php
-							 
-							 //$input = array($order_number['order_number']);
-							 //$result = array_unique($input);
-							 //echo "<pre>";
-							//print_r($result);
-							                  
-							 ?>
-									  
+									 
 									 
 									<?php
-									  } $j++;
+									$k++;
+									   } $j++;
 									 
 									  ?>
 									  
@@ -677,6 +762,20 @@ exit;
 										   $total_tax = ($tax_rate * ($subtotal_price[0]['sub_total'] / 100));
 										   $net_amount = ($subtotal_price[0]['sub_total'] +  $total_tax);
 									   ?>
+									      <?php
+									        $sum = getTotalInvoice($company_id);
+											foreach($sum as $grant_product)
+											{
+											 $TotalInvoice_price = $grant_product['grant_total'];
+											 $Total_tax_value = TaxValue();
+											 $Total_tax_rate = $Total_tax_value;
+											 $TotalInvoice_total_tax = ($Total_tax_rate * ($TotalInvoice_price / 100));
+											 $TotalInvoice_net_amount = ($TotalInvoice_price +  $TotalInvoice_total_tax);
+											 // echo "<pre>";
+											 // print_r($TotalInvoice_total_tax);
+											 // echo "</pre>";
+											}
+											?>
 									   
 								
 									  <tr>
@@ -687,13 +786,21 @@ exit;
 										  <td style="padding-left: 20px;"><b><?php echo '$' . number_format($net_amount,2, '.', '');  ?></b></td>
 									  
 									  </tr>
+									     <?php
+									  // } 
+									  // ?>
 									   <?php
-                                                                           $k++;
 									  } 
 									  ?>
-									  <?php
-									  } 
-									  ?>
+									  
+									     <tr>
+										  <td colspan="4"></td>
+										  <td style="padding-left:20px;"><b>Total Invoice</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+										  <td style="padding-left: 20px;"><b><?php echo '$' . number_format($TotalInvoice_price,2, '.', '');  ?><b></td>
+										  <td style="padding-left: 15px;"><b><?php echo '$' . number_format($TotalInvoice_total_tax,2, '.', '');  ?></b></td>
+										  <td style="padding-left: 20px;"><b><?php echo '$' . number_format($TotalInvoice_net_amount,2, '.', '');  ?></b></td>
+									  
+									   </tr>
 									  
 									</table>
 							
@@ -748,38 +855,38 @@ exit;
 </body>
 </html>
 <script type="text/javascript">
-//    
-//    function edit_commt(CUS_ID,ORD_ID)
-//    {
-//        $(".cus_commt_span_"+CUS_ID+'_'+ORD_ID).hide(); 
-//        $(".cus_commt_txt_"+CUS_ID+'_'+ORD_ID).show();  
-//        $(".cus_commt_upt_"+CUS_ID+'_'+ORD_ID).show();    
-//    }   
-//    
-//    function update_commt(CUS_ID,ORD_ID)
-//    {
-//         var cus_commt = $("#cus_commt_txt_"+CUS_ID+'_'+ORD_ID).val();  
-//         if(cus_commt != '')  
-//            {
-//             $.ajax
-//             ({
-//                type: "POST",
-//                    url: "get_child.php",
-//                    data: "cus_commt="+cus_commt+"&cus_commt_id="+CUS_ID,
-//                    beforeSend: loadStart,
-//                    complete: loadStop,
-//                    success: function(option)
-//                    {
-//                        if(option == '1'){
-//                        $(".cus_commt_span_"+CUS_ID+'_'+ORD_ID).html(cus_commt); 
-//                        $(".cus_commt_span_"+CUS_ID+'_'+ORD_ID).show(); 
-//                        $(".cus_commt_txt_"+CUS_ID+'_'+ORD_ID).hide();  
-//                        $(".cus_commt_upt_"+CUS_ID+'_'+ORD_ID).hide();   
-//                        }
-//                    }
-//             });
-//            }
-//    }
+   
+   // function edit_commt(CUS_ID,ORD_ID)
+   // {
+       // $(".cus_commt_span_"+CUS_ID+'_'+ORD_ID).hide(); 
+       // $(".cus_commt_txt_"+CUS_ID+'_'+ORD_ID).show();  
+       // $(".cus_commt_upt_"+CUS_ID+'_'+ORD_ID).show();    
+   // }   
+   
+   // function update_commt(CUS_ID,ORD_ID)
+   // {
+        // var cus_commt = $("#cus_commt_txt_"+CUS_ID+'_'+ORD_ID).val();  
+        // if(cus_commt != '')  
+           // {
+            // $.ajax
+            // ({
+               // type: "POST",
+                   // url: "get_child.php",
+                   // data: "cus_commt="+cus_commt+"&cus_commt_id="+CUS_ID,
+                   // beforeSend: loadStart,
+                   // complete: loadStop,
+                   // success: function(option)
+                   // {
+                       // if(option == '1'){
+                       // $(".cus_commt_span_"+CUS_ID+'_'+ORD_ID).html(cus_commt); 
+                       // $(".cus_commt_span_"+CUS_ID+'_'+ORD_ID).show(); 
+                       // $(".cus_commt_txt_"+CUS_ID+'_'+ORD_ID).hide();  
+                       // $(".cus_commt_upt_"+CUS_ID+'_'+ORD_ID).hide();   
+                       // }
+                   // }
+            // });
+           // }
+   // }
 
     function logingAlertPop()
     {
@@ -814,34 +921,34 @@ exit;
             }
         });
 
-//    $('.inline').click(function()
-//    {
-//        var ID      =$(this).attr('id'); 
-//        $(".product_"+ID).hide(); 
-//        $(".quantity_"+ID).hide(); 
-//        $(".price_"+ID).hide(); 
-//        $(".delete_"+ID).hide();        
-//        $(".product_txt_"+ID).show(); 
-//        $(".quantity_txt_"+ID).show(); 
-//        $(".price_txt_"+ID).show(); 
-//        $(".update_"+ID).show();         
-//        $(".jass").attr("id",ID);        
-//    });
-//    
+   // $('.inline').click(function()
+   // {
+       // var ID      =$(this).attr('id'); 
+       // $(".product_"+ID).hide(); 
+       // $(".quantity_"+ID).hide(); 
+       // $(".price_"+ID).hide(); 
+       // $(".delete_"+ID).hide();        
+       // $(".product_txt_"+ID).show(); 
+       // $(".quantity_txt_"+ID).show(); 
+       // $(".price_txt_"+ID).show(); 
+       // $(".update_"+ID).show();         
+       // $(".jass").attr("id",ID);        
+   // });
+   
 
 
-//    $(document).mouseup(function()
-//    {
-//        var ID = $('.jass').attr('id');
-//        $(".product_"+ID).show(); 
-//        $(".quantity_"+ID).show(); 
-//        $(".price_"+ID).show(); 
-//        $(".delete_"+ID).show();  
-//        $(".product_txt_"+ID).hide(); 
-//        $(".quantity_txt_"+ID).hide(); 
-//        $(".price_txt_"+ID).hide(); 
-//        $(".update_"+ID).hide(); 
-//    });
+   // $(document).mouseup(function()
+   // {
+       // var ID = $('.jass').attr('id');
+       // $(".product_"+ID).show(); 
+       // $(".quantity_"+ID).show(); 
+       // $(".price_"+ID).show(); 
+       // $(".delete_"+ID).show();  
+       // $(".product_txt_"+ID).hide(); 
+       // $(".quantity_txt_"+ID).hide(); 
+       // $(".price_txt_"+ID).hide(); 
+       // $(".update_"+ID).hide(); 
+   // });
 
         $('.reference').click(function()
         {
@@ -912,7 +1019,7 @@ exit;
         if (mail_confirm == true) {
             if (order_id != '')
             {
-                       //loading(); // loading
+                       // loading(); // loading
                          setTimeout(function(){ // then show popup, deley in .5 second
                             logingAlertPop(); // function show popup 
                             }, 500); // .5 second
@@ -930,27 +1037,27 @@ exit;
                                     // var body_content            = encodeURIComponent(subject_to_body[1]);
                                     // $("#mail_to_"+order_id).show();
                                     // $(".mail_to_"+order_id).attr("href", subject_to_body[0]+'?body='+subject_to_body[1]);
-                                //document.location.href = option;
+                                // document.location.href = option;
                                 $("#update_mail_dynamic").html(option);
                             }
                         });
 
 
-//                    $.ajax
-//                    ({
-//                       type: "POST",
-//                           url: "get_child.php",
-//                           data: "update_email_ord_id="+order_id+"&update_email_ship_id="+ship_id,
-//                           beforeSend: loadStart,
-//                           complete: loadStop,
-//                           success: function(option)
-//                           {
-//                               if(option != ''){
-//                               $(".confirm_mail_"+order_id).show();               
-//                               $(".confirm_mail_"+order_id).fadeOut(2500);               
-//                               }
-//                           }
-//                    });
+                   // $.ajax
+                   // ({
+                      // type: "POST",
+                          // url: "get_child.php",
+                          // data: "update_email_ord_id="+order_id+"&update_email_ship_id="+ship_id,
+                          // beforeSend: loadStart,
+                          // complete: loadStop,
+                          // success: function(option)
+                          // {
+                              // if(option != ''){
+                              // $(".confirm_mail_"+order_id).show();               
+                              // $(".confirm_mail_"+order_id).fadeOut(2500);               
+                              // }
+                          // }
+                   // });
             }
         }
         else
@@ -963,7 +1070,7 @@ exit;
 
     function view_order_set(ORDER_ID)
     {
-        //alert(ORDER_ID);
+        // alert(ORDER_ID);
         if (ORDER_ID != '')
         {
             $.ajax
@@ -1049,7 +1156,7 @@ exit;
 
     function update_dedails(ID, ord_id)
     {
-        //alert(ID+' '+ord_id);
+        // alert(ID+' '+ord_id);
         var order_id = $('.order_id_t_' + ID).attr('id');
         var IID = document.getElementById('h_' + ID + '_' + ord_id).value;
         var product = document.getElementById('product_txt_' + ID + '_' + ord_id).value;
@@ -1096,46 +1203,46 @@ exit;
 
     $(document).ready(function()
     {
-//  $('.updater').click(function()
-//    {
-//       
-//        var ID                   = $('.jass').attr('id');          
-//        var order_id             = $('.order_id_t_'+ID).attr('id');
-//        var IID                  = document.getElementById('h_'+ID).value;        
-//        var product              = document.getElementById('product_txt_'+ID).value;
-//        var qty                  = document.getElementById('quantity_txt_'+ID).value;
-//        var price                = document.getElementById('price_txt_'+ID).value;
-//        
-//            if(price != '' && qty != '')  
-//     {
-//      $.ajax
-//      ({
-//         type: "POST",
-//             url: "get_child.php",
-//             data: "product="+product+"&qty="+qty+"&price="+price+"&id="+ID+"&iid="+IID+"&order_id="+order_id,
-//             success: function(option)
-//             {
-//                 var myarr = option.split("~");
-//
-//                 var line = (myarr[1] * myarr[2]);
-//                 $(".product_"+ID).html(myarr[0]); 
-//                 $(".quantity_"+ID).html(myarr[1]); 
-//                 $(".price_"+ID).html("$"+myarr[2]); 
-//                 $(".tax_"+ID).html("$"+myarr[5]); 
-//                 $(".line_cost_"+ID).html(myarr[7]); 
-//                 $(".line_"+ID).html("$"+myarr[6]);
-//                 $(".lineJassim_"+ID).html("$"+myarr[4]); 
-//                 $(".jassim_"+order_id).html("$"+myarr[4]); 
-//             }
-//      });
-//     }
-//	 else
-//	 {
-//	   $(".error").html("Please fill the all fields"); 
-//	 }
-//	return false;
-//        
-//    });
+ // $('.updater').click(function()
+   // {
+      
+       // var ID                   = $('.jass').attr('id');          
+       // var order_id             = $('.order_id_t_'+ID).attr('id');
+       // var IID                  = document.getElementById('h_'+ID).value;        
+       // var product              = document.getElementById('product_txt_'+ID).value;
+       // var qty                  = document.getElementById('quantity_txt_'+ID).value;
+       // var price                = document.getElementById('price_txt_'+ID).value;
+       
+           // if(price != '' && qty != '')  
+    // {
+     // $.ajax
+     // ({
+        // type: "POST",
+            // url: "get_child.php",
+            // data: "product="+product+"&qty="+qty+"&price="+price+"&id="+ID+"&iid="+IID+"&order_id="+order_id,
+            // success: function(option)
+            // {
+                // var myarr = option.split("~");
+
+                // var line = (myarr[1] * myarr[2]);
+                // $(".product_"+ID).html(myarr[0]); 
+                // $(".quantity_"+ID).html(myarr[1]); 
+                // $(".price_"+ID).html("$"+myarr[2]); 
+                // $(".tax_"+ID).html("$"+myarr[5]); 
+                // $(".line_cost_"+ID).html(myarr[7]); 
+                // $(".line_"+ID).html("$"+myarr[6]);
+                // $(".lineJassim_"+ID).html("$"+myarr[4]); 
+                // $(".jassim_"+order_id).html("$"+myarr[4]); 
+            // }
+     // });
+    // }
+	 // else
+	 // {
+	   // $(".error").html("Please fill the all fields"); 
+	 // }
+	// return false;
+       
+   // });
         
 
         $('.refupdate').click(function()
@@ -1297,7 +1404,7 @@ exit;
                    complete: loadStop,
                    success: function(option)
                    {    
-                       //alert(option);
+                       // alert(option);
                        if(option == true){
                         $("#close_status_"+ORD_ID).html("Ready to Invoice");
                         $("#close_status_"+ORD_ID).css("background", "#DA4530");                      
@@ -1326,7 +1433,7 @@ exit;
                    {    
                        
 					   option = parseInt(option);
-					   //alert(option);
+					   // alert(option);
                        if(option == 1){
                          alert("Success");                    
                         }else{
