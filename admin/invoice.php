@@ -55,7 +55,11 @@ if ($_GET['tax_status']) {
 	// $inv_id = GetInvoice_ID($invoice_order_id);
 	$comp_bussiness_add_1 =$comp_id[0]['comp_business_address1'];
     $comp_bussiness_add_2 =$comp_id[0]['comp_business_address2'];
+	$company_city = $comp_id[0]['comp_city'];
+	$company_state = $comp_id[0]['comp_state'];
+	$company_zip = $comp_id[0]['comp_zipcode'];
 	$Invoice_Type =$comp_id[0]['invoice_type'];
+	$company_name = $comp_id[0]['comp_name'];
 	 $comp_name =str_replace(" ","_",$comp_id[0]['comp_name']);
 	 $rand_number = rand(10500,25700);
 	 $date = date('m-d-Y');
@@ -96,7 +100,7 @@ if ($_GET['tax_status']) {
 
     $message_header .='</table>';
 	
-    $message_header.= '<h3 style="text-align:left; width:50%;">'.$comp_bussiness_add_1.'<br>'.$comp_bussiness_add_2.'</h3>';
+    $message_header.= '<h3 style="text-align:left; width:100%;">'.$company_name.'<br>'.$comp_bussiness_add_1.'<br>'.$comp_bussiness_add_2.'<br>'.$company_city.",".$company_state."&nbsp;".$company_zip;'</h3>';
 	$message_header .='<table>';
 	        $message_header .='<tr>';
 			$message_header .='<th align="center" style="padding-left:5%;font-size:14px; width: 25%;"> JobNumber </th>';
@@ -224,7 +228,7 @@ if ($_GET['tax_status']) {
 						  
 						  } 
 						
-						 $message .= '<tr>';
+						 $message .= '<tr style="padding:10px;">';
 						 
 						 $message .='<td colspan="4"></td>';
 						 // $message .='<hr style="width:50%;text-align:right;">';
@@ -648,6 +652,9 @@ exit;
 												$company_name = getCustomeInfo($invoice['customer_id']);
 												$company_add_1 =($company_name[0]['comp_business_address1'] != '') ? $company_name[0]['comp_business_address1'] : '';
 												$company_add_2 =($company_name[0]['comp_business_address2'] != '') ? $company_name[0]['comp_business_address2'] : '';
+												$company_city = $company_name[0]['comp_city'];
+												$company_state = $company_name[0]['comp_state'];
+												$company_zip = $company_name[0]['comp_zipcode'];
 											    $company_id = $company_name[0]['comp_id'];
 											
 													
@@ -677,7 +684,7 @@ exit;
 										<th style="padding: 10px;">Tax</th>
 										<th style="padding: 10px;">Total</th>
 									  </tr>
-									  <h3 style="text-align:left;"><?php echo $company_add_1.'<br>'.$company_add_2; ?>
+									  <h3 style="text-align:left;"><?php echo $invoice['company_name'].",".'<br>' .$company_add_1.'<br>'.$company_add_2.'<br>'.$company_city.",".$company_state."&nbsp;".$company_zip; ?>
 									  <form name="pdf" id="pdf" method="post">
 									    
 									  <input type="submit" name="submit" value="Download PDF" class="styled-button-1" >
@@ -793,7 +800,7 @@ exit;
 									  } 
 									  ?>
 									  
-									     <tr>
+									     <tr style="padding:10px;">
 										  <td colspan="4"></td>
 										  <td style="padding-left:20px;"><b>Total Invoice</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 										  <td style="padding-left: 20px;"><b><?php echo '$' . number_format($TotalInvoice_price,2, '.', '');  ?><b></td>
