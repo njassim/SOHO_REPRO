@@ -640,13 +640,13 @@ text-align:center;
                     <div class="label_regview"> Address3 :</div> 
                     <input type="text" class="reginput comp_det_view" name="address3" id="address3" placeholder="Address3" />
                 </li>
-                <li>
+                <!--<li>
                     <div class="label_regview"> Room/Flr/Suite :</div> 
                     <input intvalue="Room" class="reginput comp_det_view" name="reg_busiroom" id="reg_busiroom" type="text" placeholder="Room/Flr/Suite"/>
-                </li>
+                </li>-->
                 <li>
                     <div class="label_regview"> City<span style="color: red;">*</span> :</div> 
-                    <input intvalue="City" class="required reginput comp_det_view" name="reg_busicity" id="reg_busicity" type="text" placeholder="City"/>
+                    <input intvalue="City" class="required reginput comp_det_view" name="reg_busicity" id="reg_busicity" type="text" placeholder="City" value="New York"/>
                 </li>
                 <li>
                     <div class="label_regview"> Fax :</div> 
@@ -660,7 +660,7 @@ text-align:center;
                         $sel_state = mysql_query("select * from sohorepro_states");
                         while ($fth_states = mysql_fetch_array($sel_state)) {
                             ?>
-                            <option value="<?php echo $fth_states['state_abbr']; ?>"><?php echo $fth_states['state_name']; ?></option>
+                        <option value="<?php echo $fth_states['state_abbr']; ?>" <?php if($fth_states['state_abbr'] == "NY"){ ?> selected="selected" <?php } ?> ><?php echo $fth_states['state_name']; ?></option>
                         <?php } ?>
                     </select>  
                 </li>

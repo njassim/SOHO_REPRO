@@ -3000,7 +3000,7 @@ if ($_GET['status_id']) {
                             ({
                                 type: "POST",
                                 url: "customers_edit_inline.php",
-                                data: "id=" + ID + "&bus_company_name=" + cname_val_rep,
+                                data: "id=" + ID + "&bus_company_name="+encodeURIComponent(cname_val_rep),
                                 success: function(option)
                                 {
                                     $(".bus_inline_span_" + ID).html(option);
@@ -3053,7 +3053,7 @@ if ($_GET['status_id']) {
                             ({
                                 type: "POST",
                                 url: "customers_edit_inline.php",
-                                data: "id=" + ID + "&cust_company_name=" + encodeURIComponent(cname_val_rep),
+                                data: "id=" + ID + "&cust_company_name="+encodeURIComponent(cname_val_rep),
                                 success: function(option)
                                 {
                                     $(".cust_inline_span_" + ID).html(option);
@@ -3109,7 +3109,7 @@ if ($_GET['status_id']) {
                             ({
                                 type: "POST",
                                 url: "customers_edit_inline.php",
-                                data: "id=" + ID + "&del_company_name=" + cname_val_rep,
+                                data: "id=" + ID + "&del_company_name="+encodeURIComponent(cname_val_rep),
                                 success: function(option)
                                 {
                                     $(".del_inline_span_" + ID).html(option);
@@ -3260,7 +3260,7 @@ if ($_GET['status_id']) {
                         ({
                             type: "POST",
                             url: "customers_edit_inline.php",
-                            data: "id=" + ID + "&bus_address_2=" + encodeURIComponent(ad2_val_fnl),
+                            data: "id=" + ID + "&bus_address_2="+encodeURIComponent(ad2_val_fnl),
                             success: function(option)
                             {
                                 $(".bus_add2_inline_span_" + ID).html(option);
@@ -3316,7 +3316,7 @@ if ($_GET['status_id']) {
                         ({
                             type: "POST",
                             url: "customers_edit_inline.php",
-                            data: "id=" + ID + "&del_address_2=" + encodeURIComponent(ad2_val_fnl),
+                            data: "id=" + ID + "&del_address_2="+encodeURIComponent(ad2_val_fnl),
                             success: function(option)
                             {
                                 $(".del_add2_inline_span_" + ID).html(option);
@@ -3371,7 +3371,7 @@ if ($_GET['status_id']) {
                         ({
                             type: "POST",
                             url: "customers_edit_inline.php",
-                            data: "id=" + ID + "&bus_address_3=" + encodeURIComponent(ad3_val_fnl),
+                            data: "id=" + ID + "&bus_address_3="+encodeURIComponent(ad3_val_fnl),
                             success: function(option)
                             {
                                 $(".bus_add3_inline_span_" + ID).html(option);
@@ -3424,7 +3424,7 @@ if ($_GET['status_id']) {
                         ({
                             type: "POST",
                             url: "customers_edit_inline.php",
-                            data: "id=" + ID + "&del_address_3=" + encodeURIComponent(ad2_val_fnl),
+                            data: "id=" + ID + "&del_address_3="+encodeURIComponent(ad2_val_fnl),
                             success: function(option)
                             {
                                 $(".del_add3_inline_span_" + ID).html(option);
@@ -3477,7 +3477,7 @@ if ($_GET['status_id']) {
                         ({
                             type: "POST",
                             url: "customers_edit_inline.php",
-                            data: "id=" + ID + "&bus_suit=" + encodeURIComponent(suit_val_fnl),
+                            data: "id=" + ID + "&bus_suit="+encodeURIComponent(suit_val_fnl),
                             success: function(option)
                             {
                                 $(".bus_suit_inline_span_" + ID).html(option);
@@ -3528,7 +3528,7 @@ if ($_GET['status_id']) {
                         ({
                             type: "POST",
                             url: "customers_edit_inline.php",
-                            data: "id=" + ID + "&del_suit=" + encodeURIComponent(suit_val_fnl),
+                            data: "id=" + ID + "&del_suit="+encodeURIComponent(suit_val_fnl),
                             success: function(option)
                             {
                                 $(".del_suit_inline_span_" + ID).html(option);
