@@ -78,7 +78,7 @@ $page_name_new = $page_names[$pagename_pos];
     if($specials == '1'){
     ?>
     <div style="background-color: #fff;border: 1px solid #000;border-bottom: 0px;text-align: center;padding-top: 15px;padding-bottom: 15px;">
-        <a href="http://sohorepro.com/specials/" target="_blank" style="text-decoration: none;background: #009D59;padding: 10px;padding-left: 60px;padding-right: 60px;border-radius: 8px;color: #FFF;font-weight: bold;font-size: 17px;">SPECIALS</a>
+        <a href="http://sohorepro.com/specials/" target="_blank" style="text-decoration: none;background: #BFC5CD;padding: 10px;padding-left: 60px;padding-right: 60px;border-radius: 8px;color: #FFF;font-weight: bold;font-size: 17px;">SPECIALS</a>
     </div>
     <?php
     }

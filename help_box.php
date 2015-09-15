@@ -237,12 +237,17 @@ jQuery(function($) {
                         <input type="text" name="phone" id="phone" style="border: 1px #ccc solid;margin-top: 10px; margin-bottom: 10px;" />
                     </td>
                 </tr>
+                <form name="myform">
                 <tr>
                     <td valign="top"><span style="font-weight: bold;">Ask Your Question<span style="color: red;">*</span></span></td>
                     <td>
-                        <textarea name="feedback" id="feedback" style="height: 150px;width: 500px;"></textarea>
+                        <textarea name="feedback" id="feedback" class="feedback" onKeyDown="limitText(this.form.feedback,this.form.countdown,256);" onKeyUp="limitText(this.form.feedback,this.form.countdown,256);" style="height: 150px;width: 500px;"></textarea>
+                        <div style=" width:82%;float: left;text-align: right;margin-top: 5px;">
+                        <input readonly type="text" name="countdown" size="5" id="countdown" value="256" style="width: 35px;border:1px solid #000;" />
+                        </div>
                     </td>
                 </tr>
+                </form>
                 <tr style="padding: 10px;">
                     <td><input type="hidden" name="feedback_id" value="1" /></td>
                     <td>
@@ -299,6 +304,15 @@ jQuery(function($) {
  <!-- Mirrored from buckart.com/srsite/SoHoRepro-WebsitePages/store/store.html by HTTrack Website Copier/3.x [XR&CO'2013], Sat, 21 Sep 2013 08:45:26 GMT -->
  </html>
 <script>
+    
+    function limitText(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
+    
 function show_forgot(str)
  {
  if(str==0)

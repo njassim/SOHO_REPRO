@@ -690,7 +690,7 @@ if ($_GET['status_id']) {
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <?php
-                                                                                                                        $company_zip_ext_ori = ($company_zip_ext == '0') ? '+4' : '-' .$company_zip_ext;
+                                                                                                                        $company_zip_ext_ori = ($company_zip_ext == '0') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '-' .$company_zip_ext;
                                                                                                                         ?>
                                                                                                                         <span>
                                                                                                                             <span style="cursor: pointer;margin-left: 0px;" class="bus_zip_inline_ext bus_zip_inline_span_ext_<?php echo $cumpony_id; ?>" id="<?php echo $cumpony_id; ?>"><?php echo $company_zip_ext_ori; ?></span>
@@ -845,7 +845,7 @@ if ($_GET['status_id']) {
                                                                                                                     </td>
                                                                                                                     <td>
                                                                                                                         <?php
-                                                                                                                        $devilery_zip_ext = ($deleivery_address[0]['zip_ext'] == '') ? '+4' : '-'.$deleivery_address[0]['zip_ext'];
+                                                                                                                        $devilery_zip_ext = ($deleivery_address[0]['zip_ext'] == '') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '-'.$deleivery_address[0]['zip_ext'];
                                                                                                                         ?>
                                                                                                                         <span>
                                                                                                                             <span style="cursor: pointer;margin-left: 0px;" class="zip_inline_del_ext zip_inline_span_del_ext_<?php echo $cumpony_id; ?>" id="<?php echo $cumpony_id; ?>"><?php echo $devilery_zip_ext; ?></span>
@@ -1881,7 +1881,7 @@ if ($_GET['status_id']) {
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <?php
-                                                                                                            $company_zip_ext_ori = ($company_zip_ext == '0') ? '+4' : '-' .$company_zip_ext;
+                                                                                                            $company_zip_ext_ori = ($company_zip_ext == '0') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '-' .$company_zip_ext;
                                                                                                             ?>
                                                                                                             <span>
                                                                                                                 <span style="cursor: pointer;margin-left: 0px;" class="bus_zip_inline_ext bus_zip_inline_span_ext_<?php echo $cumpony_id; ?>" id="<?php echo $cumpony_id; ?>"><?php echo $company_zip_ext_ori; ?></span>
@@ -2036,7 +2036,7 @@ if ($_GET['status_id']) {
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <?php
-                                                                                                            $devilery_zip_ext = ($deleivery_address[0]['zip_ext'] == '') ? '+4' : '-' .$deleivery_address[0]['zip_ext'];
+                                                                                                            $devilery_zip_ext = ($deleivery_address[0]['zip_ext'] == '') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '-' .$deleivery_address[0]['zip_ext'];
                                                                                                             ?>
                                                                                                             <span>
                                                                                                                 <span style="cursor: pointer;margin-left: 0px;" class="zip_inline_del_ext zip_inline_span_del_ext_<?php echo $cumpony_id; ?>" id="<?php echo $cumpony_id; ?>"><?php echo $devilery_zip_ext; ?></span>
@@ -2487,7 +2487,7 @@ if ($_GET['status_id']) {
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <?php
-                                                                                                            $company_zip_ext_ori = ($company_zip_ext == '0') ? '+4' : '-' .$company_zip_ext;
+                                                                                                            $company_zip_ext_ori = ($company_zip_ext == '0') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '-' .$company_zip_ext;
                                                                                                             ?>
                                                                                                             <span>
                                                                                                                 <span style="cursor: pointer;margin-left: 0px;" class="bus_zip_inline_ext bus_zip_inline_span_ext_<?php echo $cumpony_id; ?>" id="<?php echo $cumpony_id; ?>"><?php echo $company_zip_ext_ori; ?></span>
@@ -2642,7 +2642,7 @@ if ($_GET['status_id']) {
                                                                                                         </td>
                                                                                                         <td>
                                                                                                             <?php
-                                                                                                            $devilery_zip_ext = ($deleivery_address[0]['zip_ext'] == '') ? '+4' : '-' .$deleivery_address[0]['zip_ext'];
+                                                                                                            $devilery_zip_ext = ($deleivery_address[0]['zip_ext'] == '') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : '-' .$deleivery_address[0]['zip_ext'];
                                                                                                             ?>
                                                                                                             <span>
                                                                                                                 <span style="cursor: pointer;margin-left: 0px;" class="zip_inline_del_ext zip_inline_span_del_ext_<?php echo $cumpony_id; ?>" id="<?php echo $cumpony_id; ?>"><?php echo $devilery_zip_ext; ?></span>
