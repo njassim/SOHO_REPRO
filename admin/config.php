@@ -3121,4 +3121,12 @@ function GetInvoice_ID($id) {
     endwhile;
    return $value;
 }
+
+function Specials($id) {
+    $select_category = "SELECT caption FROM sohorepro_pickup_add WHERE id = '".$id."'";
+    $category = mysql_query($select_category);
+    $object = mysql_fetch_assoc($category);
+    $catg = $object['caption']; 
+    return $catg;
+}
 ?>

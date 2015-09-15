@@ -487,6 +487,29 @@ $tax_rate = $object_tax_rate['tax_rate'];
                                                         </table>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td height="38" align="left" valign="middle" class="add_title">Specials Button settings</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><div id="days_off_succ" style="color:#007F2A;"></div></td>
+                                                </tr>
+                                                <tr>
+                                                    <td bgcolor="#f6f6f6" class="form_bg">
+                                                        <?php 
+                                                            $specials       = Specials('3');
+                                                            $close_lable    = ($specials == '1') ? 'SPECIALS ON' : 'SPECIALS OFF';
+                                                            $close_lable_bg = ($specials == '1') ? 'background: #009D59;' : 'background: #D3412C;';                                                                                
+                                                        ?>
+                                                        <span id="special_status_3" onclick="return specials_on_off('3');" style="<?php echo $close_lable_bg; ?>;cursor: pointer;color: #FFF;float: left;padding: 5px 20px;margin-top: 10px;border-radius: 5px;text-decoration: none;margin-right: 15px;margin-left:5px;margin-bottom: 15px;font-weight: bold;"><?php echo $close_lable; ?></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                </tr>
                                 </table></td>
                         </tr>
                     </table></td>
@@ -782,4 +805,33 @@ function change_status(status_id)
     }
 }
 
+
+ function specials_on_off(SPL_ID){
+        var ays         =  confirm('Are you sure?');
+        if(ays == true){
+        if(SPL_ID != ''){
+        $.ajax
+               ({
+                   type: "POST",
+                   url: "get_child.php",
+                   data: "specials_on_off="+SPL_ID,
+                   beforeSend: loadStart,
+                   complete: loadStop,
+                   success: function(option)
+                   {    
+                       //alert(option);
+                       if(option == true){
+                        $("#special_status_"+SPL_ID).html("SPECIALS ON");
+                        $("#special_status_"+SPL_ID).css("background", "#009D59");                      
+                        }else{
+                        $("#special_status_"+SPL_ID).html("SPECIALS OFF");
+                        $("#special_status_"+SPL_ID).css("background", "#D3412C");     
+                        }
+                   }
+               }); 
+        }
+        }else{
+            return false;
+        }
+    }
 </script>

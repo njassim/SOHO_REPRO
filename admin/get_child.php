@@ -783,6 +783,20 @@ if (isset($_POST['order_closed_now_id']) && $_POST['order_closed_now_id'] != '')
 }
 
 
+//Close the Order
+if (isset($_POST['specials_on_off']) && $_POST['specials_on_off'] != '') {
+
+    $specials_on_off_id = $_POST['specials_on_off'];
+    $specials           = Specials($specials_on_off_id);
+    $specials_on_off    = ($specials == '1') ? '0' : '1';
+
+    $specials_update  = "UPDATE sohorepro_pickup_add SET caption = '" . $specials_on_off . "' WHERE id = '" . $specials_on_off_id . "' ";
+    mysql_query($specials_update);    
+    echo $specials_on_off;
+}
+
+
+
 //Invoice Type Set
 if (isset($_POST['invoice_type']) && $_POST['invoice_type'] != '') {
     $invoice_type = $_POST['invoice_type'];
