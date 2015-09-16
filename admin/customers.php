@@ -990,6 +990,30 @@ if ($_GET['status_id']) {
                                                                                     <span class="<?php echo $status_class; ?>" id="action_<?php echo $cumpony_id; ?>" onclick="return sus_reiv('<?php echo $cumpony_id; ?>');"><?php echo $status_text; ?></span>
                                                                                 </td>
                                                                             </tr>
+                                                                            <tr>
+                                                                                <td colspan="3">
+                                                                                    <div style="float:left;width:50%;font-weight: bold;">Customer Notes: </div>
+                                                                                        <div style="float:left;width:50%;border:2px solid #F99B3E;height: 110px;">
+                                                                                            <div id="cus_notes_<?php echo $cumpony_id; ?>" onclick="return edit_cus_notes('<?php echo $cumpony_id; ?>');" style="float:left;width:98%;margin-left: 3px;height: 75px;cursor: pointer;">
+                                                                                                <?php echo $Prod['customer_notes']; ?>
+                                                                                            </div>
+                                                                                            <form name="myform">
+                                                                                                <div id="cus_notes_edit_<?php echo $cumpony_id; ?>" style="float:left;width:98%;margin-left: 3px;margin-top: 5px;display: none;">
+                                                                                                    <textarea class="cus_notes_edit_txt_<?php echo $cumpony_id; ?>" id="cust_notes" style="width:98%;height: 75px;margin-left: 3px;" onKeyDown="limitText(this.form.cust_notes,this.form.countdown,256);" onKeyUp="limitText(this.form.cust_notes,this.form.countdown,256);"><?php echo $Prod['customer_notes']; ?></textarea>                                                                                
+                                                                                                    <div style="float:left;width:98%;margin-left: 3px;margin-bottom: 5px;margin-top: 3px;">
+                                                                                                        <div style="float:left;width: 49%;text-align: left;">
+                                                                                                           <input readonly type="text" name="countdown" size="5" id="countdown" value="256" style="width: 35px;border:1px solid #000;" />
+                                                                                                        </div>
+                                                                                                        <div style="float:left;width: 49%;text-align: right;">
+                                                                                                            <span id="cus_notes_edit_can_<?php echo $cumpony_id; ?>"  onclick="return cancel_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #D3412C;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">CANCEL</span>
+                                                                                                            <span id="cus_notes_edit_save_<?php echo $cumpony_id; ?>" onclick="return save_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #009D59;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">SAVE</span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </form>
+                                                                                        </div>
+                                                                                </td>
+                                                                            </tr>
                                                                         </table>
                                                                         <span class="succ" id="succ" style="color:#007F2A;font-size: 12px;"  ></span>
                                                                         <div id="mas_<?php echo $cumpony_id; ?>">
@@ -1564,6 +1588,30 @@ if ($_GET['status_id']) {
                                                                         <span class="<?php echo $status_class; ?>" id="action_<?php echo $cumpony_id; ?>" onclick="return sus_reiv('<?php echo $cumpony_id; ?>');"><?php echo $status_text; ?></span>
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                                <td colspan="3">
+                                                                                    <div style="float:left;width:50%;font-weight: bold;">Customer Notes: </div>
+                                                                                    <div style="float:left;width:50%;border:2px solid #F99B3E;height: 110px;">
+                                                                                        <div id="cus_notes_<?php echo $cumpony_id; ?>" onclick="return edit_cus_notes('<?php echo $cumpony_id; ?>');" style="float:left;width:98%;margin-left: 3px;height: 75px;cursor: pointer;">
+                                                                                            <?php echo $Prod['customer_notes']; ?>
+                                                                                        </div>
+                                                                                        <form name="myform">
+                                                                                            <div id="cus_notes_edit_<?php echo $cumpony_id; ?>" style="float:left;width:98%;margin-left: 3px;margin-top: 5px;display: none;">
+                                                                                                <textarea class="cus_notes_edit_txt_<?php echo $cumpony_id; ?>" id="cust_notes" style="width:98%;height: 75px;margin-left: 3px;" onKeyDown="limitText(this.form.cust_notes,this.form.countdown,256);" onKeyUp="limitText(this.form.cust_notes,this.form.countdown,256);"><?php echo $Prod['customer_notes']; ?></textarea>                                                                                
+                                                                                                <div style="float:left;width:98%;margin-left: 3px;margin-bottom: 5px;margin-top: 3px;">
+                                                                                                    <div style="float:left;width: 49%;text-align: left;">
+                                                                                                       <input readonly type="text" name="countdown" size="5" id="countdown" value="256" style="width: 35px;border:1px solid #000;" />
+                                                                                                    </div>
+                                                                                                    <div style="float:left;width: 49%;text-align: right;">
+                                                                                                        <span id="cus_notes_edit_can_<?php echo $cumpony_id; ?>"  onclick="return cancel_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #D3412C;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">CANCEL</span>
+                                                                                                        <span id="cus_notes_edit_save_<?php echo $cumpony_id; ?>" onclick="return save_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #009D59;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">SAVE</span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
                                                             </table>
                                                             <span class="succ" id="succ" style="color:#007F2A;font-size: 12px;"  ></span>
                                                             <div id="mas_<?php echo $cumpony_id; ?>">
@@ -2182,6 +2230,30 @@ if ($_GET['status_id']) {
                                                                         <span class="<?php echo $status_class; ?>" id="action_<?php echo $cumpony_id; ?>" onclick="return sus_reiv('<?php echo $cumpony_id; ?>');"><?php echo $status_text; ?></span>
                                                                     </td>
                                                                 </tr>
+                                                                <tr>
+                                                                                <td colspan="3">
+                                                                                    <div style="float:left;width:50%;font-weight: bold;">Customer Notes: </div>
+                                                                                    <div style="float:left;width:50%;border:2px solid #F99B3E;height: 110px;">
+                                                                                        <div id="cus_notes_<?php echo $cumpony_id; ?>" onclick="return edit_cus_notes('<?php echo $cumpony_id; ?>');" style="float:left;width:98%;margin-left: 3px;height: 75px;cursor: pointer;">
+                                                                                            <?php echo $Prod['customer_notes']; ?>
+                                                                                        </div>
+                                                                                        <form name="myform">
+                                                                                            <div id="cus_notes_edit_<?php echo $cumpony_id; ?>" style="float:left;width:98%;margin-left: 3px;margin-top: 5px;display: none;">
+                                                                                                <textarea class="cus_notes_edit_txt_<?php echo $cumpony_id; ?>" id="cust_notes" style="width:98%;height: 75px;margin-left: 3px;" onKeyDown="limitText(this.form.cust_notes,this.form.countdown,256);" onKeyUp="limitText(this.form.cust_notes,this.form.countdown,256);"><?php echo $Prod['customer_notes']; ?></textarea>                                                                                
+                                                                                                <div style="float:left;width:98%;margin-left: 3px;margin-bottom: 5px;margin-top: 3px;">
+                                                                                                    <div style="float:left;width: 49%;text-align: left;">
+                                                                                                       <input readonly type="text" name="countdown" size="5" id="countdown" value="256" style="width: 35px;border:1px solid #000;" />
+                                                                                                    </div>
+                                                                                                    <div style="float:left;width: 49%;text-align: right;">
+                                                                                                        <span id="cus_notes_edit_can_<?php echo $cumpony_id; ?>"  onclick="return cancel_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #D3412C;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">CANCEL</span>
+                                                                                                        <span id="cus_notes_edit_save_<?php echo $cumpony_id; ?>" onclick="return save_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #009D59;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">SAVE</span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </form>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
                                                             </table>
                                                             <span class="succ" id="succ" style="color:#007F2A;font-size: 12px;"  ></span>
                                                             <div id="mas_<?php echo $cumpony_id; ?>">
@@ -2786,6 +2858,33 @@ if ($_GET['status_id']) {
                                                                 <tr>
                                                                     <td colspan="3">
                                                                         <span class="<?php echo $status_class; ?>" id="action_<?php echo $cumpony_id; ?>" onclick="return sus_reiv('<?php echo $cumpony_id; ?>');"><?php echo $status_text; ?></span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3">&nbsp;</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3">                                                                        
+                                                                        <div style="float:left;width:50%;font-weight: bold;">Customer Notes: </div>
+                                                                        <div style="float:left;width:50%;border:2px solid #F99B3E;height: 110px;">
+                                                                            <div id="cus_notes_<?php echo $cumpony_id; ?>" onclick="return edit_cus_notes('<?php echo $cumpony_id; ?>');" style="float:left;width:98%;margin-left: 3px;height: 75px;cursor: pointer;">
+                                                                                <?php echo $Prod['customer_notes']; ?>
+                                                                            </div>
+                                                                            <form name="myform">
+                                                                                <div id="cus_notes_edit_<?php echo $cumpony_id; ?>" style="float:left;width:98%;margin-left: 3px;margin-top: 5px;display: none;">
+                                                                                    <textarea class="cus_notes_edit_txt_<?php echo $cumpony_id; ?>" id="cust_notes" style="width:98%;height: 75px;margin-left: 3px;" onKeyDown="limitText(this.form.cust_notes,this.form.countdown,256);" onKeyUp="limitText(this.form.cust_notes,this.form.countdown,256);"><?php echo $Prod['customer_notes']; ?></textarea>                                                                                
+                                                                                    <div style="float:left;width:98%;margin-left: 3px;margin-bottom: 5px;margin-top: 3px;">
+                                                                                        <div style="float:left;width: 49%;text-align: left;">
+                                                                                           <input readonly type="text" name="countdown" size="5" id="countdown" value="256" style="width: 35px;border:1px solid #000;" />
+                                                                                        </div>
+                                                                                        <div style="float:left;width: 49%;text-align: right;">
+                                                                                            <span id="cus_notes_edit_can_<?php echo $cumpony_id; ?>"  onclick="return cancel_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #D3412C;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">CANCEL</span>
+                                                                                            <span id="cus_notes_edit_save_<?php echo $cumpony_id; ?>" onclick="return save_cust_notes('<?php echo $cumpony_id; ?>');" style="background: #009D59;color: #FFF;padding: 2px 5px;text-transform: uppercase;border-radius: 5px;font-weight: bold;font-size: 11px;cursor: pointer;">SAVE</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </table>
@@ -4787,6 +4886,45 @@ if ($_GET['status_id']) {
         
     }
     
-   
+    function edit_cus_notes(COM_ID){        
+        $("#cus_notes_"+COM_ID).hide();
+        $("#cus_notes_edit_"+COM_ID).fadeIn();
+        $(".cus_notes_edit_txt_"+COM_ID).focus();
+    }
+    
+    function cancel_cust_notes(COM_ID){
+        $("#cus_notes_"+COM_ID).fadeIn();
+        $("#cus_notes_edit_"+COM_ID).hide();
+    }
+    
+    function save_cust_notes(COM_ID){
+        var cus_notes = $(".cus_notes_edit_txt_"+COM_ID).val();
+        //alert(cus_notes);
+        if(COM_ID != ''){
+        $.ajax
+               ({
+                   type: "POST",
+                   url: "get_child.php",
+                   data: "customer_notes="+encodeURIComponent(cus_notes)+"&notes_comp_id="+COM_ID,
+                   beforeSend: loadStart,
+                   complete: loadStop,
+                   success: function(option)
+                   {
+                       $("#cus_notes_"+COM_ID).fadeIn();
+                       $("#cus_notes_"+COM_ID).html(option);
+                       $("#cus_notes_edit_"+COM_ID).hide();
+                   }
+               }); 
+        }
+    }
+    
+    
+    function limitText(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
 </script>                    
 

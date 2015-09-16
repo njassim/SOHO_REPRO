@@ -847,6 +847,15 @@ if (isset($_POST['folding_id']) && $_POST['folding_id'] != '') {
         echo '0';
     }
 }
+
+//Customer Notes
+if (isset($_POST['customer_notes']) && $_POST['customer_notes'] != '') {   
+    $customer_notes = mysql_real_escape_string($_POST['customer_notes']);
+    $notes_comp_id = $_POST['notes_comp_id'];
+    $invoice_change = "UPDATE sohorepro_company SET customer_notes = '" . $customer_notes . "' WHERE comp_id = '" . $notes_comp_id . "' ";
+    mysql_query($invoice_change);    
+    echo $_POST['customer_notes'];
+}
 ?>
 
 
