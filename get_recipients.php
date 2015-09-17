@@ -188,16 +188,22 @@ if ($_POST['recipients'] == '1') {
             </div>
 
             <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
-                <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">
-                    <option value="0">Address Book</option>
-                    <?php
+                    <?php 
                     $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
+                    
+                    ?>
+                <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">
+                        <option value="0">Address Book</option>
+                        <option value="<?php echo $address_book[0]['id']; ?>">Everything Return To My Office</option>
+                        <option value="P1">381 Broome St</option>
+                        <option value="P2">307 7th Ave, 5th Floor</option>
+                    <?php                    
                     foreach ($address_book as $address) {
                         ?>                                                                                        
                         <option value="<?php echo $address['id']; ?>" ><?php echo $address['company_name']; ?></option>
-        <?php
-    }
-    ?>
+                        <?php
+                        }
+                        ?>
                 </select>
             </div>
             <!-- Address Show Start -->
@@ -338,8 +344,9 @@ if ($_POST['recipients'] == '1') {
     </div>
     <?php
 } elseif ($_POST['recipients'] == '9') {
-
-    $shipping_id_rec = $_POST['shipping_id_rec'];
+    
+    $shipping_id_rec_pre = explode("_", $_POST['shipping_id_rec']);    
+    $shipping_id_rec = ($shipping_id_rec_pre[0] == "PEVERY") ? $shipping_id_rec_pre[1] : $_POST['shipping_id_rec'];
     $user_session = $_POST['user_session'];
     $user_session_comp = $_POST['user_session_comp'];
     $date_needed = $_POST['date_needed'];
@@ -784,10 +791,15 @@ if ($_POST['recipients'] == '1') {
             </div>
 
             <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
+                <?php
+                $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
+                ?>
                 <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">
                     <option value="0">Address Book</option>
-                    <?php
-                    $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
+                    <option value="<?php echo $address_book[0]['id']; ?>">Everything Return To My Office</option>
+                    <option value="P1">381 Broome St</option>
+                    <option value="P2">307 7th Ave, 5th Floor</option>
+                    <?php                    
                     foreach ($address_book as $address) {
                         ?>                                                                                        
                         <option value="<?php echo $address['id']; ?>" ><?php echo $address['company_name']; ?></option>

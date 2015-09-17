@@ -521,7 +521,9 @@ padding-bottom: 0px !important;
                     <?php
                     if(($entered_sets['shipp_id'] != 'P1') && ($entered_sets['shipp_id'] != 'P2')){
                     $add_2 = ($shipp_add[0]['address_2'] == '') ? '' : $shipp_add[0]['address_2'] . '<br>';
-                    echo $shipp_add[0]['company_name'] . '<br>Attention: '.$entered_sets['attention_to'].'<br>'. 'Conatct:  '.$entered_sets['contact_ph'].'<br>'. $shipp_add[0]['address_1'] . '<br>' . $add_2 . $shipp_add[0]['city'] . '&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip'].'<br>'.$shipp_add[0]['phone'];
+                    $att    = ($entered_sets['attention_to'] != "undefined") ? '<br>Attention:  '.$entered_sets['attention_to'] : '';
+                    $phone  = ($entered_sets['contact_ph'] != "undefined") ? '<br>'.'Conatct:  '.$entered_sets['contact_ph'] : '';
+                    echo $shipp_add[0]['company_name'].$att.$phone.'<br>'. $shipp_add[0]['address_1'] . '<br>' . $add_2 . $shipp_add[0]['city'] . '&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip'].'<br>'.$shipp_add[0]['phone'];
                     }  else {                    //echo $shipp_add[0]['address'];                        
                     $shipp_add_p = AddressBookPickupSohoCap($entered_sets['shipp_id']);
                     echo $shipp_add_p[0]['address'];   

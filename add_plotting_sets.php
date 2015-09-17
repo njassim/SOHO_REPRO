@@ -84,7 +84,7 @@ if ($_POST['service_plotting_add'] == '1') {
                 </div>
                 <ul>
                     <li><label>Job Type </label><p>: <?php echo $job_type; ?></p></li>
-                    <li><label>Original</label><p>: <?php echo $plot['origininals']; ?></p></li>
+                    <li><label>Originals</label><p>: <?php echo $plot['origininals']; ?></p></li>
                     <li><label>Prints of Each</label><p>: <?php echo $plot['print_ea']; ?></p></li>
                     <li><label>Size</label><p>: <?php echo $plot['size']; ?></p></li>
                     <?php $output = ($plot['output'] == 'Both') ? $plot['output'].' <b>B&W and COLOR</b>' : $plot['output']; ?>
@@ -271,7 +271,8 @@ if ($_POST['service_plotting_add'] == '1') {
                                 <div style="float:left;margin-right:0px;">
                                     <select class="order_0_set1_0_binding kdSelect " style="width: 80px;" id="binding" name="binding">
                                         <option value="none">None</option>                                      
-                                        <option value="Binding Strip">Binding Strip</option>                          
+                                        <option value="Bind All">Bind All</option>                          
+                                        <option value="Bind by Discipline">Bind by Discipline</option>
                                         <option value="Screw Post">Screw Post</option>
                                     </select>
                                 </div>
@@ -527,7 +528,7 @@ if ($_POST['service_plotting_add'] == '1') {
                 </div>
                 <ul>
                     <li><label>Job Type </label><p>: <?php echo $job_type; ?></p></li>
-                    <li><label>Original</label><p>: <?php echo $plot['origininals']; ?></p></li>
+                    <li><label>Originals</label><p>: <?php echo $plot['origininals']; ?></p></li>
                     <li><label>Prints of Each</label><p>: <?php echo $plot['print_ea']; ?></p></li>
                     <li><label>Size</label><p>: <?php echo $plot['size']; ?></p></li>
                     <li><label>Output</label><p>: <?php echo $plot['output']; ?></p></li>
@@ -690,7 +691,8 @@ if ($_POST['service_plotting_add'] == '1') {
                                 <div style="float:left;margin-right:0px;">
                                     <select class="order_0_set1_0_binding kdSelect " style="width: 80px;" id="binding" name="binding">
                                         <option value="none">None</option>                                      
-                                        <option value="Binding Strip">Binding Strip</option>                          
+                                        <option value="Bind All">Bind All</option>                          
+                                        <option value="Bind by Discipline">Bind by Discipline</option>
                                         <option value="Screw Post">Screw Post</option>
                                     </select>
                                 </div>

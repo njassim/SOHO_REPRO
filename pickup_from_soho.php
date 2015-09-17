@@ -175,22 +175,31 @@ if ($_POST['pickup_from_soho'] == '1') {
             </div>
 
             <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
+                <?php
+                $check_values           = explode("_", $pickup_from_soho_add);
+                //$address_select         = ($check_values[0] == "EVERY") ? AddressBookCompanyPrimary($check_values[1]) : AddressBookPickupSoho($pickup_from_soho_add);
+                $address_book_show      = ($check_values[0] == "EVERY") ? AddressBookCompanyPrimary($check_values[1]) : AddressBookPickupSoho($pickup_from_soho_add);
+                $primary_add_print      =  $address_book_show[0]['address_1'] . ', ' . $address_book_show[0]['address_2'] . ', ' . $address_book_show[0]['city'] . ', ' . StateName($address_book_show[0]['state']) . ' ' . $address_book_show[0]['zip'];
+                $print_address          = ($check_values[0] == "EVERY") ? $primary_add_print : $address_book_show[0]['address_format'];
+                $address_book           = AddressBookPickupSohoAll();
+                $address_book_return    = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
+                ?>
                 <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return pickup_soho_p();">                    
-                    <?php
-                    $address_book_show = AddressBookPickupSoho($pickup_from_soho_add);
-                    $address_book = AddressBookPickupSohoAll();
+                        <option value="0">Address Book</option>
+                        <option value="<?php echo 'EVERY_'.$address_book_return[0]['id']; ?>" <?php if($pickup_from_soho_add == 'EVERY_'.$address_book_return[0]['id']){ ?> selected="selected" <?php } ?>>Everything Return To My Office</option>                        
+                    <?php                    
                     foreach ($address_book as $address) {
                         ?>                                                                                        
                         <option value="<?php echo $address['id']; ?>" <?php if ($address['id'] == $pickup_from_soho_add) { ?> selected="selected" <?php } ?> ><?php echo $address['caption']; ?></option>
-        <?php
-    }
-    ?>
+                        <?php
+                        }
+                        ?>
                 </select>
             </div>
             <!-- Address Show Start -->
             <div id="show_address" style="float: left;width: 56%;padding: 6px;border: 1px #F99B3E solid;margin-top: 10px;margin-left: 5px;height: 20px;font-weight: bold;">
     <?php
-    echo $address_book_show[0]['address_format'];
+    echo $print_address;
     ?>
             </div>
 

@@ -260,9 +260,9 @@ padding-bottom: 0px !important;
 </div>
 -->
 
-  <h2 class="headline-interior orange">
-	Delivery Job Reference: <?php echo $_SESSION['ref_val']; ?>
-  </h2>
+<div style="width: 100%;float: left;font-size: 35px;font-weight: bold;" class="orange">
+    Delivery Job Reference: <span style="text-transform: uppercase;font-size: 35px;font-weight: bold;"><?php echo $_SESSION['ref_val']; ?></span>
+</div>
 <?php
 $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
 ?>
@@ -1105,7 +1105,13 @@ $('#loading').hide();
 function show_address()
 {
     var shipping_id     = $("#address_book_rp").val();
-    {
+    if(shipping_id == "P1"){
+       $("#show_address").html("381 Broome Street New York, NY 10013"); 
+       $("#shipp_att").val("");
+    }else if(shipping_id == "P2"){
+       $("#show_address").html("307 7th Ave, 5th Floor New York, NY 10013"); 
+       $("#shipp_att").val("");
+    }else{
         $.ajax
             ({
                 type: "POST",

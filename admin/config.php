@@ -2911,7 +2911,7 @@ function AddressBookPickupSoho($id){
 }
 
 function AddressBookPickupSohoAll(){
-    $address_book = "SELECT * FROM sohorepro_pickup_add" ;
+    $address_book = "SELECT * FROM sohorepro_pickup_add WHERE caption <> 1" ;
     $book = mysql_query($address_book);
     while ($object = mysql_fetch_assoc($book)):
         $value[] = $object;

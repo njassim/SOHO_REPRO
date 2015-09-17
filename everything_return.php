@@ -9,7 +9,7 @@ if ($_POST['everything_return'] == '1') {
     $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $rem_avl_options = AvlOptionsRemaining($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     ?>
-        <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
+    <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
             <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo $current_option[0]['options']; ?></div>
             <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo $current_option[0]['options'].'/'.count($number_of_sets); ?></div>
     </div>
@@ -178,9 +178,14 @@ if ($_POST['everything_return'] == '1') {
                 </div>
 
                 <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
+                    <?php 
+                    $address_book = AddressBookCompanyPrimary($_SESSION['sohorepro_companyid']);
+                    ?>
                     <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">                    
-                        <?php
-                        $address_book = AddressBookCompanyPrimary($_SESSION['sohorepro_companyid']);
+                            <option value="<?php echo $address_book[0]['id']; ?>">Everything Return To My Office</option>
+                            <option value="P1">381 Broome St</option>
+                            <option value="P2">307 7th Ave, 5th Floor</option>
+                        <?php                        
                         foreach ($address_book as $address) {
                             ?>                                                                                        
                             <option value="<?php echo $address['id']; ?>" selected="selected"><?php echo $address['company_name']; ?></option>
