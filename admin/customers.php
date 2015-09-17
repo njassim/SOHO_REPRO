@@ -4733,9 +4733,9 @@ if ($_GET['status_id']) {
     {
         var ID = $(this).attr('id');
         var zip_val = $(".bus_zip_inline_txt_ext_" + ID).val();
-        var zip_val_fnl = (zip_val == '') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : zip_val;
+        var zip_val_fnl = (zip_val == '') ? 'EMPTY' : zip_val;
 
-        if (zip_val != '') {
+       
 
             $.ajax
                     ({
@@ -4752,7 +4752,7 @@ if ($_GET['status_id']) {
                         }
                     });
 
-        }
+        
 
     });
 
@@ -4784,8 +4784,8 @@ if ($_GET['status_id']) {
     {
         var ID = $(this).attr('id');
         var zip_val = $(".zip_inline_txt_del_ext_" + ID).val();
-        var zip_val_fnl = (zip_val == '') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : zip_val;
-        if (zip_val != '') {
+        var zip_val_fnl = (zip_val == '') ? 'EMPTY' : zip_val;
+       
 
             $.ajax
                     ({
@@ -4802,7 +4802,7 @@ if ($_GET['status_id']) {
                         }
                     });
 
-        }
+        
 
     });
 

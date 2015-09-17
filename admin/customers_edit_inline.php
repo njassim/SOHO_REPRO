@@ -294,6 +294,14 @@ if(isset($_POST['bus_zip_ext']) && $_POST['bus_zip_ext'] != '')
 {
   $id                   = $_POST['id'];   
   $bus_zip_ext          = $_POST['bus_zip_ext'];  
+  if($bus_zip_ext == 'EMPTY')
+  {
+  $bus_zip_ext = ($bus_zip_ext == 'EMPTY') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : $bus_zip_ext;
+  }
+  if($bus_zip_ext == '0000')
+  {
+  $bus_zip_ext = ($bus_zip_ext == '0000') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : $bus_zip_ext;
+  }
   $query = "UPDATE sohorepro_company
 			SET     comp_zipcode_ext = '" . $bus_zip_ext . "' WHERE comp_id = '".$id."'";
   mysql_query($query);    
@@ -323,7 +331,15 @@ if(isset($_POST['bus_zip_del_ext']) && $_POST['bus_zip_del_ext'] != '')
   $id                   = $_POST['id'];   
   $bus_zip_del_ext      = $_POST['bus_zip_del_ext'];
   $check_address        =  CheckDeliveryAddress($id);
-  if(count($check_address) == '1'){
+   if($bus_zip_del_ext == 'EMPTY')
+  {
+  $bus_zip_del_ext = ($bus_zip_del_ext == 'EMPTY') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : $bus_zip_del_ext;
+  }
+    if($bus_zip_del_ext == '0000')
+  {
+  $bus_zip_del_ext = ($bus_zip_del_ext == '0000') ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' : $bus_zip_del_ext;
+  }
+    if(count($check_address) == '1'){
   $query = "UPDATE sohorepro_address
 			SET     zip_ext = '" . $bus_zip_del_ext . "' WHERE comp_id = '".$id."' AND type ='1'";
   mysql_query($query);  
