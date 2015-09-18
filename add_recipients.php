@@ -224,6 +224,7 @@ padding-bottom: 0px !important;
     font-weight: bold;
 }
 
+.select-dash { border-bottom: 1px dotted #000; }
  </style>
  
  </head>

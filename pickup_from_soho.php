@@ -186,7 +186,8 @@ if ($_POST['pickup_from_soho'] == '1') {
                 ?>
                 <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return pickup_soho_p();">                    
                         <option value="0">Address Book</option>
-                        <option value="<?php echo 'EVERY_'.$address_book_return[0]['id']; ?>" <?php if($pickup_from_soho_add == 'EVERY_'.$address_book_return[0]['id']){ ?> selected="selected" <?php } ?>>Everything Return To My Office</option>                        
+                        <option value="<?php echo 'EVERY_'.$address_book_return[0]['id']; ?>" <?php if($pickup_from_soho_add == 'EVERY_'.$address_book_return[0]['id']){ ?> selected="selected" <?php } ?>>Return Everything To My Office</option>       
+                        <option class="select-dash" disabled="disabled">-----------------------------------------</option>
                     <?php                    
                     foreach ($address_book as $address) {
                         ?>                                                                                        

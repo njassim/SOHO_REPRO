@@ -178,10 +178,11 @@ if ($_POST['everything_return_to'] == '1') {
                 $address_book = AddressBookCompanySentTo($address_book_se);
                 $address_book_drop = AddressBookCompanyService($company_id_view_plot);
                ?>
-                <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">                    
-                        <option value="<?php echo $address_book_drop[0]['id']; ?>">Everything Return To My Office</option>
-                        <option value="P1">381 Broome St</option>
-                        <option value="P2">307 7th Ave, 5th Floor</option>
+                <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">                                           
+                        <option value="<?php echo $address_book_drop[0]['id']; ?>">Return Everything To My Office</option>
+                        <option value="P1">Pickup @ 381 Broome St</option>
+                        <option value="P2">Pickup @ 307 7th Ave, 5th Flr</option>
+                        <option class="select-dash" disabled="disabled">-----------------------------------------</option>
                     <?php 
                     foreach ($address_book_drop as $address) {
                     ?>                                                                                        

@@ -182,9 +182,10 @@ if ($_POST['everything_return'] == '1') {
                     $address_book = AddressBookCompanyPrimary($_SESSION['sohorepro_companyid']);
                     ?>
                     <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">                    
-                            <option value="<?php echo $address_book[0]['id']; ?>">Everything Return To My Office</option>
-                            <option value="P1">381 Broome St</option>
-                            <option value="P2">307 7th Ave, 5th Floor</option>
+                            <option value="<?php echo $address_book[0]['id']; ?>">Return Everything To My Office</option>
+                            <option value="P1">Pickup @ 381 Broome St</option>
+                            <option value="P2">Pickup @ 307 7th Ave, 5th Flr</option>
+                            <option class="select-dash" disabled="disabled">-----------------------------------------</option>
                         <?php                        
                         foreach ($address_book as $address) {
                             ?>                                                                                        

@@ -1713,7 +1713,10 @@ function close_asap()
 
 function active_plot()
 {
+    var use_same_check_box = document.getElementById("use_same_check_box").checked;
+    if(use_same_check_box != true){
     $("#options_plott").slideDown();
+    }
     $("#options_arch").slideUp();
     $("#alt_ops").slideDown();
     $("#pick_ops").slideUp();  

@@ -2387,7 +2387,7 @@ function AddressBookCompany($id){
 }
 
 function AddressBookCompanyService($id){
-    $address_book = "SELECT * FROM sohorepro_address_service WHERE comp_id = '".$id."'" ;
+    $address_book = "SELECT * FROM sohorepro_address_service WHERE comp_id = '".$id."' ORDER BY company_name ASC" ;
     $book = mysql_query($address_book);
     while ($object = mysql_fetch_assoc($book)):
         $value[] = $object;
