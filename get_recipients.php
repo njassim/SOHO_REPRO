@@ -14,6 +14,194 @@ error_reporting(0);
 // Made the Repository 
 
 if ($_POST['recipients'] == '1') {
+    
+    $user_session_comp  =   $_SESSION['sohorepro_companyid'];
+    $user_session       =   $_SESSION['sohorepro_userid'];
+    
+    $entered_needed_sets = NeededSets($user_session_comp, $user_session);
+    if(count($entered_needed_sets) > 0){ 
+        $r = 1;
+    foreach ($entered_needed_sets as $entered_sets) {
+        if ($entered_sets['shipp_id'] == "P1") {
+            $shipp_add = AddressBookPickupSohoCap("P1");
+        } elseif ($entered_sets['shipp_id'] == "P2") {
+            $shipp_add = AddressBookPickupSohoCap("P2");
+        } else {
+            $shipp_add = SelectIdAddressService($entered_sets['shipp_id']);
+        }
+        $plot_binding = ($entered_sets['binding'] == '0') ? '' : ',' . $entered_sets['binding'];
+        $plot_folding = ($entered_sets['folding'] == '0') ? '' : ',' . $entered_sets['folding'];
+        $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ',' . $entered_sets['arch_binding'];
+        $arch_folding = ($entered_sets['arch_folding'] == '0') ? '' : ',' . $entered_sets['arch_folding'];
+        $needen_sets = ($entered_sets['plot_needed'] != '0') ? $entered_sets['plot_needed'] : $entered_sets['arch_needed'];
+        $type = ($entered_sets['plot_needed'] != '0') ? 'Plotting on Bond' : 'Architectural Copies';
+        ?>    
+        <div style="border: 2px #F99B3E solid;padding-bottom: 20px;margin-bottom : 5px;width: 100%;float: left;" class="shaddows">
+            <div style="width: 100%;float: left;margin-top: 10px;">
+                <div style="float: left;width: 48%;margin-left: 10px;font-weight: bold;">RECIPIENT <?php echo $r; ?></div>
+                <div style="float: right;width: 20%;font-weight: bold;">
+                    <span title="Edit Recipient" alt="Edit Recipient" style="font-weight: bold;cursor: pointer;padding-right: 15px;font-weight: bold;padding-right: 15px;background: #009C58;color: #FFF;padding: 2px 10px;border-radius: 5px;margin-top: 3px;" onclick="return edit_recipient('<?php echo $entered_sets['id']; ?>');">Edit</span>
+                    <span title="Delete Recipient" alt="Delete Recipient" style="font-weight: bold;cursor: pointer;background: #D84B36;color: #FFF;padding: 2px 8px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return delete_recipient('<?php echo $entered_sets['id']; ?>');">Delete</span>
+                </div>
+
+                <div style="float: left;width: 100%;margin-left: 30px;margin-top: 10px;font-weight: bold;">Send to: </div>
+                <div style="float: left;width: 100%;margin-left: 30px;">  
+                    <?php
+                    $comp_name = ($shipp_add[0]['company_name'] == '') ? '' : $shipp_add[0]['company_name'] . '<br>';
+                    $add_1 = ($shipp_add[0]['address_1'] == '') ? '' : $shipp_add[0]['address_1'] . '<br>';
+                    $add_2 = ($shipp_add[0]['address_2'] == '') ? '' : $shipp_add[0]['address_2'] . '<br>';
+                    $add_3 = ($shipp_add[0]['address_3'] == '') ? '' : $shipp_add[0]['address_3'] . '<br>';
+                    //echo $shipp_add[0]['company_name'] . '<br>' . $shipp_add[0]['address_1'] . ',<br>' . $add_2 . $shipp_add[0]['city'] . ',&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip'].'<br>'.'Attention to:  '.$entered_sets['attention_to'];
+                    if (($entered_sets['shipp_id'] == "P1") || ($entered_sets['shipp_id'] == "P2")) {
+                        echo $shipp_add[0]['address'];
+                    } else {
+                        ?>                    
+                        <span style="width:100%;float: left;"><?php echo $comp_name; ?></span>
+                        <span style="width:100%;float: left;">Attention:  <?php echo $entered_sets['attention_to']; ?></span>
+                        <?php if ($entered_sets['contact_ph'] != "") { ?>
+                            <span style="width:100%;float: left;">Contact:  <?php echo $entered_sets['contact_ph']; ?></span>
+                        <?php } ?>
+                        <?php if ($add_1 != '') { ?>
+                            <span style="width:100%;float: left;"><?php echo $add_1; ?></span>
+                        <?php }if ($add_2 != '') { ?>
+                            <span style="width:100%;float: left;"><?php echo $add_2; ?></span>
+                        <?php }if ($add_3 != '') { ?>
+                            <span style="width:100%;float: left;"><?php echo $add_3; ?></span>
+            <?php } ?>
+                        <span style="width:100%;float: left;"><?php echo $shipp_add[0]['city'] . ',&nbsp;' . StateName($shipp_add[0]['state']) . '&nbsp;' . $shipp_add[0]['zip']; ?></span>
+        <?php } ?>
+                </div>
+                <!-- Address Show End -->
+
+                <div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">PACKING LIST:</div>
+                <div style="float: left;width: 90%;margin-left: 30px;margin-top: 5px;">
+
+                    <table border="1" style="width: 100%;">
+                        <tr bgcolor="#F99B3E">
+                            <td style="font-weight: bold;">Sets</td> 
+                            <td style="font-weight: bold;">Order Type</td>                            
+                            <td style="font-weight: bold;">Size</td>
+                            <td style="font-weight: bold;">Output</td>
+                            <td style="font-weight: bold;">Media</td>
+                            <td style="font-weight: bold;">Binding</td>
+                            <td style="font-weight: bold;">Folding</td>
+                        </tr>
+                        <tr bgcolor="#ffeee1">
+                            <td><?php echo $needen_sets; ?></td>
+                            <td><?php echo $type; ?></td>                            
+                            <td><?php echo $entered_sets['size']; ?></td>
+                            <td><?php echo $entered_sets['output']; ?></td>
+                            <td><?php echo $entered_sets['media']; ?></td>
+                            <td>
+                                <span onclick="return edit_binding('<?php echo $entered_sets['id']; ?>');" id="binding_<?php echo $entered_sets['id']; ?>" style="cursor: pointer;"><?php echo $entered_sets['binding']; ?></span>
+                                <select class="binding_select_<?php echo $entered_sets['id']; ?>" id="binding_select_<?php echo $entered_sets['id']; ?>" onchange="return change_binding('<?php echo $entered_sets['id']; ?>');" style="width: 65px;display:none;">
+                                    <option value="None" <?php if ($entered_sets['binding'] == 'NONE') { ?> selected="selected" <?php } ?>>None</option>                                      
+                                    <option value="Bind All" <?php if ($entered_sets['binding'] == 'BIND ALL') { ?> selected="selected" <?php } ?>>Bind All</option>                          
+                                    <option value="Bind by Discipline" <?php if ($entered_sets['binding'] == 'BIND BY DISCIPLINE') { ?> selected="selected" <?php } ?>>Bind by Discipline</option>
+                                    <option value="Screw Post" <?php if ($entered_sets['binding'] == 'SCREW POST') { ?> selected="selected" <?php } ?>>Screw Post</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span onclick="return edit_folding('<?php echo $entered_sets['id']; ?>');" id="folding_<?php echo $entered_sets['id']; ?>" style="cursor: pointer;"><?php echo $entered_sets['folding']; ?></span>
+                                <select id="folding_select_<?php echo $entered_sets['id']; ?>" onchange="return change_folding('<?php echo $entered_sets['id']; ?>');" style="width: 65px;display:none;">
+                                    <option value="None" <?php if ($entered_sets['folding'] == 'NONE') { ?> selected="selected" <?php } ?>>None</option>
+                                    <option value="Yes" <?php if ($entered_sets['folding'] == 'YES') { ?> selected="selected" <?php } ?>>Yes</option>                          
+                                </select>
+
+                            </td>
+                        </tr>
+                    </table>
+
+        <!--   1. <?php // echo $entered_sets['plot_needed'] . '&nbsp;Sets Plotting on Bond,' . $entered_sets['size'] . ',' . $entered_sets['output'] . $plot_binding . $plot_folding;  ?></br>-->
+                    <!--   2. <?php // echo  $entered_sets['arch_needed'].'&nbsp;Sets Plotting on Bond,'. $entered_sets['arch_size'].','.$entered_sets['arch_output'].$arch_binding.$arch_folding;    ?> -->
+                </div>   
+
+
+        <?php
+        if ($entered_sets['size'] == 'Custom') {
+            ?>
+                    <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
+                        <div style="font-weight: bold;width: 100%;float: left;">
+                            Custom Size Details :
+                        </div>
+                        <div style="width: 100%;float: left;">                    
+                    <?php echo $entered_sets['custome_details']; ?>
+                        </div>
+                    </div>
+                <?php } ?>
+
+        <?php
+        if ($entered_sets['output'] == 'Both') {
+            ?>
+                    <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
+                        <div style="font-weight: bold;width: 100%;float: left;">
+                            Color Page Numbers :
+                        </div>
+                        <div style="width: 100%;float: left;">                    
+                    <?php echo $entered_sets['output_page_number']; ?>
+                        </div>
+                    </div>
+                    <?php } ?>
+
+
+                <div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;">
+        <?php
+        $date_asap = ($entered_sets['shipp_time'] != 'ASAP') ? '&nbsp;&nbsp;&nbsp;' . $entered_sets['shipp_time'] : '';
+        ?>
+                    <span style="font-weight: bold;">When Needed:  </span><?php echo $entered_sets['shipp_date'] . $date_asap; ?>            
+                </div>        
+        <?php
+        if ($entered_sets['delivery_type'] != '0') {
+            ?>
+                    <div style="width: 100%;float: left;margin-left: 30px;margin-top: 7px;">
+                        <span style="font-weight: bold;">Send Via: </span>
+                    </div>
+                    <div style="width: 100%;float: left;margin-left: 30px;margin-top: 7px;">
+                        <?php
+                        if ($entered_sets['delivery_type'] == '1') {
+                            $delivery_type = 'Next Day Air';
+                        } elseif ($entered_sets['delivery_type'] == '2') {
+                            $delivery_type = 'Two Day Air';
+                        } elseif ($entered_sets['delivery_type'] == '3') {
+                            $delivery_type = 'Three Day Air';
+                        } elseif ($entered_sets['delivery_type'] == '4') {
+                            $delivery_type = 'Ground';
+                        }
+
+                        $ship_type_1 = ($entered_sets['shipp_comp_1'] == '0') ? '' : $entered_sets['shipp_comp_1'];
+                        $ship_type_2 = ($entered_sets['shipp_comp_2'] == '0') ? '' : $entered_sets['shipp_comp_2'];
+                        $ship_type_3 = ($entered_sets['shipp_comp_3'] == '0') ? '' : $entered_sets['shipp_comp_3'];
+
+                        echo $ship_type_1 . $ship_type_2 . $ship_type_3 . ',&nbsp;' . $delivery_type . ',&nbsp;Account # ' . $entered_sets['billing_number'];
+                        ?>
+                    </div>
+        <?php } else { ?>                            
+                    <div style="width: 100%;float: left;margin-left: 30px;margin-top: 7px;">
+                        <span style="font-weight: bold;">Send Via: </span>
+                    </div>
+                    <div style="width: 100%;float: left;margin-left: 30px;margin-top: 7px;">
+                        SOHO TO ARRANGE DELIVERY
+                    </div>    
+                <?php } ?>   
+        <?php
+        if ($entered_sets['spl_inc'] != '') {
+            ?>
+                    <div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">Special Instructions: </div>
+                    <div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">
+                    <?php echo $entered_sets['spl_inc']; ?>
+                    </div>
+            <?php
+        }
+        ?>
+            </div>
+        </div>
+        <?php
+        $r++;
+    }
+    }
+    ?>
+
+    <?php
     $current_option = CurrentOption($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $rem_avl_options = AvlOptionsRemaining($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
@@ -3228,7 +3416,7 @@ if ($_POST['recipients'] == '1') {
     </style>';
     $message .= '</head>';
     $message .= '<body>';
-    $message .= '<div style="border:5px solid #FF7E00;">';
+    $message .= '<div style="border:5px solid #FF7E00;width: 90%;float: left;">';
     $message .= '<table>';
     $message .= '<tr>';
     $message .= '<td colspan="3" align="left" valign="top" style="padding-top: 30px;padding-left: 10px;">';
@@ -3246,7 +3434,7 @@ if ($_POST['recipients'] == '1') {
     $message .= '<td colspan="3" style="padding-top: 20px;padding-left: 10px;padding-bottom: 10px;">';
 
     //Original Order Start
-    $message .= '<div style="float: left;margin-top: 12px;margin-bottom: 20px;">';
+    $message .= '<div style="float: left;margin-top: 12px;margin-bottom: 20px;background-image: url("data:image/jpg;base64,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AKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAFWYt7S0VDvZyH0AAKB5RuvvKaIcAAAOvpHdPbSUJZ2oHwAAwMQYrb2HrTGvP/nKK6/UjgIAAM2SOru+u7OhNeb1Y8qUKbFjx47qAgAAoHlSZ6fe3qPBa+dfPTBwURq9vb21MwAAQLOkzs7NnRs8GTZjni+YOnVq9Pf3VxcAAADNkzo79fbIOK/uylI/cpinKXbLWQAAoHlSX+/cuXMozId1eO2aYVGeRmtrazz//PO1swAAwIFKfZ17uz7Ok2Ez5ulEjvNp06bF7t27Y9u2bdWFAADA/ktRnvo6dXaO8hzmVYvXrhsW52m2PI30pO7ubnEOAAAHIEV5T09P1de5teujPGkZqPbd6UHapHsqprFr165q9PX1DY30hDlz5sSMGTOqJwIAAGNLa8rrZ8rzqF/KMhTo9WGeR32cp2+NppHiPG1TmKfCnzlzZvU4vRAAADD440EpxtMtEVM75y961s+U10d5njEfFubJaHGetulFc6jnkY6nka/PzwcAgMkkRXXeppFnwXOA55GXr4wW5dXzB2J6WE3n0E4jx3ce9UGeRv21aQAAwGRUH9lp5DivD/H6UX9ttkeYJ/WxnUd9jItyAAAYrj6208gBPlqM51Fv1DBP8uEc3nsb+RoAAJjMcmiPjO+RI18zXMT/A8cFEHhTW5mcAAAAAElFTkSuQmCC");background-repeat: no-repeat;">';
     $message .= '<div style="font-weight: bold;padding-top: 3px;">ORIGINAL ORDER</div>';
     $message .= '<div style="border: 2px #F99B3E solid;width: 95%;float: left;margin-top: 10px;margin-bottom: 10px;" class="shaddows">';
     $message .= '<div class="details_div">';

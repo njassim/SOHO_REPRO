@@ -94,6 +94,15 @@ $(window).scroll(function(event) {
 });
 
 });
+
+
+$(window).load(function() {
+    var entered_plot_already = $("#entered_plot_already").val();
+    if(entered_plot_already > 0){
+        document.getElementById('del_type_multi').checked = true;
+        multiple_recipient();
+    }    
+    });
 </script>
 
 
@@ -305,7 +314,10 @@ $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SES
                   <li class="clear">
                   
                       <div class="serviceOrderSetHolder">
-                          
+                          <?php
+                          $entered_needed_sets = NeededSets($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);                          
+                          ?>
+                          <input type="hidden" name="entered_plot_already" id="entered_plot_already" value="<?php echo count($entered_needed_sets); ?>" />
                           <div style="background-color:#FFFFFF" class="serviceOrderSetWapper" setindex="0">                            
                             <div style="padding-top: 10px;">
                                 <input type="radio" name="del_type" id="everything_return" value="1" style="width: 15% !important;" onclick="return everything_return();" /><span style="text-transform: uppercase;font-weight: bold;">Return everything to my office</span>

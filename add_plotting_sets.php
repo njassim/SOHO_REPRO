@@ -187,7 +187,7 @@ if ($_POST['service_plotting_add'] == '1') {
                             <label>
                                 Originals
                             </label>
-                            <input class="order_0_set1_0_original k-input kdText " style="width:65px;" id="original" name="original" type="text" value="" />
+                            <input class="order_0_set1_0_original k-input kdText " style="width:50px;" id="original" name="original" type="text" value="" />
                         </div>
                         <!--Originals End-->
 
@@ -230,7 +230,7 @@ if ($_POST['service_plotting_add'] == '1') {
                             </label>
                             <div class="drop" style="margin-right:0px;margin-left:0px;height:2px;">
                                 <div style="float:left;margin-right:0px;">
-                                    <select class="order_0_set1_0_output kdSelect " style="width: 90px;" id="output" name="output" onchange="return custome_output();">
+                                    <select class="order_0_set1_0_output kdSelect " style="width: 65px;" id="output" name="output" onchange="return custome_output();">
                                         <option value="B/W">B/W</option>
                                         <option value="Color">Color</option>
                                         <option value="Both">Both</option>
@@ -250,7 +250,7 @@ if ($_POST['service_plotting_add'] == '1') {
                             </label>
                             <div class="drop" style="margin-right:0px;margin-left:0px;height:2px;">
                                 <div style="float:left;margin-right:0px;">
-                                    <select class="order_0_set1_0_media kdSelect " style="width: 100px;" id="media" name="media">
+                                    <select class="order_0_set1_0_media kdSelect " style="width: 70px;" id="media" name="media">
                                         <option value="Bond">Bond</option>
                                         <option value="Vellum">Vellum</option>
                                         <option value="Mylar">Mylar</option>                          
@@ -269,7 +269,7 @@ if ($_POST['service_plotting_add'] == '1') {
                             </label>
                             <div class="drop" style="margin-right:0px;margin-left:0px;height:2px;">
                                 <div style="float:left;margin-right:0px;">
-                                    <select class="order_0_set1_0_binding kdSelect " style="width: 80px;" id="binding" name="binding">
+                                    <select class="order_0_set1_0_binding kdSelect " style="width: 130px;" id="binding" name="binding">
                                         <option value="none">None</option>                                      
                                         <option value="Bind All">Bind All</option>                          
                                         <option value="Bind by Discipline">Bind by Discipline</option>
