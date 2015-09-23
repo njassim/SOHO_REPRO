@@ -3276,7 +3276,10 @@ if ($_POST['recipients'] == '1') {
 } elseif ($_POST['recipients'] == '0_0') {
 
     $reference = strtoupper($_SESSION['ref_val']);
-
+    
+    $user_session_comp      = $_SESSION['sohorepro_companyid'];
+    $user_session           = $_SESSION['sohorepro_userid'];
+    
     $sql_order_sequence = mysql_query("SELECT id,order_sequence FROM sohorepro_order_master ORDER BY id DESC LIMIT 1");
     $object_order_sequence = mysql_fetch_assoc($sql_order_sequence);
     $sequence_id = $object_order_sequence['id'];
@@ -3442,7 +3445,7 @@ if ($_POST['recipients'] == '1') {
     $message .= '<div style="float: left;width: 33%;margin-left: 30px;">';
     $cust_add = getCustomeInfo($_SESSION['sohorepro_companyid']);
     $cust_add_2 = ($cust_add[0]['comp_business_address2'] != '') ? $cust_add[0]['comp_business_address2'] . ',<br>' : '';
-    $message .= $cust_add[0]['comp_name'] . '<br>' . $cust_add[0]['comp_business_address1'] . ',<br>' . $cust_add_2 . $cust_add[0]['comp_city'] . ',&nbsp;' . $cust_add[0]['comp_state'] . '&nbsp;' . $cust_add[0]['comp_zipcode'];
+    $message .= $cust_add[0]['comp_name'] . '<br>' . $cust_add[0]['comp_business_address1'] . ',<br>' . $cust_add_2 . $cust_add[0]['comp_city'] . ',&nbsp;' . $cust_add[0]['comp_state'] . '&nbsp;' . $cust_add[0]['comp_zipcode'].'<br>'.$cust_add[0]['phone'];
     $message .= '</div>';
     $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">User Details :</div>';
     $message .= '<div style="float: left;width: 33%;margin-left: 30px;">';
@@ -3453,15 +3456,19 @@ if ($_POST['recipients'] == '1') {
     $message .= $cust_user_name . '<br>' . $cust_mail_id . '<br>' . $cust_phone_num . '<br>Date :' . date('m-d-Y h:i A', time());
     $message .= '</div>';
     $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">PACKING LIST:</div>';
-    $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">';
-    $cust_original_order = SetsOrderedFinalize($job_reference_final[0]['id']);
+    $message .= '<div style="float: left;width: 85%;margin-left: 30px;margin-top: 5px;">';
+    //$cust_original_order = SetsOrderedFinalize($job_reference_final[0]['id']);
+    $cust_original_order = EnteredPlotRecipientsMulti($user_session_comp, $user_session, $job_reference_final[0]['id']);
     $total_plot_needed = SetsOrderedFinalizeCountOfSets($job_reference_final[0]['id']);
     $cust_original_order_final = SetsOrderedFinalizeOriginal($job_reference_final[0]['id']);
     $upload_file_exist = UploadFileExistFinalize($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid'], $job_reference_final[0]['id']);
     $cust_needed_sets = ($cust_original_order[0]['print_ea'] != '0') ? $cust_original_order[0]['print_ea'] : $cust_original_order[0]['arch_needed'];
     $cust_order_type = ($cust_original_order[0]['arch_needed'] != '0') ? 'Architectural Copies' : 'Plotting on Bond';
+    $option          = ($cust_original_order[0]['arch_needed'] != '0') ? 'Pickup Options:' : 'File Options:';  
     $message .= '<table border="0" style="width: 100%;">';
     $message .= '<tr bgcolor="#F99B3E">';
+    $message .= '<td style="font-weight: bold;">Option</td>'; 
+    $message .= '<td style="font-weight: bold;">Originals</td>';
     $message .= '<td style="font-weight: bold;">Sets</td>';
     $message .= '<td style="font-weight: bold;">Order Type</td>';
     $message .= '<td style="font-weight: bold;">Size</td>';
@@ -3469,16 +3476,27 @@ if ($_POST['recipients'] == '1') {
     $message .= '<td style="font-weight: bold;">Media</td>';
     $message .= '<td style="font-weight: bold;">Binding</td>';
     $message .= '<td style="font-weight: bold;">Folding</td>';
-    $message .= '</tr>';
+    $message .= '</tr>';    
+    foreach ($cust_original_order as $original){
+        $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
+        $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';  
+        $size         = ($original['size'] == 'undefined') ? $original['arch_size'] : $original['size'];
+        $output       = ($original['output'] == 'undefined') ? $original['arch_output'] : $original['output'];
+        $media        = ($original['media'] == 'undefined') ? $original['arch_media'] : $original['media'];
+        $binding      = ($original['binding'] == 'undefined') ? $original['arch_binding'] : $original['binding'];
+        $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding']; 
     $message .= '<tr bgcolor="#ffeee1">';
-    $message .= '<td>' . $total_plot_needed[0]['total_sets'] . '</td>';
+    $message .= '<td>' . $original['options'] . '</td>';
+    $message .= '<td>' . $original['origininals'] . '</td>';
+    $message .= '<td>' . $cust_needed_sets . '</td>';
     $message .= '<td>' . $cust_order_type . '</td>';
-    $message .= '<td>' . $cust_original_order[0]['size'] . '</td>';
-    $message .= '<td>' . $cust_original_order[0]['output'] . '</td>';
-    $message .= '<td>' . $cust_original_order_final[0]['media'] . '</td>';
-    $message .= '<td>' . $cust_original_order[0]['binding'] . '</td>';
-    $message .= '<td>' . $cust_original_order[0]['folding'] . '</td>';
-    $message .= '</tr>';
+    $message .= '<td>' . $size . '</td>';
+    $message .= '<td>' . $output . '</td>';
+    $message .= '<td>' . $media . '</td>';
+    $message .= '<td>' . $binding . '</td>';
+    $message .= '<td>' . $folding . '</td>';
+    $message .= '</tr>'; 
+    }
     $message .= '</table>';
     $message .= '</div>';
     if ($cust_original_order[0]['size'] == 'Custom') {
@@ -3490,11 +3508,11 @@ if ($_POST['recipients'] == '1') {
     if ($cust_original_order[0]['output'] == 'Both') {
         $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">';
         $message .= '<div style="font-weight: bold;width: 100%;float: left;">Page Number :</div>';
-        $message .= '<div style="padding-top: 3px;">' . $cust_original_order[0]['output_page_number'] . '</div>';
+        $message .= '<div style="padding-top: 3px;">' . $cust_original_order[0]['output_both'] . '</div>';
         $message .= '</div>';
     }
     if (($cust_original_order_final[0]['pick_up'] != '0') || ($cust_original_order_final[0]['drop_off'] != '0') || ($cust_original_order_final[0]['ftp_link'] != '0')) {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">File Options :</div>';
+        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">'.$option.'</div>';
     }
     if ($cust_original_order_final[0]['pick_up'] != '0') {
         $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">Pick up : ' . $cust_original_order_final[0]['pick_up'] . '</div>';
@@ -3534,12 +3552,19 @@ if ($_POST['recipients'] == '1') {
         } else {
             $shipp_add = SelectIdAddressService($entered_sets['shipp_id']);
         }
-        $needed_sets = ($entered_sets['plot_needed'] != '0') ? $entered_sets['plot_needed'] : $entered_sets['arch_needed'];
-        $order_type = ($entered_sets['arch_needed'] != '0') ? 'Architectural Copies' : 'Plotting on Bond';
-        $plot_binding = ($entered_sets['binding'] == '0') ? '' : ',' . $entered_sets['binding'];
-        $plot_folding = ($entered_sets['folding'] == '0') ? '' : ',' . $entered_sets['folding'];
-        $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ',' . $entered_sets['arch_binding'];
-        $arch_folding = ($entered_sets['arch_folding'] == '0') ? '' : ',' . $entered_sets['arch_folding'];
+        $needed_options  =   $entered_sets['option_id'];
+        $needed_sets  = ($entered_sets['plot_needed'] != '0') ? $entered_sets['plot_needed'] : $entered_sets['arch_needed'];
+        $order_type   = ($entered_sets['arch_needed'] != '0') ? 'Architectural Copies' : 'Plotting on Bond';
+        $plot_binding = ($entered_sets['binding'] == '0') ? '' : ','.$entered_sets['binding'];
+        $plot_folding = ($entered_sets['folding'] == '0') ? '' : ','.$entered_sets['folding'];
+        $arch_binding = ($entered_sets['arch_binding'] == '0') ? '' : ','.$entered_sets['arch_binding'];
+        $arch_folding = ($entered_sets['arch_folding'] == '0') ? '' : ','.$entered_sets['arch_folding'];
+        $size         = ($entered_sets['size'] == 'undefined') ? $entered_sets['arch_size'] : $entered_sets['size'];
+        $output       = ($entered_sets['output'] == 'undefined') ? $entered_sets['arch_output'] : $entered_sets['output'];
+        $media        = ($entered_sets['media'] == 'undefined') ? $entered_sets['arch_media'] : $entered_sets['media'];
+        $binding      = ($entered_sets['binding'] == 'undefined') ? $entered_sets['arch_binding'] : $entered_sets['binding'];
+        $folding      = ($entered_sets['folding'] == 'undefined') ? $entered_sets['arch_folding'] : $entered_sets['folding'];
+        
         $message .= '<div style="font-weight: bold;padding-top: 3px;">RECIPIENT ' . $r . '</div>';
         $message .= '<div style="border: 2px #F99B3E solid;width: 95%;float: left;margin-bottom: 10px;">';
         $message .= '<div style="width: 100%;float: left;margin-top: 10px;margin-bottom: 10px;">';
@@ -3562,21 +3587,40 @@ if ($_POST['recipients'] == '1') {
 
         $message .= '<table border="0" style="width: 100%;">';
         $message .= '<tr bgcolor="#F99B3E">';
+        $message .= '<td style="font-weight: bold;">Option</td>'; 
         $message .= '<td style="font-weight: bold;">Sets</td>';
         $message .= '<td style="font-weight: bold;">Order Type</td>';
         $message .= '<td style="font-weight: bold;">Size</td>';
         $message .= '<td style="font-weight: bold;">Output</td>';
+        $message .= '<td style="font-weight: bold;">Media</td>';
         $message .= '<td style="font-weight: bold;">Binding</td>';
         $message .= '<td style="font-weight: bold;">Folding</td>';
         $message .= '</tr>';
-        $message .= '<tr bgcolor="#ffeee1">';
+        if ($entered_sets['plot_needed'] == '1') {            
+        $message .= '<tr bgcolor="#ffeee1">';        
+        $message .= '<td>' . $needed_options . '</td>';
         $message .= '<td>' . $needed_sets . '</td>';
         $message .= '<td>' . $order_type . '</td>';
-        $message .= '<td>' . $entered_sets['size'] . '</td>';
-        $message .= '<td>' . $entered_sets['output'] . '</td>';
-        $message .= '<td>' . $entered_sets['binding'] . '</td>';
-        $message .= '<td>' . $entered_sets['folding'] . '</td>';
+        $message .= '<td>' . $size . '</td>';
+        $message .= '<td>' . $output . '</td>';
+        $message .= '<td>' . $media . '</td>';
+        $message .= '<td>' . $binding . '</td>';
+        $message .= '<td>' . $folding . '</td>';
         $message .= '</tr>';
+        }
+        if ($entered_sets['plot_needed'] == '0') {            
+        $message .= '<tr bgcolor="#ffeee1">';        
+        $message .= '<td>' . $needed_options . '</td>';
+        $message .= '<td>' . $needed_sets . '</td>';
+        $message .= '<td>' . $order_type . '</td>';
+        $message .= '<td>' . $size . '</td>';
+        $message .= '<td>' . $output . '</td>';
+        $message .= '<td>' . $media . '</td>';
+        $message .= '<td>' . $binding . '</td>';
+        $message .= '<td>' . $folding . '</td>';
+        $message .= '</tr>';
+        }
+        
         $message .= '</table>';
         $message .= '</div>';
 

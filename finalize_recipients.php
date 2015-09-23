@@ -364,7 +364,7 @@ padding-bottom: 0px !important;
                                                 $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];    
                                             ?>
                                             <tr bgcolor="#F8F8F8">
-                                                <td><?php echo $original['options']; ?></td>
+                                                <td><?php echo $original['option_id']; ?></td>
                                                 <td><?php echo $original['origininals']; ?></td>
                                                 <td><?php echo $cust_needed_sets; ?></td>
                                                 <td><?php echo $cust_order_type; ?></td>                            
@@ -400,7 +400,7 @@ padding-bottom: 0px !important;
                                             Color Page Number : 
                                         </div>
                                         <div style="padding-top: 3px;">                    
-                                            <?php echo $cust_original_order[0]['output_page_number']; ?>  
+                                            <?php echo $cust_original_order[0]['output_both']; ?>  
                                         </div>
                                     </div>
                                     <?php } ?>
