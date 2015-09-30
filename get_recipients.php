@@ -3725,5 +3725,13 @@ if ($_POST['recipients'] == '1') {
     unset($_SESSION['final_ord_id']);
     unset($_SESSION['ref_val']);
     echo '1';
+}elseif($_POST['delete_upload_files'] == '9'){
+    $user_session_comp      = $_SESSION['sohorepro_companyid'];
+    $user_session           = $_SESSION['sohorepro_userid'];
+    $file_name              = str_replace(' ','-',strtolower($_POST['file_name']));;
+    
+    $delete_sql = "DELETE FROM sohorepro_upload_files_set WHERE file_name = '" . $file_name . "' AND comp_id = '".$user_session_comp."' AND user_id = '".$user_session."' AND order_id = '0' ";
+    mysql_query($delete_sql);
+    echo '1';
 }
 ?>

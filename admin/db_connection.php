@@ -6,7 +6,7 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 
 
    
-    $link = mysql_connect('localhost', 'root', '');
+    $link = mysql_connect('localhost', 'root', 'jassim214');
 
     $db_selected = mysql_select_db('supply.sohorepro.com', $link);
     

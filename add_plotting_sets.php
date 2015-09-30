@@ -169,13 +169,13 @@ if ($_POST['service_plotting_add'] == '1') {
                     <div style="width: 100%;float: left;padding-top: 10px;">  
                         
                         <!--JASSIM-->                        
-                        <input type="checkbox"  style="width: 2%;margin-bottom: 20px;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set();" /><span id="use_same_check_box_spn">Use the same File Option as in Set/Option <?php echo ($count_option - 1); ?></span>
+                        <input type="checkbox"  style="width: 2%;margin-bottom: 20px;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set();" /><span id="use_same_check_box_spn">Use the same File Option as in Job Option <?php echo ($count_option - 1); ?></span>
                         <!--End-->
                         
                         <!--Check Box Start-->
                         <div style="float:left;width:100%;">
                             <ul class="arch_radio">
-                                <li><input type="radio" name="plotting_check" id="plotting_check" style="width:2% !important;" value="1" onclick="return active_plot();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">PLOTTING</span></li>
+                                <li><input type="radio" name="plotting_check" id="plotting_check" style="width:2% !important;" value="1" onclick="return active_plot_new();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">PLOTTING</span></li>
                                 <li><input type="radio" name="plotting_check" id="plotting_check_0" style="width:2% !important;" value="0" onclick="return active_arch();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">ARCHITECTURAL COPIES</span></li>
                             </ul>
                             <span id="errmsg"></span>
@@ -316,7 +316,7 @@ if ($_POST['service_plotting_add'] == '1') {
 <!--                        <label style="font-weight: bold;height:28px">
                             Alternative File Options<span style="color: red;">*</span>
                         </label>
-                        <input type="checkbox"  style="width: 2%;margin-bottom: 20px;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set();" /><span id="use_same_check_box_spn">Use the same File Option as in Set/Option <?php echo ($count_option - 1); ?></span>-->
+                        <input type="checkbox"  style="width: 2%;margin-bottom: 20px;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set();" /><span id="use_same_check_box_spn">Use the same File Option as in Job Option <?php echo ($count_option - 1); ?></span>-->
                         <div id="options_plott" class="check" style="width:730px;border-top: 1px solid #FF7E00;margin-top: 5px;">
                             <div class="spl_option" style="float: 100%;">
                                 <div>
