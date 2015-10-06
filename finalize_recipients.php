@@ -144,7 +144,7 @@ padding-bottom: 0px !important;
         margin-bottom: 10px;
 }
 
-// Ribbon Style
+/* Ribbon Style */
 
 #ribbon_final{
   position: absolute !important;
@@ -364,7 +364,7 @@ padding-bottom: 0px !important;
                                                 $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];    
                                             ?>
                                             <tr bgcolor="#F8F8F8">
-                                                <td><?php echo $original['option_id']; ?></td>
+                                                <td><?php echo $original['options']; ?></td>
                                                 <td><?php echo $original['origininals']; ?></td>
                                                 <td><?php echo $cust_needed_sets; ?></td>
                                                 <td><?php echo $cust_order_type; ?></td>                            
