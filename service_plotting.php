@@ -561,12 +561,13 @@ function createStatusbar(obj)
      rowCount++;
      var row="odd";
      if(rowCount %2 ==0) row ="even";
+     var james = 'jass';
      this.statusbar = $("<div class='statusbar "+row+"'></div>");
-     this.filename = $("<div class='filename'></div>").appendTo(this.statusbar);
+     this.filename = $("<div class='filename' id='filename_"+row+"'></div>").appendTo(this.statusbar);
      this.size = $("").appendTo(this.statusbar);
      this.progressBar = $("<div class='progressBar'><div></div></div>").appendTo(this.statusbar);
      this.abort = $("<div class='abort'>Abort</div>").appendTo(this.statusbar);
-     this.done = $("<div class='done-progress'>Remove</div>").appendTo(this.statusbar);
+     this.done = $("<div class='done-progress' onclick='return delete_upload_file();'>Remove</div>").appendTo(this.statusbar);
      obj.after(this.statusbar);
  
     this.setFileNameSize = function(name,size)
@@ -610,7 +611,7 @@ function createStatusbar(obj)
     {
         var sb = this.statusbar;
         this.done.click(function()
-        {
+        {           
             jqxhr.done();
             sb.hide();
         });
@@ -708,6 +709,26 @@ $(document).ready(function () {
    
 });
 
+var rowCount=0;
+function delete_upload_file()
+{ 
+    rowCount++;
+     var row = "even";
+     if(rowCount %2 ==0) row ="odd";  
+     //alert(row);
+     var mb = $('#filename_'+row).text();
+     //alert("Value of div is: " + mb); 
+        $.ajax
+        ({
+        type: "POST",
+        url: "get_recipients.php",
+        data: "delete_upload_files=9&file_name="+mb,
+        success: function(option)
+        {
+
+        }
+        });
+}
 </script>
 
  </head>
@@ -786,7 +807,7 @@ $(document).ready(function () {
                     $company_id_view_plot   = $_SESSION['sohorepro_companyid']; 
                     $check_plotting         = PlottingSetWithoutOrderId($company_id_view_plot, $user_id_add_set);
                     $check_plotting_needed  = PlottingNeededSetWithoutOrderId($company_id_view_plot, $user_id_add_set);   
-                    
+                    $check_plotting_files   = UploadFileExist($company_id_view_plot, $user_id_add_set);
                     if(count($check_plotting) > 0){
                         $delete_empty = "DELETE FROM sohorepro_plotting_set WHERE company_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0'";
                         mysql_query($delete_empty);
@@ -795,6 +816,11 @@ $(document).ready(function () {
                     if(count($check_plotting_needed) > 0){
                         $delete_empty = "DELETE FROM sohorepro_sets_needed WHERE comp_id = '".$company_id_view_plot."' AND usr_id = '".$user_id_add_set."' AND order_id = '0'";
                         mysql_query($delete_empty);
+                    }
+                    
+                    if(count($check_plotting_files) > 0){
+                        $delete_sql = "DELETE FROM sohorepro_upload_files_set WHERE comp_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0' ";
+                        mysql_query($delete_sql);
                     }
                     
 //                    if(count($check_plotting) > 0){
@@ -1179,9 +1205,9 @@ $(document).ready(function () {
                   
              
                     
-              <div style="float:left;width:100%;text-align:right;margin-top: 10px;">
-                  <input class="addNewOrderSet" value="Add Set" style="float:right;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return validate_plotting();" />
-                  <input class="addproductActionLink" value="Save and Continue" style="cursor: pointer; float: right; font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -0px !important;" type="button" onclick="return validate_plotting_cont();" />
+              <div style="float:left;width:100%;text-align:right;margin-top: 10px;">                  
+                  <input class="addproductActionLink" value="Save and Continue" style="cursor: pointer; float: right; font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -1px !important;" type="button" onclick="return validate_plotting_cont();" />
+                  <input class="addNewOrderSet" value="Add Set" style="float:right;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-right: 10px;" type="button" onclick="return validate_plotting();" />
               </div> 
               </span>
               </li>
@@ -1279,6 +1305,8 @@ $(document).ready(function () {
     
     var check_val           = document.getElementById("plotting_check").checked;
     var check_val_0         = document.getElementById("plotting_check_0").checked;
+    //var plotting_check_jk   = document.getElementsByName("plotting_check").checked;
+    
     var plotting_check      = (check_val == true) ? '1' : '0';
     
     var original            = document.getElementById("original").value;
@@ -1357,6 +1385,14 @@ $(document).ready(function () {
         document.getElementById("jobref").focus();
         return false;
     }
+    
+    if($('input[name=plotting_check]:checked').length<=0)
+    {
+        alert('Please select the job option');
+        document.getElementById("plotting_check").focus();
+        return false;
+    }
+    
     if(print_ea == ''){
         alert('Please enter the Print');
         document.getElementById("print_ea").focus();
@@ -1489,6 +1525,15 @@ function validate_plotting_cont()
         document.getElementById("jobref").focus();
         return false;
     }
+    
+//    if($('input[name=plotting_check]:checked').length<=0)
+//    {
+//        alert('Please select the job option');
+//        document.getElementById("plotting_check").focus();
+//        return false;
+//    }   
+    
+    
     if(continue_ok != '1'){
     if(print_ea == ''){
         alert('Please enter the Print');
@@ -1712,6 +1757,16 @@ function close_asap()
 }
 
 function active_plot()
+{
+    $("#options_plott").slideDown();
+    $("#options_arch").slideUp();
+    $("#alt_ops").slideDown();
+    $("#pick_ops").slideUp();  
+    $("#use_same_check_box").slideDown();
+    $("#use_same_check_box_spn").slideDown();
+}
+
+function active_plot_new()
 {
     var use_same_check_box = document.getElementById("use_same_check_box").checked;
     if(use_same_check_box != true){

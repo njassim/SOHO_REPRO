@@ -270,14 +270,53 @@ padding-bottom: 0px !important;
 </div>
 -->
 
-<div style="width: 100%;float: left;font-size: 35px;font-weight: bold;" class="orange">
+<div style="width: 100%;float: left;font-size: 35px;font-weight: bold;border: 1px solid #ff7e00;border-top: 0px;border-right: 0px; border-left: 0px;" class="orange">
     Delivery Job Reference: <span style="text-transform: uppercase;font-size: 35px;font-weight: bold;"><?php echo $_SESSION['ref_val']; ?></span>
 </div>
+
 <?php
 $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
+$cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid'], $_SESSION['ref_val']);
 ?>
-
-  <div class="bkgd-stripes-orange">
+<div style="width: 100%;float: left;">
+    <span style="font-weight: bold;">ORIGINAL ORDER</span>
+    <table border="1" style="width: 100%;">
+        <tr bgcolor="#F99B3E">
+            <td style="font-weight: bold;">Option</td> 
+            <td style="font-weight: bold;">Originals</td> 
+            <td style="font-weight: bold;">Sets</td> 
+            <td style="font-weight: bold;">Order Type</td>                            
+            <td style="font-weight: bold;">Size</td>
+            <td style="font-weight: bold;">Output</td>
+            <td style="font-weight: bold;">Media</td>
+            <td style="font-weight: bold;">Binding</td>
+            <td style="font-weight: bold;">Folding</td>
+        </tr>
+        <?php
+        foreach ($cust_original_order as $original){
+            $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
+            $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';  
+            $size         = ($original['size'] == 'undefined') ? $original['arch_size'] : $original['size'];
+            $output       = ($original['output'] == 'undefined') ? $original['arch_output'] : $original['output'];
+            $media        = ($original['media'] == 'undefined') ? $original['arch_media'] : $original['media'];
+            $binding      = ($original['binding'] == 'undefined') ? $original['arch_binding'] : $original['binding'];
+            $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];    
+        ?>
+        <tr bgcolor="#ffeee1">
+            <td><?php echo $original['options']; ?></td>
+            <td><?php echo $original['origininals']; ?></td>
+            <td><?php echo $cust_needed_sets; ?></td>
+            <td><?php echo $cust_order_type; ?></td>                            
+            <td><?php echo $size; ?></td>
+            <td><?php echo $output; ?></td>
+            <td><?php echo $media; ?></td>
+            <td><?php echo $binding; ?></td>
+            <td><?php echo $folding; ?></td>
+        </tr>
+        <?php } ?>
+    </table>
+</div>
+<div class="bkgd-stripes-orange" style="margin-bottom: 0px !important;">
     &nbsp;
   </div>
     <?php
@@ -368,7 +407,10 @@ $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SES
                             <!--<input class="addNewOrderSet" value="Add Set" style="float:right;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return validate_plotting();" />-->
                             <input class="addproductActionLink" value="Continue" style="cursor: pointer;font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -0px !important;" type="button" onclick="return continue_recipient();" />
                         </div>
-                      </div>      
+                      </div>
+                      <div id="remain_options" style="float: left;width: 100%;">
+                          
+                      </div>
               </span>
               </li>
               <li class="clear">
@@ -478,8 +520,10 @@ $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SES
                     complete: loadStop,
                     success: function(option)
                     {  
+                        var options_divide = option.split('~');
                         $('#multi_recipients').slideDown();
-                        $('#multi_recipients').html(option);
+                        $('#multi_recipients').html(options_divide[0]);
+                        $('#remain_options').html(options_divide[1]);
                         $('#add_recipients').slideDown();
                     }
                 });
@@ -680,11 +724,11 @@ $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SES
          return false;
      }
      
-     if(shipp_att == ''){
-         alert('Please enter the attention to');
-         $("#shipp_att").focus();
-         return false;
-     }
+//     if(shipp_att == ''){
+//         alert('Please enter the attention to');
+//         $("#shipp_att").focus();
+//         return false;
+//     }
      
      if(date_needed == ''){
          alert('Please select when needed');
@@ -716,6 +760,7 @@ $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SES
                 }else{
                 $('#multi_recipients').slideDown();
                 $('#multi_recipients').html(element[2]);
+                $('#remain_options').html(element[3]);
                 $('#add_recipients').slideDown();
                 }
             }
@@ -794,11 +839,11 @@ $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SES
          return false;
      }
      
-      if(shipp_att == ''){
-         alert('Please enter the attention to');
-         $("#shipp_att").focus();
-         return false;
-     }
+//      if(shipp_att == ''){
+//         alert('Please enter the attention to');
+//         $("#shipp_att").focus();
+//         return false;
+//     }
      
      if(date_needed == ''){
          alert('Please select when needed');
