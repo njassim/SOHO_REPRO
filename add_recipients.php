@@ -309,9 +309,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
             <td><?php echo $cust_order_type; ?></td>                            
             <td><?php echo $size; ?></td>
             <td><?php echo $output; ?></td>
-            <td><?php echo $media; ?></td>
-            <td><?php echo $binding; ?></td>
-            <td><?php echo $folding; ?></td>
+            <td><?php echo ucfirst($media); ?></td>
+            <td><?php echo ucfirst($binding); ?></td>
+            <td><?php echo ucfirst($folding); ?></td>
         </tr>
         <?php } ?>
     </table>
@@ -523,8 +523,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                         var options_divide = option.split('~');
                         $('#multi_recipients').slideDown();
                         $('#multi_recipients').html(options_divide[0]);
-                        $('#remain_options').html(options_divide[1]);
-                        $('#add_recipients').slideDown();
+                        $('.addproductActionLink').hide();
+                        //$('#remain_options').html(options_divide[1]);
+                        //$('#add_recipients').slideDown();
                     }
                 });
      }else{
@@ -760,8 +761,8 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                 }else{
                 $('#multi_recipients').slideDown();
                 $('#multi_recipients').html(element[2]);
-                $('#remain_options').html(element[3]);
-                $('#add_recipients').slideDown();
+//                $('#remain_options').html(element[3]);
+//                $('#add_recipients').slideDown();
                 }
             }
         });

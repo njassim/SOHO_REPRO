@@ -203,16 +203,18 @@ if ($_POST['recipients'] == '1') {
 
     <?php
     $current_option_all = CurrentOptionAll($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
-    $update_allset      =   "UPDATE sohorepro_plotting_set SET all_sets = '1' WHERE id = '".$current_option_all[0]['id']."'";
-    mysql_query($update_allset);
+//    $update_allset      =   "UPDATE sohorepro_plotting_set SET all_sets = '1' WHERE id = '".$current_option_all[0]['id']."'";
+//    mysql_query($update_allset);
     $current_option     = CurrentOption($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $number_of_sets     = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $rem_avl_options    = AvlOptionsRemaining($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $remaining_sets     = RemainingSets($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
+    $con_class = 1;
+    foreach ($remaining_sets as $current_opt){
     ?>
-    <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
-        <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo $current_option[0]['options']; ?></div>
-        <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo $current_option[0]['options'] . '/' . count($number_of_sets); ?></div>
+    <div style="width: 100%;float: left;border: 0px #F99B3E solid;margin-bottom: 5px;color: #FA8526;">            
+        <div style="width: 48%;float: left;text-align: left;font-weight: bold;font-size: 15px;">OPTION <?php echo $current_opt['options']; ?></div>
+        <div style="width: 48%;float: left;text-align: right;font-weight: bold;font-size: 15px;"><?php echo $current_opt['options'] . '&nbsp;of&nbsp;' . count($number_of_sets); ?></div>
     </div>
     <input type="hidden" name="tot_avl_options" id="tot_avl_options" value="<?php echo count($number_of_sets); ?>" />
     <input type="hidden" name="rem_avl_options" id="rem_avl_options" value="<?php echo count($rem_avl_options); ?>" />
@@ -242,7 +244,7 @@ if ($_POST['recipients'] == '1') {
                         </tr> 
                         <?php
                         // $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
-                        $enteredPlot = EnteredPlotRecipientsCurrentOption($current_option[0]['id']);
+                        $enteredPlot = EnteredPlotRecipientsCurrentOption($current_opt['id']);
 //                        echo '<pre>';
 //                        print_r($enteredPlot);
 //                        echo '</pre>';
@@ -535,339 +537,18 @@ if ($_POST['recipients'] == '1') {
 
         </div>
     </div>
-    <?php
-    // behind options start
-    echo '~';
-    foreach ($remaining_sets as $all_sets){
-    ?>
-     <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
-        <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo ($all_sets['options']); ?></div>
-        <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo ($all_sets['options']) . '/' . count($number_of_sets); ?></div>
-    </div>
-    <input type="hidden" name="tot_avl_options" id="tot_avl_options" value="<?php echo count($number_of_sets); ?>" />
-    <input type="hidden" name="rem_avl_options" id="rem_avl_options" value="<?php echo count($rem_avl_options); ?>" />
-    <div style="border: 1px #F99B3E solid;margin-bottom: 20px;padding-bottom: 20px;width: 100%;float: left;">
-        <div style="width: 100%;float: left;margin-top: 10px;">
-            <div style="float: left;width: 48%;margin-left: 10px;font-weight: bold;">RECIPIENT 1</div>
-            <div style="float: right;width: 20%;font-weight: bold;cursor: pointer;" title="Delete Recipient" alt="Delete Recipient" onclick="return delete_recipient_empty();"><span style="background: #D84B36;color: #FFF;padding: 2px 8px;border-radius: 5px;margin-top: 3px;font-weight: bold;">Delete</span></div>
-
-            <?php
-            $user_id_add_set = $_SESSION['sohorepro_userid'];
-            $company_id_view_plot = $_SESSION['sohorepro_companyid'];
-            ?>
-            <!-- Address Show End -->
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                <div id="sets_grid_new">
-                    <table border="1" style="width: 100%;">
-                        <tr bgcolor="#F99B3E">
-                            <td style="font-weight: bold;">Order Type</td>
-                            <td style="font-weight: bold;">Originals</td>
-                            <td style="font-weight: bold;">Available Sets</td>
-                            <td style="font-weight: bold;">Sets Needed</td>
-                            <td style="font-weight: bold;">Size</td>
-                            <td style="font-weight: bold;">Output</td>
-                            <td style="font-weight: bold;">Media</td>
-                            <td style="font-weight: bold;">Binding</td>
-                            <td style="font-weight: bold;">Folding</td>
-                        </tr> 
-                        <?php
-                        // $enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
-                        $enteredPlot = EnteredPlotRecipientsCurrentOption($all_sets['id']);
-//                        echo '<pre>';
-//                        print_r($enteredPlot);
-//                        echo '</pre>';
-                        $i = 1;
-                        foreach ($enteredPlot as $entered) {
-                            $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
-                            $binding = strtoupper($entered['binding']);
-                            $folding = strtoupper($entered['folding']);
-                            $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Architectural Copies';
-                            $type = ($entered['plot_arch'] == '1') ? '1' : '0';
-                            $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
-                            $plot_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1');
-                            $copy_exist = EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-
-                            if ($entered['plot_arch'] == '1') {
-                                ?>
-                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
-                                <tr bgcolor="#ffeee1">
-                                    <td>Plotting on Bond</td>
-                                    <td><?php echo $available_order[0]['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_1" class="avl_sets"  value="<?php echo ($available_order[0]['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_1" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty('<?php echo $i; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty('<?php echo $i; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
-                                    <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $i; ?>" value="<?php echo $entered['media']; ?>" /></td>
-                                    <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $i; ?>" value="<?php echo $binding; ?>" /></td>
-                                    <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $i; ?>" value="<?php echo $folding; ?>" /></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-
-                            <?php
-                            if ($entered['plot_arch'] == '0') {
-                                ?>
-                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
-                                <tr bgcolor="#ffeee1">
-                                    <td>Architectural Copies</td>
-                                    <td><?php echo $available_order[0]['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_2" class="avl_sets"  value="<?php echo ($available_order[0]['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_2" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty('<?php echo '2'; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty('<?php echo '2'; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
-                                    <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $i; ?>" value="<?php echo $entered['media']; ?>" /></td>
-                                    <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $i; ?>" value="<?php echo $binding; ?>" /></td>
-                                    <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $i; ?>" value="<?php echo $folding; ?>" /></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-
-                            <?php
-                            $i++;
-                        }
-                        ?>
-                    </table>
-                </div>
-
-                <div style="width: 99%;float: left;margin-top: 5px;">
-                    <?php
-                    if ($entered['size'] == 'Custom') {
-                        ?>
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Custom Size Details
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="size_custom_details" id="size_custom_details" value="<?php echo $entered['custome_details']; ?>" />
-                                <?php echo $entered['custome_details']; ?>
-                            </div>
-                        </div>
-                    <?php
-                    }
-                    if ($entered['output'] == 'Both') {
-                        ?>
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Color Page Numbers
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="output_page_details" id="output_page_details" value="<?php echo $entered['output_both']; ?>" />
-        <?php echo $entered['output_both']; ?>
-                            </div>
-                        </div>
-                    <?php
-                    }
-                    if ($entered['spl_instruction'] != '') {
-                        ?> 
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Special Instructions
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="spl_instruction" id="spl_instruction" value="<?php echo $entered['spl_instruction']; ?>" />
-                        <?php echo $entered['spl_instruction']; ?>
-                            </div>
-                        </div>
-                        <?php
-                    }if ($entered['plot_arch'] == '0') {
-                        if ($entered['pick_up_time'] != '0') {
-                            ?>
-                            <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
-                                <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                    Pickup Option
-                                </div>
-                                <div style="padding-top: 3px;width: 100%;float: left;">
-                                    <input type="hidden" name="pick_up_time" id="pick_up_time" value="<?php echo $entered['pick_up_time']; ?>" />
-                            <?php echo $entered['pick_up'] . ' ' . $entered['pick_up_time']; ?>
-                                </div>
-                            </div>
-        <?php }if ($entered['drop_off'] != '0') { ?>
-                            <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
-                                <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                    Pickup Option
-                                </div>
-                                <div style="padding-top: 3px;width: 100%;float: left;">
-                                    <input type="hidden" name="drop_off" id="drop_off" value="<?php echo $entered['drop_off']; ?>" />
-                            <?php echo $entered['drop_off']; ?>
-                                </div>
-                            </div>
-                    <?php }
-                } ?>
-                </div>
-
-                <?php
-                $all_days_off = AllDayOff();
-                foreach ($all_days_off as $days_off_split) {
-                    $all_days_in[] = $days_off_split['date'];
-                }
-                $all_date = implode(",", $all_days_in);
-                $all_date_exist = str_replace("/", "-", $all_date);
-                ?>
-
-            </div>
-
-            <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
-                    <?php 
-                    $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
-                    
-                    ?>
-                <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">
-                        <option value="0">Address Book</option>
-                        <option value="<?php echo $address_book[0]['id']; ?>">Return Everything To My Office</option>
-                        <option value="P1">Pickup @ 381 Broome St</option>
-                        <option value="P2">Pickup @ 307 7th Ave, 5th Flr</option>
-                        <option class="select-dash" disabled="disabled">-----------------------------------------</option>
-                    <?php                    
-                    foreach ($address_book as $address) {
-                        ?>                                                                                        
-                        <option value="<?php echo $address['id']; ?>" ><?php echo $address['company_name']; ?></option>
-                        <?php
-                        }
-                        ?>
-                </select>
-            </div>
-            <!-- Address Show Start -->
-            <div id="show_address" style="float: left;width: 56%;padding: 6px;border: 1px #F99B3E solid;margin-top: 10px;margin-left: 5px;height: 20px;font-weight: bold;">
-
-            </div>
-
-            <div style="float: left;width: 100%;margin-top: 5px;">   
-                <div style="float: left;width: 40%;">
-                    &nbsp;
-                </div>
-                <!-- Attention To Start -->
-                <div style="float: left;width: 30%;">
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: right;width: 100%;font-weight: bold;">Attention to:   </div>
-                    </div>
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: right;width: 100%;">
-                            <div id="show_address_att" style="float: left;width: 90%;border: 1px #F99B3E solid;padding: 5px;height: 25px;">
-                                <input type="text" name="shipp_att" id="shipp_att" value="" style="background-color: #F3FA2F; font-weight: bold; font-size: 20px !important;" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Attention To End -->
-                <!-- Contact Phone Start -->
-                <div style="float: left;width: 30%;">
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: left;width: 61%;font-weight: bold;">Contact Phone:   </div>
-                    </div>
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: right;width: 100%;">
-                            <div id="show_contact_phone" style="float: left;width: 90%;border: 1px #F99B3E solid;padding: 5px;height: 25px;">
-                                <input type="text" name="contact_ph" id="contact_ph" onfocus="return contact_phone();"  value="" style="background-color: #F3FA2F; font-weight: bold; font-size: 20px !important;" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Contact Phone End -->
-            </div>
-
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />
-                <div style="float:left;margin-right: 5px;margin-top: 10px;width: 100%;">
-                    <span style="font-weight: bold;">When Needed:  </span>
-                </div>
-                <div style="width: 34%;float: left;"> 
-
-                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                        <span id="asap_status" class="asap_orange" onclick="return asap();">ASAP</span> 
-                    </div>
-
-                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                        <input class="picker_icon" value="" type="text" name="date_needed" id="date_needed" style="width: 75px;" onclick="date_reveal();" />
-                        <input id="time_picker_icon" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
-                    </div>
-
-                </div>
-            </div>
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-
-                <div style="width: 265px;margin-right: 10px;float: left;margin-right: 10px;">
-
-                    <div style="padding: 10px 20px;background: #EFEFEF;border-radius: 5px;width: 225px;margin-right: 10px;float: left;">
-                        <input type="checkbox" name="arrange_del" id="arrange_del" checked style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px;" onclick="uncheck_delivery();" /><span style="text-transform: uppercase;">Soho to arrange delivery</span>
-                    </div>
-
-                    <!--<div id="delivery_info" style="width: 92%;display: none;border: 1px #F99B3E solid;padding: 5px;float: left;margin-left: 5px;margin-top: 5px;">
-                            <ul>
-                                <li>
-                                    <span style="font-weight: bold;">Delivery:  </span>
-                                    <select  name="delivery_comp" id="delivery_comp" style="width: 45% !important;" onchange="return show_address();">                    
-                                        <option value="1">Next Day Air</option>
-                                        <option value="2">Two Day Air</option>
-                                        <option value="3">Three Day Air</option>
-                                        <option value="4">Ground</option>
-                                    </select>
-                                </li>                    
-                                <li id="shipp_collection">
-                                    <label><span style="font-weight: bold;">Shipping Company:  </span></label>
-                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_1" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="FedEx" /> FedEx</span>
-                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_2" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="UPS" /> UPS</span>
-                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_3" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="Other" /><input type="text" name="other_shipp_type" id="other_shipp_type"  onclick="return other_shipp_type();" style="width: 80px;"></span>
-                                </li>
-                                <li>
-                                    <span style="font-weight: bold;">Account #  :</span> <input type="text" name="bill_number" id="bill_number" style="width: 50% !important;margin-bottom: 0px !important;" />
-                                </li>
-                            </ul>
-                        </div>-->
-
-                </div>
-                <div style="width: 265px;margin-right: 10px;float: left;margin-right: 10px;">
-
-                    <div style="padding: 10px 20px;background: #EFEFEF;border-radius: 5px;width: 225px;float: left;">
-                        <input type="checkbox" name="preffer_del" id="preffer_del" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px;" onclick="check_prefer_delivery();" /><span style="text-transform: uppercase;">Use My Carrier</span>
-                    </div>
-
-                    <div id="preffered_info" style="width: 91%;display: none;border: 1px #F99B3E solid;padding: 5px;float: left;margin-left: 5px;margin-top: 5px;">
-                        <ul>                                       
-                            <ul>
-                                <li>
-                                    <span style="font-weight: bold;">Delivery:  </span>
-                                    <select  name="delivery_comp" id="delivery_comp" style="width: 45% !important;" onchange="return show_address_();">                    
-                                        <option value="1">Next Day Air</option>
-                                        <option value="2">Two Day Air</option>
-                                        <option value="3">Three Day Air</option>
-                                        <option value="4">Ground</option>
-                                    </select>
-                                </li>                    
-                                <li id="shipp_collection">
-                                    <label><span style="font-weight: bold;">Shipping Company:  </span></label>
-                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_1" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="FedEx" /><img src="images/fedex_small.png" style="border:0px;" title="FedEx" alt="FedEx" /></span>
-                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_2" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="UPS" /><img src="images/ups_small.png" style="border:0px;" title="UPS" alt="UPS" /></span>
-                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_3" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="Other" /><input type="text" placeholder="Other" name="other_shipp_type" id="other_shipp_type"  onclick="return other_shipp_type();" style="width: 80px;"></span>
-                                </li>
-                                <li>
-                                    <span style="font-weight: bold;">Account #: </span> <input type="text" name="bill_number" id="bill_number" style="width: 50% !important;margin-bottom: 0px !important;" />
-                                </li>
-                            </ul>
-                            <!--<li>
-                                    <span style="font-weight: bold;">Account #  :</span> <input type="text" name="bill_number" id="bill_number" style="width: 50% !important;margin-bottom: 0px !important;" />
-                                </li>-->
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-
-            <div style="font-weight: bold;width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                Special Instructions:            
-            </div>        
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                <textarea name="spl_recipient" id="spl_recipient" rows="3" cols="18" style="width: 200px;height: 40px;"></textarea>
-            </div>
-
+    <div style="width:100%;float: left;"> 
+        <div style="float:right;margin-right: 12px;">
+            <input id="add_recipients" value="Add Recipient" style="margin-left: 5px;float:left;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return add_recipients();" />
+        </div>
+        <div style="float:right;">            
+            <input class="<?php echo $con_class; ?>" value="Continue" style="<?php if($con_class != count($number_of_sets)){ ?>display: none;<?php } ?>cursor: pointer;font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -0px !important;" type="button" onclick="return continue_recipient();" />
         </div>
     </div>
+    
     <?php
+    $con_class++;
     }
-    // behind options start
 } elseif ($_POST['recipients'] == '9') {
     
     $shipping_id_rec_pre = explode("_", $_POST['shipping_id_rec']);    
@@ -1153,344 +834,13 @@ if ($_POST['recipients'] == '1') {
     $current_option = CurrentOption($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
     $rem_avl_options = AvlOptionsRemaining($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
-    $remaining_sets     = RemainingSets($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
-    ?>
-    <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
-        <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo $current_option[0]['options']; ?></div>
-        <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo $current_option[0]['options'] . '/' . count($number_of_sets); ?></div>
-    </div>
-    <input type="hidden" name="tot_avl_options" id="tot_avl_options" value="<?php echo count($number_of_sets); ?>" />
-    <input type="hidden" name="rem_avl_options" id="rem_avl_options" value="<?php echo count($rem_avl_options); ?>" />
-
-    <!-- New Recipients Start -->
-    <div style="border: 1px #F99B3E solid;margin-top: 5px;margin-bottom: 20px;padding-bottom: 20px;width: 100%;float: left;">
-        <div style="width: 100%;float: left;margin-top: 10px;">
-            <div style="float: left;width: 48%;margin-left: 10px;font-weight: bold;">RECIPIENT <?php echo (count($entered_needed_sets) + 1); ?></div>
-            <div style="float: right;width: 20%;font-weight: bold;">
-                <span title="Delete Recipient" alt="Delete Recipient" style="font-weight: bold;cursor: pointer;background: #D84B36;color: #FFF;padding: 2px 8px;border-radius: 5px;margin-top: 3px;font-weight: bold;" onclick="return delete_recipient_empty();">Delete</span>
-            </div>
-
-
-            <?php
-            $user_id_add_set = $_SESSION['sohorepro_userid'];
-            $company_id_view_plot = $_SESSION['sohorepro_companyid'];
-            ?>
-            <!-- Address Show End -->
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-
-                <div id="sets_grid_new">
-                    <table border="1" style="width: 100%;">
-                        <tr bgcolor="#F99B3E">
-                            <td style="font-weight: bold;">Order Type</td>
-                            <td style="font-weight: bold;">Originals</td>
-                            <td style="font-weight: bold;">Available Sets</td>
-                            <td style="font-weight: bold;">Sets Needed</td>
-                            <td style="font-weight: bold;">Size</td>
-                            <td style="font-weight: bold;">Output</td>
-                            <td style="font-weight: bold;">Media</td>
-                            <td style="font-weight: bold;">Binding</td>
-                            <td style="font-weight: bold;">Folding</td>
-                        </tr> 
-                        <?php
-                        //$enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
-                        $enteredPlot = EnteredPlotRecipientsCurrentOption($current_option[0]['id']);
-                        $setted_option = SettedOptions($company_id_view_plot, $user_id_add_set);
-                        $print_ea_tot = $enteredPlot[0]['print_ea'];
-//                        echo '<pre>';
-//                        print_r($enteredPlot);
-//                        echo '</pre>';
-                        $i = 1;
-                        foreach ($enteredPlot as $entered) {
-                            $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
-                            $binding = strtoupper($entered['binding']);
-                            $folding = strtoupper($entered['folding']);
-                            $order_type = ($entered['plot_arch'] == '1') ? 'Plotting on Bond' : 'Architectural Copies';
-                            $type = ($entered['plot_arch'] == '1') ? '1' : '0';
-                            $available_order = ($entered['plot_arch'] == '1') ? EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '1') : EnteredPlotRecipientsCount($company_id_view_plot, $user_id_add_set, '0');
-                            $needed_sets = ($entered['plot_arch'] == '1') ? PlotSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']) : ArchSetsNeededNew($company_id_view_plot, $user_id_add_set, $entered['options']);
-                            $needed_all_sets = ($entered['plot_arch'] == '1') ? EnteredSetsAll($entered['options'], $company_id_view_plot, $user_id_add_set) : EnteredSetsAll($entered['options'], $company_id_view_plot, $user_id_add_set);
-                            ?>
-        <?php
-        if ($entered['plot_arch'] == '1') {
-            ?>
-                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
-                                <tr bgcolor="#ffeee1">
-                                    <td>Plotting on Bond</td>
-                                    <td><?php echo $available_order[0]['print_ea']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_1" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_all_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_1" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty('<?php echo $i; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty('<?php echo $i; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
-                                    <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $i; ?>" value="<?php echo $entered['media']; ?>" /></td>
-                                    <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $i; ?>" value="<?php echo $binding; ?>" /></td>
-                                    <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $i; ?>" value="<?php echo $folding; ?>" /></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-
-        <?php
-        if ($entered['plot_arch'] == '0') {
-            ?>
-                                <input type="hidden" id="option_id" value="<?php echo $entered['options']; ?>" />
-                                <tr bgcolor="#ffeee1">
-                                    <td>Architectural Copies</td>
-                                    <td><?php echo $available_order[0]['print_ea']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_2" class="avl_sets"  value="<?php echo ($available_order[0]['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_2" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty('<?php echo $i; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty('<?php echo $i; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
-                                    <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
-                                    <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $i; ?>" value="<?php echo $entered['media']; ?>" /></td>
-                                    <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $i; ?>" value="<?php echo $binding; ?>" /></td>
-                                    <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $i; ?>" value="<?php echo $folding; ?>" /></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-                            <?php
-                            $i++;
-                        }
-                        ?>
-                    </table>
-                </div>
-
-                <div style="width: 99%;float: left;margin-top: 5px;">
-    <?php
-    if ($entered['size'] == 'Custom') {
-        ?>
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Custom Size Details
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="size_custom_details" id="size_custom_details" value="<?php echo $entered['custome_details']; ?>" />
-                        <?php echo $entered['custome_details']; ?>
-                            </div>
-                        </div>
-    <?php
-    }
-    if ($entered['output'] == 'Both') {
-        ?>
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Color Page Numbers
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="output_page_details" id="output_page_details" value="<?php echo $entered['output_both']; ?>" />
-                        <?php echo $entered['output_both']; ?>
-                            </div>
-                        </div>
-    <?php
-    }
-    if ($entered['spl_instruction'] != '') {
-        ?> 
-                        <div style="width: 22%;float: left;border: 1px solid #F99B3E;margin-right: 10px;">
-                            <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                Special Instructions
-                            </div>
-                            <div style="padding-top: 3px;width: 100%;float: left;">
-                                <input type="hidden" name="spl_instruction" id="spl_instruction" value="<?php echo $entered['spl_instruction']; ?>" />
-                        <?php echo $entered['spl_instruction']; ?>
-                            </div>
-                        </div>
-        <?php
-    }if ($entered['plot_arch'] == '0') {
-        if ($entered['pick_up_time'] != '0') {
-            ?>
-                            <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
-                                <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                    Pickup Option
-                                </div>
-                                <div style="padding-top: 3px;width: 100%;float: left;">
-                                    <input type="hidden" name="pick_up_time" id="pick_up_time" value="<?php echo $entered['pick_up_time']; ?>" />
-            <?php echo $entered['pick_up'] . ' ' . $entered['pick_up_time']; ?>
-                                </div>
-                            </div>
-        <?php }if ($entered['drop_off'] != '0') { ?>
-                            <div style="width: 22%;float: left;border: 1px solid #F99B3E;">
-                                <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #F99B3E;color: #5C5C5C;text-align: center;">
-                                    Pickup Option
-                                </div>
-                                <div style="padding-top: 3px;width: 100%;float: left;">
-                                    <input type="hidden" name="drop_off" id="drop_off" value="<?php echo $entered['drop_off']; ?>" />
-                        <?php echo $entered['drop_off']; ?>
-                                </div>
-                            </div>
-                    <?php }
-                } ?> 
-                </div>
-
-                <?php
-                $all_days_off = AllDayOff();
-                foreach ($all_days_off as $days_off_split) {
-                    $all_days_in[] = $days_off_split['date'];
-                }
-                $all_date = implode(",", $all_days_in);
-                $all_date_exist = str_replace("/", "-", $all_date);
-                ?>
-
-            </div>
-
-            <div style="float: left;width: 33%;margin-left: 30px;border: 1px #F99B3E solid;margin-top: 10px;font-weight: bold;padding:3px;">Send to: 
-                <?php
-                $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
-                ?>
-                <select  name="address_book_rp" id="address_book_rp" style="width: 75% !important;" onchange="return show_address();">
-                    <option value="0">Address Book</option>
-                    <option value="<?php echo $address_book[0]['id']; ?>">Return Everything To My Office</option>
-                    <option value="P1">Pickup @ 381 Broome St</option>
-                    <option value="P2">Pickup @ 307 7th Ave, 5th Flr</option>
-                    <option class="select-dash" disabled="disabled">-----------------------------------------</option>
-                    <?php                    
-                    foreach ($address_book as $address) {
-                        ?>                                                                                        
-                        <option value="<?php echo $address['id']; ?>" ><?php echo $address['company_name']; ?></option>
-        <?php
-    }
-    ?>
-                </select>
-            </div>
-            <!-- Address Show Start -->
-            <div id="show_address" style="float: left;width: 56%;padding: 6px;border: 1px #F99B3E solid;margin-top: 10px;margin-left: 5px;height: 20px;font-weight: bold;">
-
-            </div>
-
-            <div style="float: left;width: 100%;margin-top: 5px;">   
-                <div style="float: left;width: 40%;">
-                    &nbsp;
-                </div>
-                <!-- Attention To Start -->
-                <div style="float: left;width: 30%;">
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: right;width: 100%;font-weight: bold;">Attention to:   </div>
-                    </div>
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: right;width: 100%;">
-                            <div id="show_address_att" style="float: left;width: 90%;border: 1px #F99B3E solid;padding: 5px;height: 25px;">
-                                <input type="text" name="shipp_att" id="shipp_att" value="" style="background-color: #F3FA2F; font-weight: bold; font-size: 20px !important;" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Attention To End -->
-                <!-- Contact Phone Start -->
-                <div style="float: left;width: 30%;">
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: left;width: 61%;font-weight: bold;">Contact Phone:   </div>
-                    </div>
-                    <div style="float: left;width: 100%;margin-top: 10px;">
-                        <div style="float: right;width: 100%;">
-                            <div id="show_contact_phone" style="float: left;width: 90%;border: 1px #F99B3E solid;padding: 5px;height: 25px;">
-                                <input type="text" name="contact_ph" id="contact_ph" onfocus="return contact_phone();"  value="" style="background-color: #F3FA2F; font-weight: bold; font-size: 20px !important;" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Contact Phone End -->
-            </div>
-
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />
-                <div style="float:left;margin-right: 5px;margin-top: 10px;width: 100%;">
-                    <span style="font-weight: bold;">When Needed:  </span>
-                </div>
-                <div style="width: 34%;float: left;"> 
-
-                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
-                        <span id="asap_status" class="asap_orange" onclick="return asap();">ASAP</span>
-                    </div>
-
-                    <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                        <input class="picker_icon" value="" type="text" name="date_needed" id="date_needed" style="width: 75px;" onclick="date_reveal();" />
-                        <input id="time_picker_icon" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
-                    </div>
-
-                </div>
-            </div>
-
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-
-                <div style="width: 265px;margin-right: 10px;float: left;margin-right: 10px;">
-
-                    <div style="padding: 10px 20px;background: #EFEFEF;border-radius: 5px;width: 225px;margin-right: 10px;float: left;">
-                        <input type="checkbox" name="arrange_del" id="arrange_del" checked style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px;" onclick="uncheck_delivery();" /><span style="text-transform: uppercase;">Soho to arrange delivery</span>
-                    </div>
-
-                    <!--                    <div id="delivery_info" style="width: 92%;display: none;border: 1px #F99B3E solid;padding: 5px;float: left;margin-left: 5px;margin-top: 5px;">
-                                            <ul>
-                                                <li>
-                                                    <span style="font-weight: bold;">Delivery:  </span>
-                                                    <select  name="delivery_comp" id="delivery_comp" style="width: 45% !important;" onchange="return show_address();">                    
-                                                        <option value="1">Next Day Air</option>
-                                                        <option value="2">Two Day Air</option>
-                                                        <option value="3">Three Day Air</option>
-                                                        <option value="4">Ground</option>
-                                                    </select>
-                                                </li>                    
-                                                <li id="shipp_collection">
-                                                    <label><span style="font-weight: bold;">Shipping Company:  </span></label>
-                                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_1" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="FedEx" /> FedEx</span>
-                                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_2" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="UPS" /> UPS</span>
-                                                    <span><input type="radio" name="shipp_comp" id="shipp_comp_3" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="Other" /><input type="text" name="other_shipp_type" id="other_shipp_type"  onclick="return other_shipp_type();" style="width: 80px;"></span>
-                                                </li>
-                                                <li>
-                                                    <span style="font-weight: bold;">Account #  :</span> <input type="text" name="bill_number" id="bill_number" style="width: 50% !important;margin-bottom: 0px !important;" />
-                                                </li>
-                                            </ul>
-                                        </div>                -->
-                </div>
-                <div style="width: 265px;margin-right: 10px;float: left;margin-right: 10px;">
-
-                    <div style="padding: 10px 20px;background: #EFEFEF;border-radius: 5px;width: 225px;float: left;">
-                        <input type="checkbox" name="preffer_del" id="preffer_del" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px;" onclick="check_prefer_delivery();" /><span style="text-transform: uppercase;">Use My Carrier</span>
-                    </div>
-
-                    <div id="preffered_info" style="width: 91%;display: none;border: 1px #F99B3E solid;padding: 5px;float: left;margin-left: 5px;margin-top: 5px;">
-                        <ul>
-                            <li>
-                                <span style="font-weight: bold;">Delivery:  </span>
-                                <select  name="delivery_comp" id="delivery_comp" style="width: 45% !important;" onchange="return show_address_();">                    
-                                    <option value="1">Next Day Air</option>
-                                    <option value="2">Two Day Air</option>
-                                    <option value="3">Three Day Air</option>
-                                    <option value="4">Ground</option>
-                                </select>
-                            </li>                    
-                            <li id="shipp_collection">
-                                <label><span style="font-weight: bold;">Shipping Company:  </span></label>
-                                <span><input type="radio" name="shipp_comp" id="shipp_comp_1" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="FedEx" /><img src="images/fedex_small.png" style="border:0px;" title="FedEx" alt="FedEx" /></span>
-                                <span><input type="radio" name="shipp_comp" id="shipp_comp_2" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="UPS" /><img src="images/ups_small.png" style="border:0px;" title="UPS" alt="UPS" /></span>
-                                <span><input type="radio" name="shipp_comp" id="shipp_comp_3" style="width: 10% !important;margin-bottom: 0px;margin-bottom: 0px !important;" value="Other" /><input type="text" name="other_shipp_type" placeholder="Other" id="other_shipp_type"  onclick="return other_shipp_type();" style="width: 80px;"></span>
-                            </li>
-                            <li>
-                                <span style="font-weight: bold;">Account #: </span> <input type="text" name="bill_number" id="bill_number" style="width: 50% !important;margin-bottom: 0px !important;" />
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-
-
-            <div style="font-weight: bold;width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                Special Instructions:            
-            </div>        
-            <div style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;">
-                <textarea name="spl_recipient" id="spl_recipient" rows="3" cols="18" style="width: 200px;height: 40px;"></textarea>
-            </div>
-
-        </div>
-    </div>
-    <!-- New Recipients End -->
-    
-    <?php
-    // behind options start
-    echo '~';
+    $remaining_sets     = RemainingSetsAfter($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
+    $con_class = 1;  
     foreach ($remaining_sets as $all_sets){
     ?>
-     <div style="width: 100%;float: left;border: 1px #F99B3E solid;margin-bottom: 5px;">            
-        <div style="width: 48%;float: left;text-align: left;font-weight: bold;">OPTION <?php echo ($all_sets['options']); ?></div>
-        <div style="width: 48%;float: left;text-align: right;font-weight: bold;"><?php echo ($all_sets['options']) . '/' . count($number_of_sets); ?></div>
+     <div style="width: 100%;float: left;border: 0px #F99B3E solid;margin-bottom: 5px;color: #FA8526;">            
+        <div style="width: 48%;float: left;text-align: left;font-weight: bold;font-size: 15px;">OPTION <?php echo ($all_sets['options']); ?></div>
+        <div style="width: 48%;float: left;text-align: right;font-weight: bold;font-size: 15px;"><?php echo ($all_sets['options']) . '&nbsp;of&nbsp;' . count($number_of_sets); ?></div>
     </div>
     <input type="hidden" name="tot_avl_options" id="tot_avl_options" value="<?php echo count($number_of_sets); ?>" />
     <input type="hidden" name="rem_avl_options" id="rem_avl_options" value="<?php echo count($rem_avl_options); ?>" />
@@ -1812,8 +1162,18 @@ if ($_POST['recipients'] == '1') {
             </div>
 
         </div>
+        
     </div>
+    <div style="width:100%;float: left;"> 
+            <div style="float:right;margin-right: 12px;">
+                <input id="add_recipients" value="Add Recipient" style="margin-left: 5px;float:left;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return add_recipients();" />
+            </div>
+            <div style="float:right;">            
+                <input class="<?php echo $con_class; ?>" value="Continue" style="<?php if($con_class != count($remaining_sets)){ ?>display: none;<?php } ?>cursor: pointer;font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -0px !important;" type="button" onclick="return continue_recipient();" />
+            </div>
+        </div>
     <?php
+    $con_class++;
     }
 
 } elseif ($_POST['recipients'] == '8') {
@@ -4031,82 +3391,12 @@ if ($_POST['recipients'] == '1') {
 //    $message .= '<style>';
 //    $message .= '.shaddows{background: white;border-radius: 10px;-webkit-box-shadow: 0px 0px 8px rgba(0,0,0,0.3);-moz-box-shadow: 0px 0px 8px rgba(0,0,0,0.3);box-shadow: 0px 0px 8px rgba(0,0,0,0.3);position: relative;z-index: 90;}';
 //    $message .= '</style>';
-    $message = '<!DOCTYPE html>
-    <html>
-    <head>
-    <style>
-        .shaddows{
-            background: white;
-            border-radius: 10px;
-            -webkit-box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
-            -moz-box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
-            box-shadow: 0px 0px 8px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 90;
-            margin-bottom: 10px;
-        }
-        #ribbon_final{
-            position: absolute !important;
-            left: -5px !important; 
-            top: -5px !important;
-            z-index: 1 !important;
-            overflow: hidden !important;
-            width: 75px !important;
-            height: 75px !important;
-            text-align: right !important;  
-        }
-
-        .ribbon {
-            position: absolute !important;
-            left: -5px !important; 
-            top: -5px !important;
-            z-index: 1 !important;
-            overflow: hidden !important;
-            width: 75px !important;
-            height: 75px !important;
-            text-align: right !important;
-        }
-        .ribbon span {
-            font-size: 10px;
-            font-weight: bold;
-            color: #FFF;
-            text-transform: uppercase;
-            text-align: center;
-            line-height: 20px;
-            transform: rotate(-45deg);
-            width: 100px;
-            display: block;
-            background: #79A70A;
-            background: linear-gradient(#BFC5CD 0%, #83878C 100%);
-            box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
-            position: absolute;
-            top: 19px; left: -21px;
-        }
-        .ribbon span::before {
-            content: "";
-            position: absolute; left: 0px; top: 100%;
-            z-index: -1;
-            border-left: 3px solid #83878C;
-            border-right: 3px solid transparent;
-            border-bottom: 3px solid transparent;
-            border-top: 3px solid #83878C;
-        }
-        .ribbon span::after {
-            content: "";
-            position: absolute; right: 0px; top: 100%;
-            z-index: -1;
-            border-left: 3px solid transparent;
-            border-right: 3px solid #83878C;
-            border-bottom: 3px solid transparent;
-            border-top: 3px solid #83878C;
-        }
-    </style>';
-    $message .= '</head>';
+    $message = '<!DOCTYPE html><html>';
     $message .= '<body>';
     $message .= '<div style="border:5px solid #FF7E00;width: 90%;float: left;">';
     $message .= '<table>';
     $message .= '<tr>';
-    $message .= '<td colspan="3" align="left" valign="top" style="padding-top: 30px;padding-left: 10px;">';
+    $message .= '<td align="left" valign="top" style="padding-top: 30px;padding-left: 10px;">';
     $message .= '<div style="width: 100%;float: left;font-size: 21px;margin-bottom:5px;">Order Completed : ORDER # ' . $job_reference_final[0]['order_sequence'] . '</div>';
     $message .= '<div style="width: 100%;float: left;margin-bottom:7px;"><span style="font-weight:bold;">Customer Reference  :</span> ' . $reference . '</div>';
     $message .= '<div style="width: 100%;float: left;margin-bottom:7px;"><span style="font-weight:bold;">Date  :</span> ' . $Date . '</div>';
@@ -4116,31 +3406,37 @@ if ($_POST['recipients'] == '1') {
     $message .= '<div style="width: 100%;float: left;margin-bottom:7px;"><span style="font-weight:bold;">Phone :</span>' . $phone . '</div>';
     $message .= '<div style="width: 100%;float: left;margin-bottom:5px"><span style="font-weight:bold;">Billing Address :</span></div>';
     $message .= '<div style="width: 100%;float: left;margin-bottom:5px">' . $service_billing_address[0]['comp_name'] . '<br>' . $service_address_1 . $service_address_2 . $service_address_3 . $service_billing_address[0]['comp_city'] . ',&nbsp;' . $service_billing_address[0]['comp_state'] . '&nbsp;' . $service_billing_address[0]['comp_zipcode'] . '</div>';
-    $message .= '</td></tr>';
+    $message .= '</td></tr><tr>';
 
-    $message .= '<td colspan="3" style="padding-top: 20px;padding-left: 10px;padding-bottom: 10px;">';
+    $message .= '<td style="padding-top: 20px;padding-left: 10px;padding-bottom: 10px;">';
 
     //Original Order Start
-    $message .= '<div style="float: left;margin-top: 12px;margin-bottom: 20px;background-image: url("data:image/jpg;base64,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AKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAMIcAAAKIMwBAKAAwhwAAAogzAEAoADCHAAACiDMAQCgAFWYt7S0VDvZyH0AAKB5RuvvKaIcAAAOvpHdPbSUJZ2oHwAAwMQYrb2HrTGvP/nKK6/UjgIAAM2SOru+u7OhNeb1Y8qUKbFjx47qAgAAoHlSZ6fe3qPBa+dfPTBwURq9vb21MwAAQLOkzs7NnRs8GTZjni+YOnVq9Pf3VxcAAADNkzo79fbIOK/uylI/cpinKXbLWQAAoHlSX+/cuXMozId1eO2aYVGeRmtrazz//PO1swAAwIFKfZ17uz7Ok2Ez5ulEjvNp06bF7t27Y9u2bdWFAADA/ktRnvo6dXaO8hzmVYvXrhsW52m2PI30pO7ubnEOAAAHIEV5T09P1de5teujPGkZqPbd6UHapHsqprFr165q9PX1DY30hDlz5sSMGTOqJwIAAGNLa8rrZ8rzqF/KMhTo9WGeR32cp2+NppHiPG1TmKfCnzlzZvU4vRAAADD440EpxtMtEVM75y961s+U10d5njEfFubJaHGetulFc6jnkY6nka/PzwcAgMkkRXXeppFnwXOA55GXr4wW5dXzB2J6WE3n0E4jx3ce9UGeRv21aQAAwGRUH9lp5DivD/H6UX9ttkeYJ/WxnUd9jItyAAAYrj6208gBPlqM51Fv1DBP8uEc3nsb+RoAAJjMcmiPjO+RI18zXMT/A8cFEHhTW5mcAAAAAElFTkSuQmCC");background-repeat: no-repeat;">';
-    $message .= '<div style="font-weight: bold;padding-top: 3px;">ORIGINAL ORDER</div>';
-    $message .= '<div style="border: 2px #F99B3E solid;width: 95%;float: left;margin-top: 10px;margin-bottom: 10px;" class="shaddows">';
-    $message .= '<div class="details_div">';
-    $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">Customer Details :</div>';
-    $message .= '<div style="float: left;width: 33%;margin-left: 30px;">';
+    $message .= '<div style="float: left;margin-top: 12px;margin-bottom: 20px;width: 100%;float: left;">';
+    $message .= '<div style="font-weight: bold;padding-top: 3px;width: 95%;float: left;">ORIGINAL ORDER</div>';
+    $message .= '<div style="border: 2px #F99B3E solid;width: 95%;float: left;margin-top: 10px;margin-bottom: 10px;">';
+    
+    $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+    
+    $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;">Customer Details :</div>';
+    
+    $message .= '<div style="float: left;width: 100%;margin-top: 7px;">';
     $cust_add = getCustomeInfo($_SESSION['sohorepro_companyid']);
     $cust_add_2 = ($cust_add[0]['comp_business_address2'] != '') ? $cust_add[0]['comp_business_address2'] . ',<br>' : '';
     $message .= $cust_add[0]['comp_name'] . '<br>' . $cust_add[0]['comp_business_address1'] . ',<br>' . $cust_add_2 . $cust_add[0]['comp_city'] . ',&nbsp;' . $cust_add[0]['comp_state'] . '&nbsp;' . $cust_add[0]['comp_zipcode'].'<br>'.$cust_add[0]['phone'];
     $message .= '</div>';
-    $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">User Details :</div>';
-    $message .= '<div style="float: left;width: 33%;margin-left: 30px;">';
+    
+    $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;">User Details :</div>';
+    
+    $message .= '<div style="float: left;width: 100%;">';
     $cust_user_add = UserLoginDtls($_SESSION['sohorepro_userid']);
     $cust_user_name = $cust_user_add[0]['cus_fname'] . '&nbsp;' . $cust_user_add[0]['cus_lname'];
     $cust_mail_id = $cust_user_add[0]['cus_email'];
     $cust_phone_num = $cust_user_add[0]['cus_contact_phone'];
     $message .= $cust_user_name . '<br>' . $cust_mail_id . '<br>' . $cust_phone_num . '<br>Date :' . date('m-d-Y h:i A', time());
     $message .= '</div>';
-    $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">PACKING LIST:</div>';
-    $message .= '<div style="float: left;width: 85%;margin-left: 30px;margin-top: 5px;">';
+    
+    $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;">PACKING LIST:</div>';
+    $message .= '<div style="float: left;width: 100%;margin-top: 5px;">';
     //$cust_original_order = SetsOrderedFinalize($job_reference_final[0]['id']);
     $cust_original_order = EnteredPlotRecipientsMulti($user_session_comp, $user_session, $job_reference_final[0]['id']);
     $total_plot_needed = SetsOrderedFinalizeCountOfSets($job_reference_final[0]['id']);
@@ -4149,7 +3445,7 @@ if ($_POST['recipients'] == '1') {
     $cust_needed_sets = ($cust_original_order[0]['print_ea'] != '0') ? $cust_original_order[0]['print_ea'] : $cust_original_order[0]['arch_needed'];
     $cust_order_type = ($cust_original_order[0]['arch_needed'] != '0') ? 'Architectural Copies' : 'Plotting on Bond';
     $option          = ($cust_original_order[0]['arch_needed'] != '0') ? 'Pickup Options:' : 'File Options:';  
-    $message .= '<table border="0" style="width: 100%;">';
+    $message .= '<table border="0" style="width: 90%;">';
     $message .= '<tr bgcolor="#F99B3E">';
     $message .= '<td style="font-weight: bold;">Option</td>'; 
     $message .= '<td style="font-weight: bold;">Originals</td>';
@@ -4183,49 +3479,74 @@ if ($_POST['recipients'] == '1') {
     }
     $message .= '</table>';
     $message .= '</div>';
+    $message .= '</div>';
+    
     if ($cust_original_order[0]['size'] == 'Custom') {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">';
         $message .= '<div style="font-weight: bold;width: 100%;float: left;">Custom Size Details :</div>';
         $message .= '<div style="padding-top: 3px;">' . $cust_original_order[0]['custome_details'] . '</div>';
         $message .= '</div>';
+        $message .= '</div>';
     }
+    
     if ($cust_original_order[0]['output'] == 'Both') {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">';
         $message .= '<div style="font-weight: bold;width: 100%;float: left;">Page Number :</div>';
         $message .= '<div style="padding-top: 3px;">' . $cust_original_order[0]['output_both'] . '</div>';
         $message .= '</div>';
+        $message .= '</div>';
     }
+    
     if (($cust_original_order_final[0]['pick_up'] != '0') || ($cust_original_order_final[0]['drop_off'] != '0') || ($cust_original_order_final[0]['ftp_link'] != '0')) {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">'.$option.'</div>';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;">'.$option.'</div>';
+        $message .= '</div>';
     }
+    
     if ($cust_original_order_final[0]['pick_up'] != '0') {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">Pick up : ' . $cust_original_order_final[0]['pick_up'] . '</div>';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">Pick up : ' . $cust_original_order_final[0]['pick_up'] . '</div>';
+        $message .= '</div>';
     }
+    
     if ($cust_original_order_final[0]['drop_off'] != '0') {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">Drop off at Soho Repro : ' . $cust_original_order_final[0]['drop_off'] . '</div>';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">Drop off at Soho Repro : ' . $cust_original_order_final[0]['drop_off'] . '</div>';
+        $message .= '</div>';
     }
+        
     if ($cust_original_order_final[0]['ftp_link'] != '0') {
         $ftp_user_name      =   ($cust_original_order_final[0]['user_name'] == '0') ? '' : $cust_original_order_final[0]['user_name'];
         $ftp_password       =   ($cust_original_order_final[0]['password'] == '0') ? '' : $cust_original_order_final[0]['password'];
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;font-weight:bold;">Provide Link to File</div>';
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">FTP Link : ' . $cust_original_order_final[0]['ftp_link'] . '</div>';
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">User Name : ' . $ftp_user_name . '</div>';
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">Password : ' . $ftp_password . '</div>';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;font-weight:bold;">Provide Link to File</div>';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">FTP Link : ' . $cust_original_order_final[0]['ftp_link'] . '</div>';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">User Name : ' . $ftp_user_name . '</div>';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">Password : ' . $ftp_password . '</div>';
+        $message .= '</div>';
     }
+        
     if (count($upload_file_exist) > 0) {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">File Options :</div>';
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;text-decoration: underline;">Upload File :</div>';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;">File Options :</div>';
+        $message .= '<div style="float: left;width: 100%;margin-top: 7px;text-decoration: underline;">Upload File :</div>';
         $f = 1;
         foreach ($upload_file_exist as $files) {
-            $message .= '<div style="width: 100%;float: left;margin-top: 10px;margin-left: 30px;">' . $f . '.&nbsp;&nbsp;&nbsp;<a href="http://cipldev.com/supply-new.sohorepro.com/uploads/' . $files['file_name'] . '" target="_blank">' . $files['file_name'] . '</a></div>';
+            $message .= '<div style="width: 100%;float: left;margin-top: 10px;">' . $f . '.&nbsp;&nbsp;&nbsp;<a href="http://cipldev.com/supply-new.sohorepro.com/uploads/' . $files['file_name'] . '" target="_blank">' . $files['file_name'] . '</a></div>';
             $f++;
         }
-    }
+        $message .= '</div>';
+    }     
+        
     if ($cust_original_order_final[0]['spl_instruction'] != '') {
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">Special Instructions: </div>';
-        $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 5px;">' . $cust_original_order_final[0]['spl_instruction'] . '</div>';
+        $message .= '<div style="float: left;width: 100%;margin-left: 30px;">';
+        $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;">Special Instructions: </div>';
+        $message .= '<div style="float: left;width: 100%;margin-top: 5px;">' . $cust_original_order_final[0]['spl_instruction'] . '</div>';
+        $message .= '</div>';
     }
-    $message .= '</div>';
+    
     $message .= '</div>';
     $message .= '</div>';
     //Original Order End
@@ -4251,7 +3572,7 @@ if ($_POST['recipients'] == '1') {
         $binding      = ($entered_sets['binding'] == 'undefined') ? $entered_sets['arch_binding'] : $entered_sets['binding'];
         $folding      = ($entered_sets['folding'] == 'undefined') ? $entered_sets['arch_folding'] : $entered_sets['folding'];
         
-        $message .= '<div style="font-weight: bold;padding-top: 3px;">RECIPIENT ' . $r . '</div>';
+        $message .= '<div style="font-weight: bold;padding-top: 3px;width: 95%;float: left;">RECIPIENT ' . $r . '</div>';
         $message .= '<div style="border: 2px #F99B3E solid;width: 95%;float: left;margin-bottom: 10px;">';
         $message .= '<div style="width: 100%;float: left;margin-top: 10px;margin-bottom: 10px;">';
         $message .= '<div style="float: left;width: 65%;margin-left: 30px;margin-top: 10px;font-weight: bold;">Send to: </div>';

@@ -2991,7 +2991,7 @@ function CheckOrderidInvoice($order_id){
 
 //CUrrent Option 
 function CurrentOption($company_id, $user_id){
-    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' AND all_sets = '1' ORDER BY options ASC LIMIT 1" ;
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' ORDER BY options ASC LIMIT 1" ;
     $set = mysql_query($plotting_set);
     while ($object = mysql_fetch_assoc($set)):
         $value[] = $object;
@@ -3039,7 +3039,16 @@ function AvlOptionsRemaining($company_id, $user_id){
 }
 
 function RemainingSets($company_id, $user_id){
-    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND all_sets = '0'" ;
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0'" ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+function RemainingSetsAfter($company_id, $user_id){
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0'" ;
     $set = mysql_query($plotting_set);
     while ($object = mysql_fetch_assoc($set)):
         $value[] = $object;

@@ -10,7 +10,7 @@ $currhost=1;
 if($currhost==0)
 {
     
-    $link = mysql_connect('localhost', 'root', 'jassim214');
+    $link = mysql_connect('localhost', 'root', '');
 
     $db_selected = mysql_select_db('supply.sohorepro.com', $link);
     
@@ -18,7 +18,7 @@ if($currhost==0)
 }
 else 
 {    
-    $link = mysql_connect('localhost', 'root', 'jassim214');
+    $link = mysql_connect('localhost', 'root', '');
 
     $db_selected = mysql_select_db('supply.sohorepro.com', $link);
     

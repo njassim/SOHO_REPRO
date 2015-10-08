@@ -169,7 +169,7 @@ if ($_POST['service_plotting_add'] == '1') {
                     <div style="width: 100%;float: left;padding-top: 10px;">  
                         
                         <!--JASSIM-->                        
-                        <input type="checkbox"  style="width: 2%;margin-bottom: 20px;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set();" /><span id="use_same_check_box_spn">Use the same File Option as in Job Option <?php echo ($count_option - 1); ?></span>
+                        <input type="checkbox"  style="width: 2%;margin-bottom: 20px;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set();" /><span id="use_same_check_box_spn">Use the same File as in Job Option <?php echo ($count_option - 1); ?></span>
                         <!--End-->
                         
                         <!--Check Box Start-->
