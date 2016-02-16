@@ -6,28 +6,52 @@ error_reporting(0);
 
 if ($_POST['service_plotting_add'] == '1') {
 
-    $user_id_add_set = $_SESSION['sohorepro_userid'];
-    $company_id_view_plot = $_SESSION['sohorepro_companyid'];
+    $user_id_add_set            = $_SESSION['sohorepro_userid'];
+    $company_id_view_plot       = $_SESSION['sohorepro_companyid'];
 
-    $job_reference = $_POST['job_reference'];
-    $original = $_POST['original'];
-    $print_ea = $_POST['print_ea'];
-    $size = $_POST['size'];
-    $output = $_POST['output'];
-    $media = $_POST['media'];
-    $binding = $_POST['binding'];
-    $folding = $_POST['folding'];
-    $plot_arch = $_POST['plot_arch'];
-    $special_instruction = $_POST['special_instruction'];
-    $size_custom_val = $_POST['size_custom_val'];
-    $output_both_val = $_POST['output_both_val'];
-    $pickup_date = $_POST['pickup_date'];
-    $pickup_time = $_POST['pickup_time'];
-    $drop_val = $_POST['drop_val'];
-    $ftp_link_val = $_POST['ftp_link_val'];
-    $user_name_val = $_POST['user_name_val'];
-    $password_val = $_POST['password_val'];
-    $size_custom = $_POST['size_custom'];
+    $job_reference              = $_POST['job_reference'];
+    $original                   = $_POST['original'];
+    $print_ea                   = $_POST['print_ea'];
+    $size                       = ucwords(strtolower($_POST['size']));
+    $output                     = ucwords(strtolower($_POST['output']));
+    $media                      = ucwords(strtolower($_POST['media']));
+    $binding                    = ucwords(strtolower($_POST['binding']));
+    $folding                    = ucwords(strtolower($_POST['folding']));
+    $plot_arch                  = $_POST['plot_arch'];
+    $special_instruction        = $_POST['special_instruction'];
+    $size_custom_val            = $_POST['size_custom_val'];
+    $output_both_val            = $_POST['output_both_val'];
+    
+    
+    if($_SESSION['use_the_same'] != ''){
+    $uploadedfile_option        = $_SESSION['upload_file'];
+    
+    $pickup_date                = $_SESSION['pick_up'];
+    $pickup_time                = $_SESSION['pick_up_time'];
+    
+    $drop_val                   = $_SESSION['drop_off'];
+    
+    $ftp_link_val               = $_SESSION['ftp_link'];
+    $user_name_val              = $_SESSION['user_name'];
+    $password_val               = $_SESSION['password']; 
+    }  else {        
+    $uploadedfile_option        = ($_POST['uploadedfile_option'] != "undefined") ? $_POST['uploadedfile_option'] : '';
+    
+    $pickup_date                = $_POST['pickup_date'];
+    $pickup_time                = $_POST['pickup_time'];
+    
+    $drop_val                   = ($_POST['drop_val'] == 'undefined') ? '0' : $_POST['drop_val'];
+    
+    $ftp_link_val               = $_POST['ftp_link_val'];
+    $user_name_val              = $_POST['user_name_val'];
+    $password_val               = $_POST['password_val'];        
+    }
+    
+    
+    
+    
+    $size_custom                = $_POST['size_custom'];
+    
     
     
     $sql_option_id = mysql_query("SELECT options FROM sohorepro_plotting_set WHERE company_id = '".$company_id_view_plot."' AND user_id = '".$user_id_add_set."' AND order_id = '0' ORDER BY options DESC LIMIT 1");
@@ -56,6 +80,7 @@ if ($_POST['service_plotting_add'] == '1') {
                                 spl_instruction = '" . $special_instruction . "',
                                 custom_size     = '" . $size_custom_val . "',
                                 output_both     = '" . $output_both_val . "',
+                                upload_file     = '" . $uploadedfile_option . "',
                                 pick_up         = '" . $pickup_date . "', 
                                 pick_up_time    = '" . $pickup_time . "',
                                 drop_off        = '" . $drop_val . "',
@@ -65,6 +90,16 @@ if ($_POST['service_plotting_add'] == '1') {
                                 company_id      = '" . $company_id_view_plot . "',
                                 user_id         = '" . $user_id_add_set . "' ";
     $sql_result = mysql_query($query);
+    if($sql_result){
+                                $_SESSION['upload_file']    =   '';
+                                $_SESSION['pick_up']        =   '';
+                                $_SESSION['pick_up_time']   =   '';
+                                $_SESSION['drop_off']       =   '';
+                                $_SESSION['ftp_link']       =   '';
+                                $_SESSION['user_name']      =   '';
+                                $_SESSION['password']       =   '';
+                                $_SESSION['use_the_same']   =   '';
+    }
     $enteredPlotPrimay = EnteredPlotttingPrimary($company_id_view_plot, $user_id_add_set);
 
     $count_option = count($enteredPlotPrimay) + 1;
@@ -73,7 +108,7 @@ if ($_POST['service_plotting_add'] == '1') {
 
     $i = 1;
     foreach ($enteredPlotPrimay as $plot) {
-        $job_type = ($plot['plot_arch'] == '1') ? 'Plotting' : 'Architecture';
+        $job_type = ($plot['plot_arch'] == '1') ? 'Plotting' : 'Architectural Copies';
         $file_upload_exist = UploadFileExist($_SESSION['sohorepro_companyid'], $_SESSION['sohorepro_userid']);
         ?>
         <div class="plot_container" style="width: 100%;float: left;border: 1px #FF7E00 solid;margin-bottom: 20px;">
@@ -103,19 +138,15 @@ if ($_POST['service_plotting_add'] == '1') {
                     <?php } ?>
                 </ul>
                 <div style="width: 100%;float: left;margin-top: 5px;">
-                    <div style="float: left;width: 100%;margin-top: 5px;font-weight: bold;">Alternative File Options</div>
+                    <?php if(($file_upload_exist[0]['job_id'] != '') || ($plot['ftp_link'] != '0') || ($plot['pick_up'] != '0') || ($plot['drop_off'] != '0')){ ?>
+                    <div style="float: left;width: 100%;margin-top: 5px;font-weight: bold;">File Options</div>
+                    <?php } ?>
                     <?php
-                    if ($file_upload_exist[0]['job_id'] != '') {
+                    if ($plot['upload_file'] != '') {
                         ?>
                         <div style="float: left;width: 100%;">
-                            <div style="float: left;width: 100%;text-decoration: underline;">Upload File</div>
-                            <?php
-                            foreach ($file_upload_exist as $upload_exist) {
-                                ?>
-                                <div style="float: left;width: 100%;"><?php echo $upload_exist['file_name']; ?></div>
-                                <?php
-                            }
-                            ?>
+                            <div style="float: left;width: 100%;text-decoration: underline;">Upload File</div>                            
+                            <div style="float: left;width: 100%;"><?php echo $plot['upload_file']; ?></div>                               
                         </div>
                     <?php } elseif ($plot['ftp_link'] != '0') {
                             $link       = ($plot['ftp_link'] != '0') ? $plot['ftp_link'] : '';
@@ -128,27 +159,37 @@ if ($_POST['service_plotting_add'] == '1') {
                             <div style="float: left;width: 100%;">User Name : <?php echo $user_name; ?></div>
                             <div style="float: left;width: 100%;">Password  : <?php echo $password; ?></div>
                         </div>
-                    <?php } elseif ($plot['pick_up'] != '0') { ?>
+                    <?php } elseif ($plot['pick_up'] != '0') {
+                            if(($plot['pick_up'] == 'ASAP') && ($plot['pick_up_time'] == 'ASAP')){
+                          ?>
+                            <div style="float: left;width: 100%;">
+                                  <div style="float: left;width: 100%;">Schedule a pick up Date/Time: <?php echo $plot['pick_up']; ?></div>
+                                  <!--<div style="float: left;width: 100%;">Pickup Date : <?php echo $plot['pick_up']; ?></div>-->
+<!--                                  <div style="float: left;width: 100%;">Pickup Time  : <?php //echo $plot['pick_up_time']; ?></div>-->
+                            </div>
+                          <?php
+                            }else{
+                        ?>
                         <div style="float: left;width: 100%;">
-                            <div style="float: left;width: 100%;text-decoration: underline;">Schedule a pick up</div>
-                            <div style="float: left;width: 100%;">Pickup Date : <?php echo $plot['pick_up']; ?></div>
-                            <div style="float: left;width: 100%;">Pickup Time  : <?php echo $plot['pick_up_time']; ?></div>
+                            <div style="float: left;width: 100%;margin-bottom: 10px;">Schedule a pick up Date/Time: <?php echo $plot['pick_up'].'&nbsp;'.$plot['pick_up_time']; ?></div>
+<!--                            <div style="float: left;width: 100%;">Pickup Date : <?php //echo $plot['pick_up']; ?></div>
+                            <div style="float: left;width: 100%;">Pickup Time  : <?php //echo $plot['pick_up_time']; ?></div>-->
                         </div>
-                    <?php } elseif ($plot['drop_off'] != '0') { ?>
+                            <?php }} elseif ($plot['drop_off'] != '0') { ?>
                         <div style="float: left;width: 100%;">
                             <div style="float: left;width: 100%;text-decoration: underline;">Drop off at Soho Repro</div>                       
                             <div style="float: left;width: 100%;">Drop off at : <?php echo $plot['drop_off']; ?></div>
                         </div>   
                     <?php } ?>
                 </div>
-
+                    <?php if($plot['spl_instruction'] != ''){ ?>
                 <div style="width: 100%;float: left;margin-top: 7px;">                    
                     <div style="float: left;width: 100%;margin-top: 5px;font-weight: bold;">Special Instructions</div>
                     <div style="float: left;width: 100%;">                        
                         <div style="float: left;width: 100%;"><?php echo $plot['spl_instruction']; ?></div>
                     </div> 
                 </div>
-
+                    <?php } ?>
             </div>
         </div>
         <?php
@@ -158,9 +199,8 @@ if ($_POST['service_plotting_add'] == '1') {
     <!--New Job Add Start -->
     <div class="serviceOrderSetHolder">
         <label style="font-weight: bold; margin-bottom: 0px; margin-top: 0px;" for="jo1" class="optional">
-            Job Options 
-            <div style="float:right;font-weight: bold;">
-                Option - <?php echo $count_option; ?>                            
+            Job Option - <?php echo $count_option; ?>
+            <div style="float:right;font-weight: bold;">                                          
             </div>
         </label>  
         <div style="background-color:#FFFFFF" class="serviceOrderSetWapper" setindex="0">
@@ -393,7 +433,7 @@ if ($_POST['service_plotting_add'] == '1') {
                                     </div>
 
                                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                                        <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt" style="width: 75px;" onclick="date_reveal();" />
+                                        <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt" style="width: 75px;" onclick="return date_revele();" />
                                         <input id="time_for_alt" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
                                     </div>
 
@@ -457,7 +497,7 @@ if ($_POST['service_plotting_add'] == '1') {
                                 </div>
 
                                 <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                                    <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 75px;" onclick="date_reveal();" />
+                                    <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 75px;" onclick="return date_reveal();" />
                                     <input id="time_for_alt_arc" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
                                 </div>
 
@@ -482,8 +522,9 @@ if ($_POST['service_plotting_add'] == '1') {
                             <!--Drop off Details End-->
 
                         </div>
-
+                        
                         <!--Special Instruction Start-->
+                        <input type="hidden" name="validate_imp" id="validate_imp" value="" />
                         <div style="float: left;width: 100%;">
                             <div id="sp_inst" style="margin-top:10px;">
                                 <label style="font-weight: bold;margin-bottom: -4px; margin-top: -10px;">
@@ -538,7 +579,7 @@ if ($_POST['service_plotting_add'] == '1') {
                 </ul>
 
                 <div style="width: 100%;float: left;margin-top: 5px;">
-                    <div style="float: left;width: 100%;margin-top: 5px;font-weight: bold;">Alternative File Options</div>
+                    <div style="float: left;width: 100%;margin-top: 5px;font-weight: bold;">File Options</div>
                     <?php
                     if ($file_upload_exist[0]['job_id'] != '') {
                         ?>
@@ -734,7 +775,7 @@ if ($_POST['service_plotting_add'] == '1') {
 
                     <div style="width:730px;border-bottom: 1px solid #CCCCCC;float: left;">
                         <label style="font-weight: bold;height:28px">
-                            Alternative File Options<span style="color: red;">*</span>
+                            File Options<span style="color: red;">*</span>
                         </label>
                         <input type="checkbox"  style="display: none;width: 2%;" name="use_same_check" id="use_same_check_box" value="1"  onclick="return use_same_set('1');" />
                         <div class="check" style="width:730px;border-top: 1px solid #FF7E00;margin-top:-13px;">
@@ -813,7 +854,7 @@ if ($_POST['service_plotting_add'] == '1') {
 
                                 <div style="padding: 5px;">
                                     <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />
-                                    <input type="text" name="dahe_for_alt" id="date_for_alt" style="width: 30%;margin-left: 5px;" class="date_for_alt picker_icon" />                        
+                                    <input type="text" name="date_for_alt" id="date_for_alt" style="width: 30%;margin-left: 5px;" class="date_for_alt picker_icon" onclick="date_revele();" />                        
 
                                     <input id="time_for_alt" type="text" style="width: 30%;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" />
                                 </div>                        

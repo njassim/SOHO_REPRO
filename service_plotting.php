@@ -390,12 +390,32 @@ function show_date_picker(ID)
     $("#provide_link").slideUp(1000);
     $("#drop_off").slideUp(1000);
     $("#drop_off_select_val").val('0');
+    $("#validate_imp").val('1');
+    
+    $("#ftp_link").val('');
+    $("#user_name").val('');
+    $("#pass_word").val('');
+    
+    $("#drop_val").val('');
+    $("#drop_val_1").val('');
+    
+    $(".filename").html('');
+    
+    $("#date_for_alt").val('');
+    $("#time_for_alt").val(''); 
 }
 
 function show_date_picker_arch()
 {    
     $("#date_time_arch").slideDown(1000);    
     $("#drop_off_arch").slideUp(1000);
+    $("#validate_imp").val('1');
+    
+    $("#date_for_alt_arc").val('');
+    $("#time_for_alt_arc").val(''); 
+    
+    $("#drop_val_arc").val('381 Broome Street');
+    $("#drop_val_arc_1").val('307 7th Ave, 5th Floor');
 }
 
 
@@ -412,6 +432,19 @@ function drop_sohorepro()
     $("#drop_off").slideDown(1000);
     document.getElementById("drop_val").checked = true;
     $("#drop_off_select_val").val('1');
+    $("#validate_imp").val('1');
+    
+    $("#ftp_link").val('');
+    $("#user_name").val('');
+    $("#pass_word").val('');
+    
+    $("#date_for_alt").val('0');
+    $("#time_for_alt").val('0'); 
+    
+    $(".filename").html('');
+    
+    $("#drop_val").val('381 Broome Street');
+    $("#drop_val_1").val('307 7th Ave, 5th Floor');
 }
 
 
@@ -420,7 +453,14 @@ function drop_sohorepro_arch()
     $( "#date_time_arch").slideUp(1000);
     $("#drop_off_arch").slideDown(1000);
     document.getElementById("drop_val_arc").checked = true;
-    $("#drop_off_select_val").val('1');    
+    $("#drop_off_select_val").val('1');  
+    $("#validate_imp").val('1');
+    
+    $("#date_for_alt_arc").val('');
+    $("#time_for_alt_arc").val(''); 
+    
+    $("#drop_val_arc").val('381 Broome Street');
+    $("#drop_val_arc_1").val('307 7th Ave, 5th Floor');
 }
 
 
@@ -432,6 +472,20 @@ function upload_soho()
     $("#provide_link").slideUp(1000);
     $("#drop_off").slideUp(1000);
     $("#drop_off_select_val").val('0');
+    $("#validate_imp").val('1');
+    
+    $("#ftp_link").val('');
+    $("#user_name").val('');
+    $("#pass_word").val('');
+    
+    $(".filename").html('');
+    
+    $("#date_for_alt").val('0');
+    $("#time_for_alt").val('0'); 
+    
+    $("#drop_val").val('');
+    $("#drop_val_1").val('');    
+    
 }
 
 function provide_link()
@@ -442,6 +496,19 @@ function provide_link()
     $("#provide_link").slideDown(1000);
     $("#drop_off").slideUp(1000);
     $("#drop_off_select_val").val('0');
+    $("#validate_imp").val('1');
+    
+    $("#date_for_alt").val('0');
+    $("#time_for_alt").val('0'); 
+    
+    $("#drop_val").val('0');
+    $("#drop_val_1").val('0');
+    
+    $(".filename").html('');
+    
+    $("#ftp_link").val('');
+    $("#user_name").val('');
+    $("#pass_word").val('');
 }
 
 $(function() {
@@ -499,6 +566,7 @@ function custome_size()
         $("#size").focus;
     }else{
         $("#size_custom_div").slideUp(1000);
+        $("#size_custom").val("");
     }
 }
 
@@ -511,6 +579,7 @@ function custome_output()
         $("#output").focus;
     }else{
         $("#output_both_div").slideUp(1000);
+        $("#output_both").val("");
     }
 }
 
@@ -733,17 +802,17 @@ function delete_upload_file()
 
  </head>
  <body>
-    <div id="loading" class="none"  style="position: fixed;top: 35%;left: 48%;padding: 5px;z-index: 10;">
-         <img src="admin/images/login_loader.gif" border="0" />
+    <div id="loading" class="none"  style="position: fixed;top: 10%;left: 40%;padding: 5px;z-index: 1000;">
+         <img src="admin/images/loading_rainbow.gif" border="0" style="width: 200px;height: 200px;" />
     </div>
-    <div id="asap_popup" style="display: none;font-size: 15px;position: fixed;top: 35%;left: 35%;padding: 5px;z-index: 10;position: absolute;z-index: 1000;width: 45%;background: white;border-bottom: 1px solid #aaa;border-radius: 4px;box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);border: 1px solid rgba(0, 0, 0, 0.1);background-clip: padding-box;">
+    <div id="asap_popup" style="display: none;font-size: 15px;position: fixed;top: 35%;left: 35%;padding: 5px;z-index: 10;z-index: 1000;width: 45%;background: white;border-bottom: 1px solid #aaa;border-radius: 4px;box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);border: 1px solid rgba(0, 0, 0, 0.1);background-clip: padding-box;">
         <div style="width: 96%;padding: 2%;float: left;font-size: 14px;line-height: 18px;text-align: justify;">
-            All orders placed online are assumed to be for today and available for collection immediately.
+            All orders placed online are assumed to be ready for today and available for collection immediately. Requests placed outside of our normal business hours will be fulfilled on the next business day.
         If you wish to place an order for another date and time, or for today but at a later time, 
-        please check the box at the left and then enter below a date and time for collection.
+        please edit the date and time for collection.
         </div>
         <div style="float: right;width: 98%;background-color: #EEE;padding: 1%;">
-            <span style="float: left;color: #000;font-weight: bold;margin-top: 5px;margin-left: 15px;">Note: All orders placed after hours will be picked up on the next business day.</span>
+            <!--<span style="float: left;color: #000;font-weight: bold;margin-top: 5px;margin-left: 15px;">Note: All orders placed after hours will be picked up on the next business day.</span>-->
             <span style="float: right;border: 1px solid #BBB;padding: 3px 10px;border-radius: 3px;cursor: pointer;" onclick="return close_asap();">Close</span>
         </div>
     </div> 
@@ -1069,7 +1138,7 @@ function delete_upload_file()
                                     </div>
 
                                     <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                                        <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt" style="width: 75px;" onclick="date_reveal();" />
+                                        <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt" style="width: 75px;" onclick="return date_reveal();" />
                                         <input id="time_for_alt" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
                                     </div>
 
@@ -1150,7 +1219,7 @@ function delete_upload_file()
                                 </div>
 
                                 <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
-                                    <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 75px;" onclick="date_reveal();" />
+                                    <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 75px;" onclick="return date_reveal();" />
                                     <input id="time_for_alt_arc" value="" type="text" style="width: 75px;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
                                 </div>
 
@@ -1178,6 +1247,7 @@ function delete_upload_file()
                     
                     
                 <!--Special Instruction Start-->
+                <input type="hidden" name="validate_imp" id="validate_imp" value="" />
                 <div style="float: left;width: 100%;margin-top: 15px;">
                     <div id="sp_inst" style="margin-top:10px;">
                       <label style="font-weight: bold;margin-bottom: -4px; margin-top: -10px;">
@@ -1300,7 +1370,8 @@ function delete_upload_file()
  <script>
      
   function validate_plotting()
-  {   
+  {  
+   //$("body").append("<div class='modal-overlay'></div>");  
     var jobreference        = document.getElementById("jobref").value;
     
     var check_val           = document.getElementById("plotting_check").checked;
@@ -1319,6 +1390,176 @@ function delete_upload_file()
     var special_instruction = document.getElementById("special_instruction").value;
     var size_custom         = document.getElementById("size_custom").value;
     var output_both         = document.getElementById("output_both").value;
+    var uploadedfile_pre    = $(".filename").html();
+    var uploadedfile_option = (uploadedfile_pre != "") ? uploadedfile_pre : '';
+    
+    var date_for_alt        = document.getElementById("date_for_alt").value;
+    var date_for_alt_arc    = document.getElementById("date_for_alt_arc").value;
+    if(date_for_alt != ''){
+        var date_for_alt_val    = date_for_alt;
+    }else if(date_for_alt_arc != ''){
+        var date_for_alt_val    = date_for_alt_arc;
+    }else{
+        var date_for_alt_val    = '0';
+    }
+    
+    var time_for_alt        =  document.getElementById("time_for_alt").value;
+    var time_for_alt_arc    =  document.getElementById("time_for_alt_arc").value;
+    if(time_for_alt != ''){
+        var time_for_alt_val    =  time_for_alt;
+    }else if(time_for_alt_arc != ''){
+        var time_for_alt_val    =  time_for_alt_arc;
+    }else{
+        var time_for_alt_val    =  '0';
+    }
+    
+    var drop_chk_val_0          =   document.getElementById("drop_val").value;
+    var drop_chk_val_1          =   document.getElementById("drop_val_1").value;
+    
+    var drop_chk_arc_val_0      =   document.getElementById("drop_val_arc").value;
+    var drop_chk_arc_val_1      =   document.getElementById("drop_val_arc_1").value;
+    
+    var drop_chk_1          =   document.getElementById("drop_val").checked;
+    var drop_chk_2          =   document.getElementById("drop_val_1").checked;
+    var drop_chk_arc_1      =   document.getElementById("drop_val_arc").checked;
+    var drop_chk_arc_2      =   document.getElementById("drop_val_arc_1").checked;
+    
+    var drop_off_select_val =   document.getElementById("drop_off_select_val").value;
+    
+    if(drop_off_select_val == '1'){
+        if(drop_chk_1 == true){
+            var drop_val            =   drop_chk_val_0;
+        }else if(drop_chk_2 == true){
+            var drop_val            =   drop_chk_val_1;
+        }else if(drop_chk_arc_1 == true){
+            var drop_val            =   drop_chk_arc_val_0;
+        }else if(drop_chk_arc_2 == true){
+            var drop_val            =   drop_chk_arc_val_1;
+        }
+    }else{
+            var drop_val            =   '0';
+    }
+    
+    var ftp_link            =   document.getElementById("ftp_link").value;
+    var user_name           =   document.getElementById("user_name").value;
+    var password            =   document.getElementById("pass_word").value;
+    
+    var ftp_link_val        =   (ftp_link != '') ? ftp_link : '0';
+    var user_name_val       =   (user_name != '') ? user_name : '0';
+    var password_val        =   (password != '') ? password : '0';
+        
+    var size_custom_val     =  (size_custom != '') ? size_custom : '0';
+    var output_both_val     =  (output_both != '') ? output_both : '0';
+    
+    var size_custom         = (size == 'Custom') ? document.getElementById("size_custom").value : '0';
+    
+    
+    var uploadedfile        =   $("#filename_odd").html();   
+    var dropoff             =   $("#dropoff").val();
+    var drop_file           =   document.getElementById("drop_file").checked;
+    var link                =   document.getElementById("link").checked;
+   
+    var validate_imp        =   $("#validate_imp").val();
+    //alert(validate_imp);
+    if(jobreference == ''){
+        alert('Please enter the Job Reference');
+        document.getElementById("jobref").focus();
+        return false;
+    }
+    
+    if($('input[name=plotting_check]:checked').length<=0)
+    {
+        alert('Please select a job type');
+        document.getElementById("plotting_check").focus();
+        return false;
+    }
+    
+    if(print_ea == ''){
+        alert('Please enter Prints of Each');
+        document.getElementById("print_ea").focus();
+        return false;
+    }  
+//    if(output == 'Both'){
+//        if(special_instruction == ''){
+//        alert('Please enter the special instructions');
+//        document.getElementById("special_instruction").focus();
+//        return false;  
+//        }      
+//    }
+    if(size == 'Custom'){
+       if(size_custom == ''){
+        alert('Please enter the custom size');
+        document.getElementById("size_custom").focus();
+        return false;  
+        }      
+    }
+    //(dropoff == '') ||
+    //|| (ftp_link == '')
+    if(validate_imp == ''){
+        alert('Please select the file option');
+        return false;
+    }
+    
+    if (jobreference != '')
+    {
+        $.ajax
+                ({
+                    type: "POST",
+                    url: "add_plotting_sets.php",
+                    data: "service_plotting_add=1&job_reference="+encodeURIComponent(jobreference)+
+                          "&original="+encodeURIComponent(original)+"&print_ea="+encodeURIComponent(print_ea)+
+                          "&size="+encodeURIComponent(size)+"&output="+encodeURIComponent(output)+
+                          "&media="+encodeURIComponent(media)+
+                          "&binding="+encodeURIComponent(binding)+"&folding="+encodeURIComponent(folding)+
+                          "&plot_arch="+encodeURIComponent(plotting_check)+"&special_instruction="+encodeURIComponent(special_instruction)+
+                          "&size_custom_val="+encodeURIComponent(size_custom_val)+"&output_both_val="+encodeURIComponent(output_both_val)+
+                          "&pickup_date="+encodeURIComponent(date_for_alt_val)+"&pickup_time="+encodeURIComponent(time_for_alt_val)+
+                          "&drop_val="+encodeURIComponent(drop_val)+"&ftp_link_val="+encodeURIComponent(ftp_link_val)+
+                          "&user_name_val="+encodeURIComponent(user_name_val)+"&password_val="+encodeURIComponent(password_val)+"&size_custom="+encodeURIComponent(size_custom)+"&uploadedfile_option="+encodeURIComponent(uploadedfile_option),
+                    beforeSend: loadStart,
+                    complete: loadStop,
+                    success: function(option)
+                    {                           
+                        $('#sets_all').slideDown();
+                        $('#sets_all').html(option);
+                        $('#continue_ok').val('1');
+                        $( ".modal-overlay" ).remove();
+                        $("#validate_imp").val('');
+                    }
+                });
+    }
+    
+  }   
+
+function validate_plotting_cont()
+{
+    //$("body").append("<div class='modal-overlay'></div>");  
+    var jobreference        = document.getElementById("jobref").value;
+    var continue_ok         = document.getElementById("continue_ok").value;  
+    var check_val           = document.getElementById("plotting_check").checked;
+    var check_val_0         = document.getElementById("plotting_check_0").checked;
+    var plotting_check      = (check_val == true) ? '1' : '0';
+    var continue_ok         =   $('#continue_ok').val;
+    
+    var original            = document.getElementById("original").value;
+    var print_ea            = document.getElementById("print_ea").value;
+    var size                = document.getElementById("size").value;
+    var output              = document.getElementById("output").value;
+    var media               = document.getElementById("media").value;
+    var binding             = document.getElementById("binding").value;
+    var folding             = document.getElementById("folding").value;
+    var special_instruction = document.getElementById("special_instruction").value;
+    var size_custom         = document.getElementById("size_custom").value;
+    var output_both         = document.getElementById("output_both").value;
+    var uploadedfile_pre    = $(".filename").html();
+    var uploadedfile_option = (uploadedfile_pre != "") ? uploadedfile_pre : '';
+    
+    var validate_imp        =   $("#validate_imp").val();
+    
+    if(continue_ok == '1'){
+    var use_same            = document.getElementById('use_same_check_box').checked;  
+    }
+    var same_file           = (use_same == true) ? '1' : '0';
     
     var date_for_alt        = document.getElementById("date_for_alt").value;
     var date_for_alt_arc    = document.getElementById("date_for_alt_arc").value;
@@ -1388,155 +1629,18 @@ function delete_upload_file()
     
     if($('input[name=plotting_check]:checked').length<=0)
     {
-        alert('Please select the job option');
+        alert('Please select a job type');
         document.getElementById("plotting_check").focus();
         return false;
-    }
-    
-    if(print_ea == ''){
-        alert('Please enter the Print');
-        document.getElementById("print_ea").focus();
+    }   
+        if(validate_imp == ''){
+        alert('Please select the file option');
         return false;
-    }  
-//    if(output == 'Both'){
-//        if(special_instruction == ''){
-//        alert('Please enter the special instructions');
-//        document.getElementById("special_instruction").focus();
-//        return false;  
-//        }      
-//    }
-    if(size == 'Custom'){
-       if(size_custom == ''){
-        alert('Please enter the custom size');
-        document.getElementById("size_custom").focus();
-        return false;  
-        }      
-    }
-    if (jobreference != '')
-    {
-        $.ajax
-                ({
-                    type: "POST",
-                    url: "add_plotting_sets.php",
-                    data: "service_plotting_add=1&job_reference="+encodeURIComponent(jobreference)+
-                          "&original="+encodeURIComponent(original)+"&print_ea="+encodeURIComponent(print_ea)+
-                          "&size="+encodeURIComponent(size)+"&output="+encodeURIComponent(output)+
-                          "&media="+encodeURIComponent(media)+
-                          "&binding="+encodeURIComponent(binding)+"&folding="+encodeURIComponent(folding)+
-                          "&plot_arch="+encodeURIComponent(plotting_check)+"&special_instruction="+encodeURIComponent(special_instruction)+
-                          "&size_custom_val="+encodeURIComponent(size_custom_val)+"&output_both_val="+encodeURIComponent(output_both_val)+
-                          "&pickup_date="+encodeURIComponent(date_for_alt_val)+"&pickup_time="+encodeURIComponent(time_for_alt_val)+
-                          "&drop_val="+encodeURIComponent(drop_val)+"&ftp_link_val="+encodeURIComponent(ftp_link_val)+
-                          "&user_name_val="+encodeURIComponent(user_name_val)+"&password_val="+encodeURIComponent(password_val)+"&size_custom="+encodeURIComponent(size_custom),
-                    beforeSend: loadStart,
-                    complete: loadStop,
-                    success: function(option)
-                    {                           
-                        $('#sets_all').slideDown();
-                        $('#sets_all').html(option);
-                        $('#continue_ok').val('1');
-                    }
-                });
-    }
-    
-  }   
-
-function validate_plotting_cont()
-{
-    var jobreference        = document.getElementById("jobref").value;
-    var continue_ok         = document.getElementById("continue_ok").value;  
-    var check_val           = document.getElementById("plotting_check").checked;
-    var check_val_0         = document.getElementById("plotting_check_0").checked;
-    var plotting_check      = (check_val == true) ? '1' : '0';
-    
-    var original            = document.getElementById("original").value;
-    var print_ea            = document.getElementById("print_ea").value;
-    var size                = document.getElementById("size").value;
-    var output              = document.getElementById("output").value;
-    var media               = document.getElementById("media").value;
-    var binding             = document.getElementById("binding").value;
-    var folding             = document.getElementById("folding").value;
-    var special_instruction = document.getElementById("special_instruction").value;
-    var size_custom         = document.getElementById("size_custom").value;
-    var output_both         = document.getElementById("output_both").value;
-    
-    var date_for_alt        = document.getElementById("date_for_alt").value;
-    var date_for_alt_arc    = document.getElementById("date_for_alt_arc").value;
-    if(date_for_alt != ''){
-        var date_for_alt_val    = date_for_alt;
-    }else if(date_for_alt_arc != ''){
-        var date_for_alt_val    = date_for_alt_arc;
-    }else{
-        var date_for_alt_val    = '0';
-    }
-    
-    var time_for_alt        =  document.getElementById("time_for_alt").value;
-    var time_for_alt_arc    =  document.getElementById("time_for_alt_arc").value;
-    if(time_for_alt != ''){
-        var time_for_alt_val    =  time_for_alt;
-    }else if(time_for_alt_arc != ''){
-        var time_for_alt_val    =  time_for_alt_arc;
-    }else{
-        var time_for_alt_val    =  '0';
-    }
-    
-    var drop_chk_val_0          =   document.getElementById("drop_val").value;
-    var drop_chk_val_1          =   document.getElementById("drop_val_1").value;
-    
-    var drop_chk_arc_val_0      =   document.getElementById("drop_val_arc").value;
-    var drop_chk_arc_val_1      =   document.getElementById("drop_val_arc_1").value;
-    
-    var drop_chk_1          =   document.getElementById("drop_val").checked;
-    var drop_chk_2          =   document.getElementById("drop_val_1").checked;
-    var drop_chk_arc_1      =   document.getElementById("drop_val_arc").checked;
-    var drop_chk_arc_2      =   document.getElementById("drop_val_arc_1").checked;
-    
-    var drop_off_select_val =   document.getElementById("drop_off_select_val").value;
-    
-    if(drop_off_select_val == '1'){
-        if(drop_chk_1 == true){
-            var drop_val            =   drop_chk_val_0;
-        }else if(drop_chk_2 == true){
-            var drop_val            =   drop_chk_val_1;
-        }else if(drop_chk_arc_1 == true){
-            var drop_val            =   drop_chk_arc_val_0;
-        }else if(drop_chk_arc_2 == true){
-            var drop_val            =   drop_chk_arc_val_1;
         }
-    }else{
-            var drop_val            =   '0';
-    }
-    
-    var ftp_link            =   document.getElementById("ftp_link").value;
-    var user_name           =   document.getElementById("user_name").value;
-    var password            =   document.getElementById("pass_word").value;
-    
-    var ftp_link_val        =   (ftp_link != '') ? ftp_link : '0';
-    var user_name_val       =   (user_name != '') ? user_name : '0';
-    var password_val        =   (password != '') ? password : '0';
-        
-    var size_custom_val     =  (size_custom != '') ? size_custom : '0';
-    var output_both_val     =  (output_both != '') ? output_both : '0';
-    
-    var size_custom         = (size == 'Custom') ? document.getElementById("size_custom").value : '0';
-    
-    if(jobreference == ''){
-        alert('Please enter the Job Reference');
-        document.getElementById("jobref").focus();
-        return false;
-    }
-    
-//    if($('input[name=plotting_check]:checked').length<=0)
-//    {
-//        alert('Please select the job option');
-//        document.getElementById("plotting_check").focus();
-//        return false;
-//    }   
-    
     
     if(continue_ok != '1'){
     if(print_ea == ''){
-        alert('Please enter the Print');
+        alert('Please enter Prints of Each');
         document.getElementById("print_ea").focus();
         return false;
     }  
@@ -1570,7 +1674,7 @@ function validate_plotting_cont()
                           "&size_custom_val="+encodeURIComponent(size_custom_val)+"&output_both_val="+encodeURIComponent(output_both_val)+
                           "&pickup_date="+encodeURIComponent(date_for_alt_val)+"&pickup_time="+encodeURIComponent(time_for_alt_val)+
                           "&drop_val="+encodeURIComponent(drop_val)+"&ftp_link_val="+encodeURIComponent(ftp_link_val)+
-                          "&user_name_val="+encodeURIComponent(user_name_val)+"&password_val="+encodeURIComponent(password_val)+"&size_custom="+encodeURIComponent(size_custom),
+                          "&user_name_val="+encodeURIComponent(user_name_val)+"&password_val="+encodeURIComponent(password_val)+"&size_custom="+encodeURIComponent(size_custom)+"&same_file="+same_file+"&uploadedfile_option="+encodeURIComponent(uploadedfile_option),
                     beforeSend: loadStart,
                     complete: loadStop,
                     success: function(option)
@@ -1593,13 +1697,41 @@ $('#loading').hide();
 function use_same_set()
 {   
     var use_same = document.getElementById('use_same_check_box').checked;     
-    if(use_same == true){
-    $("#use_same").slideDown(1000);
-    $(".check").slideUp();
-    $("#options_arch").slideUp();
+    if(use_same == true){            
+     $.ajax
+        ({
+            type: "POST",
+            url: "use_the_same_file.php",
+            data: "use_thesame_file=1",
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {   
+                if(option == true){
+                $("#use_same").slideDown(1000);
+                $(".check").slideUp();
+                $("#options_arch").slideUp();
+                $("#validate_imp").val('1');
+                }
+            }
+        });     
     }else{
-    $(".check").slideDown();
-    $("#options_arch").slideUp();
+        $.ajax
+        ({
+            type: "POST",
+            url: "use_the_same_file.php",
+            data: "use_thesame_file=2",
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {   
+                if(option == true){
+                $(".check").slideDown();
+                $("#options_arch").slideUp();
+                $("#validate_imp").val('');
+                }
+            }
+        }); 
     }
 }
 
@@ -1780,13 +1912,27 @@ function active_plot_new()
 }
 
 function active_arch()
-{
-    $("#options_arch").slideDown();
-    $("#options_plott").slideUp();
-    $("#alt_ops").slideUp();
-    $("#pick_ops").slideDown();
-    $("#use_same_check_box").slideUp();
-    $("#use_same_check_box_spn").slideUp();
+{    
+    $.ajax
+        ({
+            type: "POST",
+            url: "use_the_same_file.php",
+            data: "use_thesame_file=2",
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {   
+                if(option == true){                    
+                    $("#options_arch").slideDown();
+                    $("#options_plott").slideUp();
+                    $("#alt_ops").slideUp();
+                    $("#pick_ops").slideDown();
+                    $("#use_same_check_box").slideUp();
+                    $("#use_same_check_box_spn").slideUp();
+                    $("#validate_imp").val('');
+                }
+            }
+        }); 
 }
  
  

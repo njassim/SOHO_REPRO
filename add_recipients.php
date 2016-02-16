@@ -15,7 +15,18 @@ if(count($check_pe_null) > 0){
 }
 ?>
 
-
+ <?php
+ if($_GET['multi'] == "1"){
+?>
+ <script>
+     function test_values(){
+         alert('123');
+     }
+     // multiple_recipient();
+ </script>
+ <?php
+ }
+ ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -53,7 +64,18 @@ if(count($check_pe_null) > 0){
 <link rel="stylesheet" type="text/css" href="js/jquery.timepicker.css" media="screen" />
 <script src="js/jquery.maskedinput.js" type="text/javascript" ></script>
 <script>
-function show_time()
+function show_time(ID)
+{
+    //alert(ID);
+    
+    $('#time_picker_icon_'+ID).timepicker({
+        'minTime': '8:00am',
+        'maxTime': '7:00pm',
+        'showDuration': true
+    });
+}
+
+function show_time_return()
 {
     $('#time_picker_icon').timepicker({
         'minTime': '8:00am',
@@ -61,6 +83,7 @@ function show_time()
         'showDuration': true
     });
 }
+    
     
 function dtls_reveal(ID)
 {
@@ -96,13 +119,18 @@ $(window).scroll(function(event) {
 });
 
 
+
+
 $(window).load(function() {
     var entered_plot_already = $("#entered_plot_already").val();
     if(entered_plot_already > 0){
         document.getElementById('del_type_multi').checked = true;
         multiple_recipient();
     }    
+    
     });
+
+
 </script>
 
 
@@ -166,9 +194,10 @@ padding-bottom: 0px !important;
 .time_picker_icon {
     background: #FFFFFF url(images/clock.png) no-repeat 4px 4px;
     padding: 5px 5px 5px 30px;
-    height: 18px;
+    /*height: 18px;*/
     cursor: pointer;
     width: 50px;
+    width: 75px !important;
 }
 .shaddows{
         background: white;
@@ -195,14 +224,14 @@ padding-bottom: 0px !important;
 #asap_popup{
     display: none;
     font-size: 15px;
-    position: fixed;
+    position: fixed !important;
     top: 150px;
-    left: 35%;
+    left: 40%;
     padding: 5px;
     z-index: 10;
     position: absolute;
     z-index: 1000;
-    width: 45%;
+    width: 25%;
     background: white;
     border-bottom: 1px solid #aaa;
     border-radius: 4px;
@@ -234,20 +263,49 @@ padding-bottom: 0px !important;
 }
 
 .select-dash { border-bottom: 1px dotted #000; }
+
+.modal-overlay {
+  opacity: 0.7;
+  filter: alpha(opacity=0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 900;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+#address_container li label{
+    width: 25%;
+    float: left;
+    margin-left: 35px;
+    font-weight: bold;
+}
+
+#address_container li{
+        padding-bottom: 10px;
+}
+
+.systemForm select {
+    width: 20% !important;
+}
  </style>
  
  </head>
  <body>
-    <div id="loading" class="none"  style="position: fixed;top: 35%;left: 48%;padding: 5px;z-index: 10;">
-         <img src="admin/images/login_loader.gif" border="0" />
+    <div id="loading" class="none"  style="position: fixed;top: 10%;left: 40%;padding: 5px;z-index: 1002;">
+         <img src="admin/images/loading_rainbow.gif" border="0" style="width: 200px;height: 200px;" />
     </div>
     <div id="asap_popup">
-        <div style="width: 96%;padding: 2%;float: left;font-size: 14px;line-height: 18px;text-align: justify;">
-            All orders placed online are assumed to be for today and available for collection immediately.
-        If you wish to place an order for another date and time, or for today but at a later time, 
-        please check the box at the left and then enter below a date and time for collection.
+        <div style="width: 96%;float:left;text-align: center;background-color: #EEE;padding: 1%;font-weight: bold;font-size: 18px;padding-top: 10px;">
+            Edit Recipient Address
+        </div>
+        <div id="recipient_address" style="width: 96%;padding: 2%;float: left;font-size: 14px;line-height: 18px;text-align: justify;">
+            
         </div>
         <div style="float: right;width: 98%;background-color: #EEE;padding: 1%;">
+            <span style="float: left;border: 1px solid #BBB;padding: 3px 10px;border-radius: 3px;cursor: pointer;" onclick="return save_recipient_address();">Save</span>
             <span style="float: right;border: 1px solid #BBB;padding: 3px 10px;border-radius: 3px;cursor: pointer;" onclick="return close_asap();">Close</span>
         </div>
     </div>
@@ -277,9 +335,11 @@ padding-bottom: 0px !important;
 <?php
 $number_of_sets = EnteredPlotttingPrimary($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid']);
 $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid'], $_SESSION['ref_val']);
+//echo '<pre>';
+//print_r($cust_original_order);
 ?>
 <div style="width: 100%;float: left;">
-    <span style="font-weight: bold;">ORIGINAL ORDER</span>
+    <span style="font-weight: bold;float: left;margin-top: 5px;margin-bottom: 5px;">ORIGINAL ORDER</span>
     <table border="1" style="width: 100%;">
         <tr bgcolor="#F99B3E">
             <td style="font-weight: bold;">Option</td> 
@@ -293,7 +353,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
             <td style="font-weight: bold;">Folding</td>
         </tr>
         <?php
+         $i = 1;
         foreach ($cust_original_order as $original){
+            $rowColor = ($i % 2 != 0) ? '#F9F2DE' : '#FCD9A9';
             $cust_needed_sets       = ($original['print_ea'] != '0') ? $original['print_ea'] : $original['arch_needed'];
             $cust_order_type        = ($original['plot_arch'] == '0') ? 'Architectural Copies' : 'Plotting on Bond';  
             $size         = ($original['size'] == 'undefined') ? $original['arch_size'] : $original['size'];
@@ -302,18 +364,21 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
             $binding      = ($original['binding'] == 'undefined') ? $original['arch_binding'] : $original['binding'];
             $folding      = ($original['folding'] == 'undefined') ? $original['arch_folding'] : $original['folding'];    
         ?>
-        <tr bgcolor="#ffeee1">
+        <tr bgcolor="<?php echo $rowColor; ?>" style="height: 20px;">
             <td><?php echo $original['options']; ?></td>
             <td><?php echo $original['origininals']; ?></td>
-            <td><?php echo $cust_needed_sets; ?></td>
+            <td><span id="available_<?php echo $original['options']; ?>"><?php echo $cust_needed_sets; ?></span></td>
             <td><?php echo $cust_order_type; ?></td>                            
-            <td><?php echo $size; ?></td>
-            <td><?php echo $output; ?></td>
+            <td><?php echo ucwords(strtolower($size)); ?></td>
+            <td><?php echo strtoupper($output); ?></td>
             <td><?php echo ucfirst($media); ?></td>
             <td><?php echo ucfirst($binding); ?></td>
             <td><?php echo ucfirst($folding); ?></td>
         </tr>
-        <?php } ?>
+        <?php 
+        $i++;
+        }         
+        ?>
     </table>
 </div>
 <div class="bkgd-stripes-orange" style="margin-bottom: 0px !important;">
@@ -379,19 +444,28 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                                 <input type="radio" name="del_type" id="del_type_multi" value="1" style="width: 15% !important;" onclick="return multiple_recipient();"  /><span style="text-transform: uppercase;font-weight: bold;">Distribute to one or more locations</span>
                             </div>
                             <div>
-                                <input type="radio" name="del_type" id="pickup_soho" value="1" style="width: 15% !important;" onclick="return pickup_soho();" /><span style="text-transform: uppercase;font-weight: bold;">Will pick up from SoHo</span>                                
+                                <input type="radio" name="del_type" id="pickup_soho" value="1" style="width: 15% !important;" onclick="return pickup_soho();" /><span style="text-transform: uppercase;font-weight: bold;">WILL PICKUP FROM SOHO REPRO</span>                                
                                 <select style="width: 20% !important;" id="pickup_soho_add" name="pickup_soho_add" onchange="return pickup_soho();">
                                     <option value="1" selected="selected">381 Broome St</option>
                                     <option value="2" >307 7th Ave, 5th Floor</option>
                                 </select>
                             </div>
                         </div>
-                          <div style="background-color:#FFFFFF" class="serviceOrderSetWapper" setindex="0">
-                            <div id="multi_recipients">
+                            <div style="background-color:#FFFFFF" class="serviceOrderSetWapper" setindex="0">
+                               
+                                <div id="entered_sets">
 
-                            </div>
+                                </div>
+                                
+                                <div id="multi_recipients">
 
+                                </div>
                             
+                            <div style="float:right;">
+                                <!--<input class="addNewOrderSet" value="Add Set" style="float:right;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return validate_plotting();" />-->
+                                <input class="all_are_done" value="Save and Continue" style="display: none;cursor: pointer;font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -0px !important;" type="button"  />
+                            </div>
+                              
                           </div>
                           
                           
@@ -400,7 +474,7 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                       <div style="width:100%;float: left;"> 
                         
                         <div style="float:right;margin-right: 12px;">
-                            <input id="add_recipients" value="Add Recipient" style="display: none;margin-left: 5px;float:left;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return add_recipients();" />
+                            <input class="addrecipientActionLink" id="add_recipients" value="Add Recipient" style="display: none;margin-left: 5px;float:left;cursor: pointer;font-size:12px; padding:1.5px; width: 100px;margin-top:-51px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;" type="button" onclick="return add_recipients();" />
                         </div>
                           
                         <div style="float:right;">
@@ -456,8 +530,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
             .picker_icon{
                 background : #FFFFFF url(images/datepicker-20.png) no-repeat 4px 4px;
                 padding: 5px 5px 5px 25px;
-                height:18px;
+                /*height:18px;*/
                 cursor: pointer;
+                width: 75px !important;
             }
         </style>
         
@@ -506,7 +581,8 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
  <div id="dynamicAppender" style="postion:absolute;top:-5000px"></div>
 
 
- <script>
+ <script>    
+ 
  function multiple_recipient()
  {
      var multi = document.getElementById('del_type_multi').checked;
@@ -535,6 +611,7 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
  
  function everything_return()
  {
+     $("body").append("<div class='modal-overlay'></div>");
      var everything_return = document.getElementById('everything_return').checked;
      if(everything_return == true){ 
          $.ajax
@@ -549,12 +626,110 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                         $('#multi_recipients').slideDown();
                         $('#multi_recipients').html(option);
                         $('#add_recipients').slideUp();
+                        $(".addproductActionLink").hide();
+                        $( ".modal-overlay" ).remove();
                     }
                 });
      }else{
          $('#multi_recipients').slideUp();
          $('#add_recipients').slideUp();
      }
+ }
+ 
+ function continue_recipient_everyting_return()
+ {
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp").val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     var delivery_type_option   = $("#delivery_type_option").val();
+     var delivery_type          = $("#delivery_comp").val();
+     
+     var avl_sets_1             = $("#avl_sets_1").val();
+     var need_sets_1            = $("#need_sets_1").val();
+     var size_sets_1            = $("#size_sets_1").val();
+     var output_sets_1          = $("#output_sets_1").val();
+     var media_sets_1           = $("#media_sets_1").val();
+     var binding_sets_1_pre     = $("#binding_sets_1").val();
+     var folding_sets_1         = $("#folding_sets_1").val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed").val();
+     var time_needed            = $("#time_picker_icon").val();
+     var spl_recipient          = $("#spl_recipient").val();
+     var contact_ph             = $("#contact_ph").val();
+     
+     var shipp_att              = $("#shipp_att").val();
+     
+     var option_id              =   $("#option_id").val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     var preffer_del            = document.getElementById('preffer_del').checked;  
+     
+     var arrange_del            = document.getElementById('arrange_del').checked;
+     
+     var delivery_type          = (arrange_del == false) ? $("#delivery_comp").val() : '0';
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp").value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number").value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById('shipp_comp_1').checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1").value : '0';
+        var shipp_comp_2        =   document.getElementById('shipp_comp_2').checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2").value : '0';
+        var shipp_comp_3        =   document.getElementById('shipp_comp_3').checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type").value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }      
+     
+     
+     if(shipping_id == '0'){
+         alert('Please select send to address');
+         $("#address_book_rp").focus();
+         return false;
+     }
+     
+//     if(shipp_att == ''){
+//         alert('Please enter the attention to');
+//         $("#shipp_att").focus();
+//         return false;
+//     }
+     
+     if(date_needed == ''){
+         alert('Please select when needed');
+         $("#date_needed").focus();
+         return false;
+     }
+     
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=4_4&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&delivery_type_option="+encodeURIComponent(delivery_type_option)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&delivery_type="+encodeURIComponent(delivery_type),
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+                if(option == '1'){
+                    window.location = "view_all_recipients.php";
+                }
+            }
+        });
  }
  
  function everything_return_arch()
@@ -599,6 +774,39 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                         $('#multi_recipients').slideDown();
                         $('#multi_recipients').html(option);
                         $('#add_recipients').slideDown();
+                        $('.addrecipientActionLink').hide();
+                        $(".addproductActionLink").hide();
+                    }
+                });
+         }else{
+            alert("Select the address.");
+            document.getElementById('address_book_se').focus();
+            document.getElementById('send_everything_to').checked = false;
+         }
+     }else{
+         $('#multi_recipients').slideUp();
+         $('#add_recipients').slideUp();
+     }
+ }
+ 
+ function send_everything_to_cancel()
+ {
+     var send_everything_to = document.getElementById('send_everything_to').checked;
+     var address_book_se    = document.getElementById('address_book_se').value;
+     if(send_everything_to == true){
+         if(address_book_se != '0'){
+             $.ajax
+                ({
+                    type: "POST",
+                    url: "everything_return_to.php",
+                    data: "everything_return_to=1&address_book_se="+address_book_se,                   
+                    success: function(option)
+                    {  
+                        $('#multi_recipients').slideDown();
+                        $('#multi_recipients').html(option);
+                        $('#add_recipients').slideDown();
+                        $('.addrecipientActionLink').hide();
+                        $(".addproductActionLink").hide();
                     }
                 });
          }else{
@@ -614,6 +822,7 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
  
  function pickup_soho()
  {
+     // $("body").append("<div class='modal-overlay'></div>");
      var pickup_soho             = document.getElementById('pickup_soho').checked;
      var pickup_from_soho_add    = document.getElementById('pickup_soho_add').value;
      if(pickup_soho == true){
@@ -629,6 +838,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                         $('#multi_recipients').slideDown();
                         $('#multi_recipients').html(option);
                         $('#add_recipients').slideDown();
+                        $('.addrecipientActionLink').hide();
+                        $(".addproductActionLink").hide();
+                        //$( ".modal-overlay" ).remove();
                     }
                 });
      }else{
@@ -769,6 +981,612 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
  }
  
  
+ function add_recipients_dynamic(OPTION_ID,ID){
+     
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp_"+OPTION_ID).val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_"+OPTION_ID).val();
+     var need_sets_1            = $("#need_sets_"+OPTION_ID).val();
+     var size_sets_1            = $("#size_sets_1").val();
+     var output_sets_1          = $("#output_sets_1").val();
+     var media_sets_1           = $("#media_sets_1").val();
+     var binding_sets_1_pre     = $("#binding_sets_1").val();
+     var folding_sets_1         = $("#folding_sets_1").val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed_"+OPTION_ID).val();
+     var time_needed            = $("#time_picker_icon_"+OPTION_ID).val();
+     var spl_recipient          = $("#spl_recipient_"+OPTION_ID).val();
+     var contact_ph             = $("#contact_ph_"+OPTION_ID).val();
+     var option_type            = $("#option_type_"+OPTION_ID).val();
+     
+     var shipp_att              = $("#shipp_att_"+OPTION_ID).val();
+     
+     var option_id              =   $("#option_id_"+OPTION_ID).val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     var preffer_del            = document.getElementById("preffer_del_"+OPTION_ID).checked;  
+     
+     var arrange_del            = document.getElementById("arrange_del_"+OPTION_ID).checked;
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp_"+OPTION_ID).value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number_"+OPTION_ID).value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById("shipp_comp_1_"+OPTION_ID).checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1_"+OPTION_ID).value : '0';
+        var shipp_comp_2        =   document.getElementById("shipp_comp_2_"+OPTION_ID).checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2_"+OPTION_ID).value : '0';
+        var shipp_comp_3        =   document.getElementById("shipp_comp_3_"+OPTION_ID).checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type_"+OPTION_ID).value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }          
+     
+     
+     if(shipping_id == '0'){
+         alert('Please select send to address');
+         $("#address_book_rp").focus();
+         return false;
+     }
+     
+//     if(shipp_att == ''){
+//         alert('Please enter the attention to');
+//         $("#shipp_att").focus();
+//         return false;
+//     }
+     
+     if(date_needed == ''){
+         alert('Please select when needed');
+         $("#date_needed").focus();
+         return false;
+     }
+           
+     if(preffer_del == true){
+        var bill_number = $("#bill_number_"+OPTION_ID).val(); 
+        if(bill_number ==''){
+        alert('Please enter the account number');
+        $("#bill_number_"+OPTION_ID).focus();
+        return false;
+        }
+    }
+     
+    if(avl_sets_1 == '1'){
+        one_more_set(ID);
+        top_order_summary(OPTION_ID);
+       // return false;
+    }
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=22&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&option_type="+encodeURIComponent(option_type),
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+//                var element = option.split("~");
+//                if(element[0] == element[1]){
+//                window.location = "view_all_recipients.php";  
+//                }else{                
+//                //$('#optiond_dynamic_'+OPTION_ID).html(element[2]);
+//                $('#multi_recipients').slideDown();
+//                $('#multi_recipients').html(element[2]);
+//                }
+                  multiple_recipient_nmjk();
+                  
+            }
+        });
+ }
+ 
+ function one_more_set(ID)
+ {
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=95&one_more_set_id="+encodeURIComponent(ID),
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+                
+            }
+        });
+ }
+ 
+ function add_recipients_dynamic_go_next()
+ {
+     window.location = "view_all_recipients.php"; 
+ }
+ 
+ function add_recipients_dynamic_go_next_jk(OPTION_ID)
+ {
+     
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp_"+OPTION_ID).val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_"+OPTION_ID).val();
+     var need_sets_1            = $("#need_sets_"+OPTION_ID).val();
+     var size_sets_1            = $("#size_sets_"+OPTION_ID).val();
+     var output_sets_1          = $("#output_sets_"+OPTION_ID).val();
+     var media_sets_1           = $("#media_sets_"+OPTION_ID).val();
+     var binding_sets_1_pre     = $("#binding_sets_"+OPTION_ID).val();
+     var folding_sets_1         = $("#folding_sets_"+OPTION_ID).val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed_"+OPTION_ID).val();
+     var time_needed            = $("#time_picker_icon_"+OPTION_ID).val();
+     var spl_recipient          = $("#spl_recipient_"+OPTION_ID).val();
+     var contact_ph             = $("#contact_ph_"+OPTION_ID).val();
+     var option_type            = $("#option_type_"+OPTION_ID).val();
+     
+     var shipp_att              = $("#shipp_att_"+OPTION_ID).val();
+     
+     var option_id              =   $("#option_id_"+OPTION_ID).val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     var preffer_del            = document.getElementById("preffer_del_"+OPTION_ID).checked;  
+     
+     var arrange_del            = document.getElementById("arrange_del_"+OPTION_ID).checked;
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp_"+OPTION_ID).value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number_"+OPTION_ID).value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById("shipp_comp_1_"+OPTION_ID).checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1_"+OPTION_ID).value : '0';
+        var shipp_comp_2        =   document.getElementById("shipp_comp_2_"+OPTION_ID).checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2_"+OPTION_ID).value : '0';
+        var shipp_comp_3        =   document.getElementById("shipp_comp_3_"+OPTION_ID).checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type_"+OPTION_ID).value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }          
+     
+     
+     if(shipping_id == '0'){
+         alert('Please select send to address');
+         $("#address_book_rp").focus();
+         return false;
+     }
+     
+//     if(shipp_att == ''){
+//         alert('Please enter the attention to');
+//         $("#shipp_att").focus();
+//         return false;
+//     }
+     
+     if(date_needed == ''){
+         alert('Please select when needed');
+         $("#date_needed").focus();
+         return false;
+     }
+           
+     if(preffer_del == true){
+        var bill_number = $("#bill_number_"+OPTION_ID).val(); 
+        if(bill_number ==''){
+        alert('Please enter the account number');
+        $("#bill_number_"+OPTION_ID).focus();
+        return false;
+        }
+    }
+    
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=22&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&option_type="+encodeURIComponent(option_type),
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+//                var element = option.split("~");
+//                if(element[0] == element[1]){
+//                window.location = "view_all_recipients.php";  
+//                }else{                
+//                //$('#optiond_dynamic_'+OPTION_ID).html(element[2]);
+//                $('#multi_recipients').slideDown();
+//                $('#multi_recipients').html(element[2]);
+//                }
+                  multiple_recipient_nmjk();
+                  //top_order_summary(OPTION_ID);
+            }
+        });
+     
+ }
+ 
+ function multiple_recipient_nmjk(){
+        
+    var multi = document.getElementById("del_type_multi").checked;         
+     if(multi == true){
+		$.ajax
+                ({
+                    type: "POST",
+                    url: "get_recipients.php",
+                    data: "recipients=234",
+                    beforeSend: loadStart,
+                    complete: loadStop,
+                    success: function(option)
+                    {  
+					var element = option.split("~");
+					if(element[0] == element[1]){
+					window.location = "view_all_recipients.php";  
+					}else{
+					$('#multi_recipients').slideDown();
+					$('#multi_recipients').html(element[7]);
+                                        $("#entered_sets").slideDown();
+					$("#entered_sets").html(element[3]);  
+                                        
+                                        $(".all_are_done").show();    
+                                        $(".all_are_done").attr('onclick', 'return add_recipients_dynamic_go_next('+element[2]+');');
+					}
+				}
+                });
+	}
+ }
+ 
+ function top_order_summary(OPTION_ID)
+ {
+     var current_sets = $("#available_"+OPTION_ID).html();
+     $("#available_"+OPTION_ID).html((Number(current_sets) + 1));
+ }
+ 
+ function asap_dynamic(OPTION_ID)
+{
+    var current_status  =   $("#asap_status_"+OPTION_ID).attr('class');
+    var change_status   =   (current_status == "asap_orange") ? 'asap_green' : 'asap_orange';    
+    
+    var current_dte_neede    = $("#date_needed_"+OPTION_ID).val();
+    var current_time_neede   = $("#time_picker_icon_"+OPTION_ID).val();
+    var change_date          = (current_dte_neede == 'ASAP') ? '' : 'ASAP';
+    var change_time          = (current_time_neede == 'ASAP') ? '' : 'ASAP';
+       
+    
+    if(OPTION_ID != '0'){
+        
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp_"+OPTION_ID).val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_"+OPTION_ID).val();
+     var need_sets_1            = $("#need_sets_"+OPTION_ID).val();
+     var size_sets_1            = $("#size_sets_"+OPTION_ID).val();
+     var output_sets_1          = $("#output_sets_"+OPTION_ID).val();
+     var media_sets_1           = $("#media_sets_"+OPTION_ID).val();
+     var binding_sets_1_pre     = $("#binding_sets_"+OPTION_ID).val();
+     var folding_sets_1         = $("#folding_sets_"+OPTION_ID).val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed_"+OPTION_ID).val();
+     var time_needed            = $("#time_picker_icon_"+OPTION_ID).val();
+     var spl_recipient          = $("#spl_recipient_"+OPTION_ID).val();
+     var contact_ph             = $("#contact_ph_"+OPTION_ID).val();
+     var option_type            = $("#option_type_"+OPTION_ID).val();
+     
+     var shipp_att              = $("#shipp_att_"+OPTION_ID).val();
+     
+     var option_id              =   $("#option_id_"+OPTION_ID).val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     //var preffer_del            = document.getElementById("preffer_del_"+OPTION_ID).checked;  
+     
+     var arrange_del            = document.getElementById("arrange_del_"+OPTION_ID).checked;
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp_"+OPTION_ID).value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number_"+OPTION_ID).value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById("shipp_comp_1_"+OPTION_ID).checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1_"+OPTION_ID).value : '0';
+        var shipp_comp_2        =   document.getElementById("shipp_comp_2_"+OPTION_ID).checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2_"+OPTION_ID).value : '0';
+        var shipp_comp_3        =   document.getElementById("shipp_comp_3_"+OPTION_ID).checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type_"+OPTION_ID).value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }      
+     
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=31&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&option_type="+encodeURIComponent(option_type),           
+            success: function(option)
+            {  
+                //console.log('Added Previous!!!');
+                $("#asap_status_"+OPTION_ID).removeClass(current_status);
+                $("#asap_status_"+OPTION_ID).addClass(change_status);
+                
+                $("#date_needed_"+OPTION_ID).val(change_date);
+                $("#time_picker_icon_"+OPTION_ID).val(change_time);
+                
+            }
+        });
+            
+        }else{
+            //console.log('Mohamed')
+        }
+
+}
+ 
+ function update_current_option(OPTION_ID){
+  
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp_"+OPTION_ID).val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_"+OPTION_ID).val();
+     var need_sets_1            = $("#need_sets_"+OPTION_ID).val();
+     var size_sets_1            = $("#size_sets_"+OPTION_ID).val();
+     var output_sets_1          = $("#output_sets_"+OPTION_ID).val();
+     var media_sets_1           = $("#media_sets_"+OPTION_ID).val();
+     var binding_sets_1_pre     = $("#binding_sets_"+OPTION_ID).val();
+     var folding_sets_1         = $("#folding_sets_"+OPTION_ID).val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed_"+OPTION_ID).val();
+     var time_needed            = $("#time_picker_icon_"+OPTION_ID).val();
+     var spl_recipient          = $("#spl_recipient_"+OPTION_ID).val();
+     var contact_ph             = $("#contact_ph_"+OPTION_ID).val();
+     var option_type            = $("#option_type_"+OPTION_ID).val();
+     
+     var shipp_att              = $("#shipp_att_"+OPTION_ID).val();
+     
+     var option_id              =   $("#option_id_"+OPTION_ID).val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     //var preffer_del            = document.getElementById("preffer_del_"+OPTION_ID).checked;  
+     
+     var arrange_del            = document.getElementById("arrange_del_"+OPTION_ID).checked;
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp_"+OPTION_ID).value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number_"+OPTION_ID).value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById("shipp_comp_1_"+OPTION_ID).checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1_"+OPTION_ID).value : '0';
+        var shipp_comp_2        =   document.getElementById("shipp_comp_2_"+OPTION_ID).checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2_"+OPTION_ID).value : '0';
+        var shipp_comp_3        =   document.getElementById("shipp_comp_3_"+OPTION_ID).checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type_"+OPTION_ID).value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     } 
+     
+      $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=40&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&option_type="+encodeURIComponent(option_type),           
+            success: function(option)
+            {  
+                //console.log('Added Previous!!!');  
+            }
+        });
+ }
+ 
+ 
+ 
+ function update_current_option_jk(OPTION_ID)
+ {
+     if(OPTION_ID != '0'){
+        
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp_"+OPTION_ID).val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_"+OPTION_ID).val();
+     var need_sets_1            = $("#need_sets_"+OPTION_ID).val();
+     var size_sets_1            = $("#size_sets_"+OPTION_ID).val();
+     var output_sets_1          = $("#output_sets_"+OPTION_ID).val();
+     var media_sets_1           = $("#media_sets_"+OPTION_ID).val();
+     var binding_sets_1_pre     = $("#binding_sets_"+OPTION_ID).val();
+     var folding_sets_1         = $("#folding_sets_"+OPTION_ID).val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed_"+OPTION_ID).val();
+     var time_needed            = $("#time_picker_icon_"+OPTION_ID).val();
+     var spl_recipient          = $("#spl_recipient_"+OPTION_ID).val();
+     var contact_ph             = $("#contact_ph_"+OPTION_ID).val();
+     var option_type            = $("#option_type_"+OPTION_ID).val();
+     
+     var shipp_att              = $("#shipp_att_"+OPTION_ID).val();
+     
+     var option_id              =   $("#option_id_"+OPTION_ID).val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     //var preffer_del            = document.getElementById("preffer_del_"+OPTION_ID).checked;  
+     
+     var arrange_del            = document.getElementById("arrange_del_"+OPTION_ID).checked;
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp_"+OPTION_ID).value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number_"+OPTION_ID).value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById("shipp_comp_1_"+OPTION_ID).checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1_"+OPTION_ID).value : '0';
+        var shipp_comp_2        =   document.getElementById("shipp_comp_2_"+OPTION_ID).checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2_"+OPTION_ID).value : '0';
+        var shipp_comp_3        =   document.getElementById("shipp_comp_3_"+OPTION_ID).checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type_"+OPTION_ID).value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }      
+     
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=31&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&option_type="+encodeURIComponent(option_type),           
+            success: function(option)
+            {  
+                //console.log('Added Previous!!!');
+//                $("#asap_status_"+OPTION_ID).removeClass(current_status);
+//                $("#asap_status_"+OPTION_ID).addClass(change_status);
+//                
+//                $("#date_needed_"+OPTION_ID).val(change_date);
+//                $("#time_picker_icon_"+OPTION_ID).val(change_time);
+                
+            }
+        });
+            
+        }else{
+            //console.log('Mohamed')
+        }
+ }
+ 
+ 
+ 
+ function add_prvious_dis(OPTION_ID){
+     
+     if(OPTION_ID != '0'){
+        
+     var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
+     var shipping_id_pre        = $("#address_book_rp_"+OPTION_ID).val();
+     var shipping_id            = (pickup_soho_chk == true) ? 'P'+shipping_id_pre : shipping_id_pre;
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_"+OPTION_ID).val();
+     var need_sets_1            = $("#need_sets_"+OPTION_ID).val();
+     var size_sets_1            = $("#size_sets_1").val();
+     var output_sets_1          = $("#output_sets_1").val();
+     var media_sets_1           = $("#media_sets_1").val();
+     var binding_sets_1_pre     = $("#binding_sets_1").val();
+     var folding_sets_1         = $("#folding_sets_1").val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed_"+OPTION_ID).val();
+     var time_needed            = $("#time_picker_icon_"+OPTION_ID).val();
+     var spl_recipient          = $("#spl_recipient_"+OPTION_ID).val();
+     var contact_ph             = $("#contact_ph_"+OPTION_ID).val();
+     var option_type            = $("#option_type_"+OPTION_ID).val();
+     
+     var shipp_att              = $("#shipp_att_"+OPTION_ID).val();
+     
+     var option_id              =   $("#option_id_"+OPTION_ID).val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var output_page_details    = (output_sets_1 == 'Both') ? document.getElementById("output_page_details").value : '0';
+     
+     //var preffer_del            = document.getElementById("preffer_del_"+OPTION_ID).checked;  
+     
+     var arrange_del            = document.getElementById("arrange_del_"+OPTION_ID).checked;
+     
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp_"+OPTION_ID).value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number_"+OPTION_ID).value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById("shipp_comp_1_"+OPTION_ID).checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1_"+OPTION_ID).value : '0';
+        var shipp_comp_2        =   document.getElementById("shipp_comp_2_"+OPTION_ID).checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2_"+OPTION_ID).value : '0';
+        var shipp_comp_3        =   document.getElementById("shipp_comp_3_"+OPTION_ID).checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type_"+OPTION_ID).value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }      
+     
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=31&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&output_page_details="+encodeURIComponent(output_page_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&media_sets_1="+encodeURIComponent(media_sets_1)+"&contact_ph="+encodeURIComponent(contact_ph)+"&option_id="+encodeURIComponent(option_id)+"&option_type="+encodeURIComponent(option_type),           
+            success: function(option)
+            {  
+                console.log('Added Previous!!!');
+            }
+        });
+            
+        }else{
+            //console.log('Mohamed')
+        }
+ }
+ 
  function continue_recipient(){
      
      var pickup_soho_chk        = document.getElementById('pickup_soho').checked;
@@ -900,7 +1718,31 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
         }
  }
  
- function decrease_qty(ID)
+  function increase_qty_dy(OPTION_ID){
+     
+     var need_sets      =   $("#need_sets_"+OPTION_ID).val();
+     var avl_sets       =   $("#avl_sets_"+OPTION_ID).val();
+     
+        need_sets++;
+        if(need_sets <= avl_sets){
+        $('#need_sets_'+OPTION_ID).val(need_sets);
+        }
+ }
+ 
+ function decrease_qty_dy(ID)
+ {
+     var need_sets      =   $("#need_sets_"+ID).val();
+     var avl_sets       =   $("#avl_sets_"+ID).val();
+     
+        need_sets--;
+        if(need_sets != '0')
+        {
+        $('#need_sets_'+ID).val(need_sets);
+        }
+ }
+ 
+ 
+ function decrease_qty_return(ID)
  {
      var need_sets      =   $("#need_sets_"+ID).val();
      var avl_sets       =   $("#avl_sets_"+ID).val();
@@ -952,9 +1794,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
     }
  }
  
- function increase_qty_avl_plot(ID,USR_ID,COMP_ID,TYPE)
+ function increase_qty_avl_plot(ID,USR_ID,COMP_ID,TYPE,OPTION_ID)
  {
-     var avl_sets       =   $("#avl_sets_"+ID).val();
+     var avl_sets       =   $("#avl_sets_"+OPTION_ID).val();
     avl_sets++;
     if(avl_sets != '0'){    
         $('#avl_sets_'+ID).val(avl_sets);
@@ -962,19 +1804,21 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
             ({
                 type: "POST",
                 url: "get_recipients.php",
-                data: "recipients=55&inc_avl_user_id="+USR_ID+"&inc_avl_comp_id="+COMP_ID+"&inc_avl_type="+TYPE,
+                data: "recipients=55&inc_avl_user_id="+USR_ID+"&inc_avl_comp_id="+COMP_ID+"&inc_avl_type="+TYPE+"&option_id="+OPTION_ID+"&available_sets="+avl_sets,
                 success: function(option)
                 {                    
-                    $('#sets_grid_new').html(option);                             
+                    //$('#sets_grid_new').html(option); 
+                    $("#avl_sets_"+OPTION_ID).val(avl_sets);
+                    $("#available_"+OPTION_ID).html(avl_sets);
                 }
             });
     }
      
  }
  
- function decrease_qty_avl(ID,USR_ID,COMP_ID,TYPE,REC_ID)
+ function decrease_qty_avl(ID,USR_ID,COMP_ID,TYPE,REC_ID,OPTION_ID)
  {
-     var avl_sets       =   $("#avl_sets_"+ID).val();
+     var avl_sets       =   $("#avl_sets_"+OPTION_ID).val();
      var need_sets_1    =   $("#need_sets_1").val();
      var need_sets_2    =   $("#need_sets_2").val();
      
@@ -986,10 +1830,12 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
             ({
                 type: "POST",
                 url: "get_recipients.php",
-                data: "recipients=4&inc_avl_user_id="+USR_ID+"&inc_avl_comp_id="+COMP_ID+"&inc_avl_type="+TYPE+"&inc_avl_rec_id="+REC_ID+"&need_sets_current_1="+need_sets_1+"&need_sets_current_2="+need_sets_2+"&decrese_avl_sets="+avl_sets,
+                data: "recipients=4&inc_avl_user_id="+USR_ID+"&inc_avl_comp_id="+COMP_ID+"&inc_avl_type="+TYPE+"&inc_avl_rec_id="+REC_ID+"&need_sets_current_1="+need_sets_1+"&need_sets_current_2="+need_sets_2+"&decrese_avl_sets="+avl_sets+"&option_id="+OPTION_ID,
                 success: function(option)
                 {                    
-                    $('#sets_grid_new').html(option);                             
+                    //$('#sets_grid_new').html(option); 
+                    $("#avl_sets_"+OPTION_ID).val(avl_sets);
+                    $("#available_"+OPTION_ID).html(avl_sets);
                 }
             });
         
@@ -1044,6 +1890,25 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
     }
  }
  
+ 
+ function edit_recipient_dynamic(ID)
+ {
+     //alert(ID+"_EDIT");
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=501&edit_rec_id="+encodeURIComponent(ID),
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+                //$('#multi_recipients').slideDown();
+                $('#dynamic_edit_'+ID).html(option);
+                //$('#add_recipients').slideDown();
+            }
+        });
+ }
  
  function update_recipient(ID)
  {
@@ -1147,6 +2012,35 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
  }
  
  
+ function uncheck_delivery_dynamic(option_id)
+ {
+     var arrange_del = document.getElementById('arrange_del_'+option_id).checked;     
+     if(arrange_del == false){          
+     $('#preffered_info_'+option_id).slideDown();      
+     document.getElementById("preffer_del_"+option_id).checked = true;
+    }else{
+     $('#preffered_info_'+option_id).slideUp();  
+     document.getElementById("preffer_del_"+option_id).checked = false;
+    }    
+ }
+ 
+ function check_prefer_delivery_dynamic(option_id)
+ {
+     var preff_del = document.getElementById("preffer_del_"+option_id).checked;     
+     if(preff_del == true){          
+     $('#preffered_info_'+option_id).slideDown(); 
+     $('#delivery_info_'+option_id).slideUp();
+     document.getElementById("arrange_del_"+option_id).checked = false;
+    }else{
+     $('#preffered_info_'+option_id).slideUp();        
+     $('#delivery_info_'+option_id).slideDown();
+     document.getElementById("arrange_del_"+option_id).checked = true;
+    }    
+ }
+ 
+ 
+ 
+ 
  
  function delete_recipient_empty()
  {
@@ -1187,6 +2081,71 @@ function show_address()
 }
 
 
+
+function show_address_dynamic(option_id)
+{
+    var shipping_id     = $("#address_book_rp_"+option_id).val();
+    if(shipping_id == "P1"){
+       $("#show_address").html("381 Broome Street New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "P2"){
+       $("#show_address").html("307 7th Ave, 5th Floor New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "NEW"){
+       window.location = "service_add_address.php?serivice_plotting=1"; 
+    }else if(shipping_id == "NEW-MULTI"){
+       window.location = "service_add_address.php?serivice_plotting=1&multi=1"; 
+    }else{
+        $.ajax
+            ({
+                type: "POST",
+                url: "shipping_address_rec.php",
+                data: "shipping_id_rp=" + shipping_id,
+                success: function(option)
+                {  
+                    var myarr = option.split("~");
+                    $("#show_address_"+option_id).html(myarr[0]);
+                    $("#shipp_att_"+option_id).val(myarr[1]);
+                    $("#edit_address_"+option_id).fadeIn();
+                }
+            });
+    }
+}
+
+
+function show_address_dynamic_nmjk(option_id)
+{
+    var shipping_id     = $("#address_book_rp_"+option_id).val();
+    if(shipping_id == "P1"){
+       $("#show_address").html("381 Broome Street New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "P2"){
+       $("#show_address").html("307 7th Ave, 5th Floor New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "NEW"){
+       window.location = "service_add_address.php?serivice_plotting=1"; 
+    }else if(shipping_id == "NEW-MULTI"){
+       window.location = "service_add_address.php?serivice_plotting=1&multi=1"; 
+    }else{
+        $.ajax
+            ({
+                type: "POST",
+                url: "shipping_address_rec_nmjk_new.php",
+                data: "shipping_id_rp="+shipping_id+"&option_id="+option_id,
+                success: function(option)
+                {  
+                    var myarr = option.split("~");
+                    $("#show_address_"+option_id).html(myarr[0]);
+                    $("#shipp_att_"+option_id).val(myarr[1]);
+                    $("#edit_address_"+option_id).fadeIn();
+                    $("."+myarr[2]).hide();
+                    $(".all_are_done").show();    
+                    $(".all_are_done").attr('onclick', 'return add_recipients_dynamic_go_next_jk('+myarr[2]+');');
+                }
+            });
+    }
+}
+
 $(function() {
     var all_exist_date_needed      = $("#all_exist_date").val();
     var split_element_needed       = all_exist_date_needed.split(","); 
@@ -1208,7 +2167,37 @@ $(function() {
     } 
 }); 
 
-function date_reveal()
+function date_reveal(ID)
+{    
+    var all_exist_date_needed      = $("#all_exist_date").val();
+    var split_element_needed       = all_exist_date_needed.split(","); 
+    var disabledSpecificDays_needed = [split_element_needed[0],split_element_needed[1],split_element_needed[2],split_element_needed[3],split_element_needed[4],split_element_needed[5],split_element_needed[6],split_element_needed[7],split_element_needed[8],split_element_needed[8],split_element_needed[9],split_element_needed[10],split_element_needed[11],split_element_needed[12],split_element_needed[13],split_element_needed[14],split_element_needed[15],split_element_needed[16],split_element_needed[17],split_element_needed[18],split_element_needed[19]];
+
+    function disableSpecificDaysAndWeekends(date) {
+    var m = date.getMonth();
+    var d = date.getDate();
+    var y = date.getFullYear();
+
+    for (var i = 0; i < disabledSpecificDays_needed.length; i++) {
+    if ($.inArray((m + 1) + '-' + d + '-' + y, disabledSpecificDays_needed) != -1 ) {
+    return [false];
+    }
+    }
+
+    var noWeekend = $.datepicker.noWeekends(date);
+    return !noWeekend[0] ? noWeekend : [true];
+    } 
+$("#date_needed_"+ID).datepicker({minDate: 0,
+            dateFormat: 'mm/dd/yy',
+            inline: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            beforeShowDay: disableSpecificDaysAndWeekends}); 
+$("#date_needed_"+ID).focus();
+show_time(ID);
+}
+
+
+function date_reveal_return()
 {    
     var all_exist_date_needed      = $("#all_exist_date").val();
     var split_element_needed       = all_exist_date_needed.split(","); 
@@ -1234,11 +2223,25 @@ $("#date_needed").datepicker({minDate: 0,
             dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             beforeShowDay: disableSpecificDaysAndWeekends}); 
 $("#date_needed").focus();
+show_time_return();
 }
+
 
 function other_shipp_type()
 {
     $("#shipp_comp_3").attr("checked", true);
+}
+
+function field_color()
+{
+    $("#bill_number").css("background-color", "#F3FA2F");
+    $("#bill_number").focus();
+}
+
+function field_color_dynamic(OPTION_ID)
+{
+    $("#bill_number_"+OPTION_ID).css("background-color", "#F3FA2F");
+    $("#bill_number_"+OPTION_ID).focus();
 }
 
 function asap()
@@ -1250,8 +2253,12 @@ function asap()
     
     var current_dte_neede    = $("#date_needed").val();
     var current_time_neede   = $("#time_picker_icon").val();
-    var change_date          = (current_dte_neede == 'ASAP') ? '' : 'ASAP';
-    var change_time          = (current_time_neede == 'ASAP') ? '' : 'ASAP';
+    
+    var change_date          = (current_status == "asap_orange") ? 'ASAP' : '';
+    var change_time          = (current_status == "asap_orange") ? 'ASAP' : '';
+    
+    //alert(current_dte_neede+' '+current_time_neede);
+    
     $("#date_needed").val(change_date);
     $("#time_picker_icon").val(change_time);
 
@@ -1262,6 +2269,63 @@ function close_asap()
     //$("body").append("<div class='modal-overlay js-modal-close'></div>");
     $(".modal-overlay").fadeOut();
     $("#asap_popup").slideUp("slow"); 
+}
+
+
+function edit_recipient_address(option_id)
+{  
+    var shipping_id     = $("#address_book_rp_"+option_id).val();
+    if(shipping_id != ''){
+        $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",
+            data: "recipients=77&address_book_id="+shipping_id+"&option_id="+option_id,
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+                $("body").append("<div class='modal-overlay'></div>");
+                $("#asap_popup").show();
+                $("#recipient_address").html(option);
+            }
+        });    
+    }
+    
+}
+
+function save_recipient_address()
+{
+    var address_1               = $("#address_1").val();
+    var address_2               = $("#address_2").val();
+    var address_3               = $("#address_3").val();
+    var edit_city               = $("#edit_city").val();
+    var edit_state              = $("#edit_state").val();
+    var edit_zip                = $("#edit_zip").val();
+    var edit_address_id         = $("#edit_address_id").val();
+    var edit_address_option_id  = $("#edit_option_id").val();
+    
+    //console.log(address_1+' '+address_2+' '+address_3+' '+edit_city+' '+edit_state+' '+edit_zip);
+    
+    if(edit_zip != ''){
+        $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",
+            data: "recipients=78&edit_address_1="+encodeURIComponent(address_1)+"&edit_address_2="+encodeURIComponent(address_2)+
+                  "&edit_address_3="+encodeURIComponent(address_3)+"&edit_city="+encodeURIComponent(edit_city)+"&edit_state="+encodeURIComponent(edit_state)+
+                  "&edit_zip="+encodeURIComponent(edit_zip)+"&edit_address_id="+encodeURIComponent(edit_address_id)+"&edit_address_option_id="+edit_address_option_id,
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {                  
+                $("#show_address_"+edit_address_option_id).html(option);
+                $("#asap_popup").hide();
+                $(".modal-overlay").fadeOut();
+            }
+        });    
+    }
+    
 }
 
 
@@ -1351,6 +2415,811 @@ function ste_function(){
  function contact_phone(){
  $("#contact_ph").mask("999-999-9999");
  }
+ 
+ function contact_phone_dynamic(OPTION_ID){
+ $("#contact_ph_"+OPTION_ID).mask("999-999-9999");
+ }
+ 
+ function contact_phone_dynamic_1(){
+ $(".contact_ph").mask("999-999-9999");
+ }
+ 
+ 
+ function show_address_recipient_1(ID)
+ {
+     $("#address_1_span_"+ID).hide();
+     $("#address_1_"+ID).show();
+     $("#address_1_buttons_"+ID).show();
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+  function cancel_address_1(ID)
+ {
+     $("#address_1_span_"+ID).show();
+     $("#address_1_"+ID).hide();
+     $("#address_1_buttons_"+ID).hide();     
+ }
+ 
+ function show_address_recipient_1_j(ID, OPTION_ID)
+ {
+     $("#address_1_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_1_"+ID+"_"+OPTION_ID).show();
+     $("#address_1_buttons_"+ID+"_"+OPTION_ID).show();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+  function cancel_address_1_j(ID, OPTION_ID)
+ {
+     $("#address_1_span_"+ID+"_"+OPTION_ID).show();
+     $("#address_1_"+ID+"_"+OPTION_ID).hide();
+     $("#address_1_buttons_"+ID+"_"+OPTION_ID).hide();     
+ }
+ 
+ function show_address_recipient_2(ID)
+ {
+     $("#address_2_span_"+ID).hide();
+     $("#address_2_"+ID).show();
+     $("#address_2_buttons_"+ID).show();
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+  function cancel_address_2(ID)
+ {
+     $("#address_2_span_"+ID).show();
+     $("#address_2_"+ID).hide();
+     $("#address_2_buttons_"+ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_2_j(ID, OPTION_ID)
+ {
+     $("#address_2_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_2_"+ID+"_"+OPTION_ID).show();
+     $("#address_2_buttons_"+ID+"_"+OPTION_ID).show();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+  function cancel_address_2_j(ID, OPTION_ID)
+ {
+     $("#address_2_span_"+ID+"_"+OPTION_ID).show();
+     $("#address_2_"+ID+"_"+OPTION_ID).hide();
+     $("#address_2_buttons_"+ID+"_"+OPTION_ID).hide();     
+ }
+ 
+ 
+ function show_address_recipient_3(ID)
+ {
+     $("#address_3_span_"+ID).hide();
+     $("#address_3_"+ID).show();
+     $("#address_3_buttons_"+ID).show();
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+  function cancel_address_3(ID)
+ {
+     $("#address_3_span_"+ID).show();
+     $("#address_3_"+ID).hide();
+     $("#address_3_buttons_"+ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_3_j(ID, OPTION_ID)
+ {
+     $("#address_3_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_3_"+ID+"_"+OPTION_ID).show();
+     $("#address_3_buttons_"+ID+"_"+OPTION_ID).show();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+  function cancel_address_3_j(ID, OPTION_ID)
+ {
+     $("#address_3_span_"+ID+"_"+OPTION_ID).show();
+     $("#address_3_"+ID+"_"+OPTION_ID).hide();
+     $("#address_3_buttons_"+ID+"_"+OPTION_ID).hide();    
+ }
+ 
+ 
+ function show_address_recipient_city(ID)
+ {
+     $("#address_city_span_"+ID).hide();
+     $("#address_city_"+ID).show();
+     $("#address_city_buttons_"+ID).show();
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+  function cancel_address_city(ID)
+ {
+     $("#address_city_span_"+ID).show();
+     $("#address_city_"+ID).hide();
+     $("#address_city_buttons_"+ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_city_j(ID, OPTION_ID)
+ {
+     $("#address_city_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_city_"+ID+"_"+OPTION_ID).show();
+     $("#address_city_buttons_"+ID+"_"+OPTION_ID).show();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+  function cancel_address_city_j(ID, OPTION_ID)
+ {
+     $("#address_city_span_"+ID+"_"+OPTION_ID).show();
+     $("#address_city_"+ID+"_"+OPTION_ID).hide();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_state(ID)
+ {
+     $("#address_state_span_"+ID).hide();
+     $("#address_state_select_"+ID).show();   
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+ 
+ function show_address_recipient_state_j(ID, OPTION_ID)
+ {
+     $("#address_state_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_state_select_"+ID+"_"+OPTION_ID).show();   
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+ function show_address_recipient_zip(ID)
+ {
+     $("#address_zip_span_"+ID).hide();
+     $("#address_zip_"+ID).show();
+     $("#address_zip_"+ID).mask("99999");
+     $("#address_zip_buttons_"+ID).show();
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+ function cancel_address_zip(ID)
+ {
+     $("#address_zip_span_"+ID).show();
+     $("#address_zip_"+ID).hide();
+     $("#address_zip_buttons_"+ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_zip_j(ID, OPTION_ID)
+ {
+     $("#address_zip_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_zip_"+ID+"_"+OPTION_ID).show();
+     $("#address_zip_"+ID+"_"+OPTION_ID).mask("99999");
+     $("#address_zip_buttons_"+ID+"_"+OPTION_ID).show();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+ function cancel_address_zip_j(ID, OPTION_ID)
+ {
+     $("#address_zip_span_"+ID+"_"+OPTION_ID).show();
+     $("#address_zip_"+ID+"_"+OPTION_ID).hide();
+     $("#address_zip_buttons_"+ID+"_"+OPTION_ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_phone(ID)
+ {
+     $("#address_phone_span_"+ID).hide();
+     $("#address_phone_"+ID).show();
+     $("#address_phone_"+ID).mask("999-999-9999");
+     $("#address_phone_buttons_"+ID).show();
+     $("#show_address_buttons_to_"+ID).slideDown();
+ }
+ 
+ function cancel_address_phone(ID)
+ {
+     $("#address_phone_span_"+ID).show();
+     $("#address_phone_"+ID).hide();
+     $("#address_phone_buttons_"+ID).hide();
+ }
+ 
+ 
+ function show_address_recipient_phone_j(ID, OPTION_ID)
+ {
+     $("#address_phone_span_"+ID+"_"+OPTION_ID).hide();
+     $("#address_phone_"+ID+"_"+OPTION_ID).show();
+     $("#address_phone_"+ID+"_"+OPTION_ID).mask("999-999-9999");
+     $("#address_phone_buttons_"+ID+"_"+OPTION_ID).show();
+     $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideDown();
+ }
+ 
+ function cancel_address_phone_j(ID, OPTION_ID)
+ {
+     $("#address_phone_span_"+ID+"_"+OPTION_ID).show();
+     $("#address_phone_"+ID+"_"+OPTION_ID).hide();
+     $("#address_phone_buttons_"+ID+"_"+OPTION_ID).hide();
+ }
+ 
+ 
+ function update_exist_address(ID)
+ {
+     var address_1                  = $("#address_1_"+ID).val();
+     var address_2                  = $("#address_2_"+ID).val();
+     var address_3                  = $("#address_3_"+ID).val();
+     var address_city               = $("#address_city_"+ID).val();
+     var address_state_select       = $("#address_state_select_"+ID).val();
+     var address_zip                = $("#address_zip_"+ID).val();
+     var address_phone              = $("#address_phone_"+ID).val();
+     
+     $.ajax
+        ({
+           type: "POST",
+           url: "get_recipients.php",
+           data: "recipients=85&address_1="+encodeURIComponent(address_1)+"&address_2="+encodeURIComponent(address_2)+"&address_3="+encodeURIComponent(address_3)+"&address_city="+encodeURIComponent(address_city)+"&address_state_select="+address_state_select+"&address_zip="+encodeURIComponent(address_zip)+"&address_phone="+encodeURIComponent(address_phone)+"&address_id="+ID,
+           beforeSend: loadStart,
+           complete: loadStop,
+           success: function(option)
+           {  
+               if(option == true){
+                   
+                   $("#address_1_"+ID).hide();
+                   $("#address_1_span_"+ID).html(address_1);
+                   $("#address_1_span_"+ID).show();
+                   $("#address_1_buttons_"+ID).hide();
+                   
+                   $("#address_2_"+ID).hide();
+                   $("#address_2_span_"+ID).html(address_2);
+                   $("#address_2_span_"+ID).show();
+                   $("#address_2_buttons_"+ID).hide();
+                   
+                   $("#address_3_"+ID).hide();
+                   $("#address_3_span_"+ID).html(address_3);
+                   $("#address_3_span_"+ID).show();
+                   $("#address_3_buttons_"+ID).hide();
+                   
+                   $("#address_city_"+ID).hide();
+                   $("#address_city_span_"+ID).html(address_city+",&nbsp;");
+                   $("#address_city_span_"+ID).show();
+                   $("#address_city_buttons_"+ID).hide();
+                   
+                   $("#address_state_select_"+ID).hide(); 
+                   $("#address_state_span_"+ID).html(address_state_select+"&nbsp;");
+                   $("#address_state_span_"+ID).show();
+                   
+                   
+                   $("#address_zip_"+ID).hide();
+                   $("#address_zip_span_"+ID).html(address_zip);
+                   $("#address_zip_span_"+ID).show();
+                   $("#address_zip_buttons_"+ID).hide();
+                   
+                   $("#address_phone_"+ID).hide();
+                   $("#address_phone_span_"+ID).html(address_phone);
+                   $("#address_phone_span_"+ID).show();
+                   $("#address_phone_buttons_"+ID).hide();
+                   
+                   $("#show_address_buttons_to_"+ID).slideUp();
+               }
+           }
+        }); 
+ }
+ 
+ 
+ function update_exist_address_j(ID, OPTION_ID)
+ {
+     var address_1                  = $("#address_1_"+ID+"_"+OPTION_ID).val();
+     var address_2                  = $("#address_2_"+ID+"_"+OPTION_ID).val();
+     var address_3                  = $("#address_3_"+ID+"_"+OPTION_ID).val();
+     var address_city               = $("#address_city_"+ID+"_"+OPTION_ID).val();
+     var address_state_select       = $("#address_state_select_"+ID+"_"+OPTION_ID).val();
+     var address_zip                = $("#address_zip_"+ID+"_"+OPTION_ID).val();
+     var address_phone              = $("#address_phone_"+ID+"_"+OPTION_ID).val();
+     
+     $.ajax
+        ({
+           type: "POST",
+           url: "get_recipients.php",
+           data: "recipients=85&address_1="+encodeURIComponent(address_1)+"&address_2="+encodeURIComponent(address_2)+"&address_3="+encodeURIComponent(address_3)+"&address_city="+encodeURIComponent(address_city)+"&address_state_select="+address_state_select+"&address_zip="+encodeURIComponent(address_zip)+"&address_phone="+encodeURIComponent(address_phone)+"&address_id="+ID,
+           beforeSend: loadStart,
+           complete: loadStop,
+           success: function(option)
+           {  
+               if(option == true){
+                   
+                   $("#address_1_"+ID+"_"+OPTION_ID).hide();
+                   $("#address_1_span_"+ID+"_"+OPTION_ID).html(address_1);
+                   $("#address_1_span_"+ID+"_"+OPTION_ID).show();
+                   $("#address_1_buttons_"+ID+"_"+OPTION_ID).hide();
+                   
+                   $("#address_2_"+ID+"_"+OPTION_ID).hide();
+                   $("#address_2_span_"+ID+"_"+OPTION_ID).html(address_2);
+                   $("#address_2_span_"+ID+"_"+OPTION_ID).show();
+                   $("#address_2_buttons_"+ID+"_"+OPTION_ID).hide();
+                   
+                   $("#address_3_"+ID+"_"+OPTION_ID).hide();
+                   $("#address_3_span_"+ID+"_"+OPTION_ID).html(address_3);
+                   $("#address_3_span_"+ID+"_"+OPTION_ID).show();
+                   $("#address_3_buttons_"+ID+"_"+OPTION_ID).hide();
+                   
+                   $("#address_city_"+ID+"_"+OPTION_ID).hide();
+                   $("#address_city_span_"+ID+"_"+OPTION_ID).html(address_city+",&nbsp;");
+                   $("#address_city_span_"+ID+"_"+OPTION_ID).show();
+                   $("#address_city_buttons_"+ID+"_"+OPTION_ID).hide();
+                   
+                   $("#address_state_select_"+ID+"_"+OPTION_ID).hide(); 
+                   $("#address_state_span_"+ID+"_"+OPTION_ID).html(address_state_select+"&nbsp;");
+                   $("#address_state_span_"+ID+"_"+OPTION_ID).show();
+                   
+                   
+                   $("#address_zip_"+ID+"_"+OPTION_ID).hide();
+                   $("#address_zip_span_"+ID+"_"+OPTION_ID).html(address_zip);
+                   $("#address_zip_span_"+ID+"_"+OPTION_ID).show();
+                   $("#address_zip_buttons_"+ID+"_"+OPTION_ID).hide();
+                   
+                   $("#address_phone_"+ID+"_"+OPTION_ID).hide();
+                   $("#address_phone_span_"+ID+"_"+OPTION_ID).html(address_phone);
+                   $("#address_phone_span_"+ID+"_"+OPTION_ID).show();
+                   $("#address_phone_buttons_"+ID+"_"+OPTION_ID).hide();
+                   
+                   $("#show_address_buttons_"+ID+"_"+OPTION_ID).slideUp();
+               }
+           }
+        }); 
+ }
+ 
+ function save_new_address(ID, OPTION_ID)
+ {  
+    $.ajax
+        ({
+           type: "POST",
+           url: "add_new_address_closer.php",
+           data: "address_closer=1_1&address_id="+ID,
+           beforeSend: loadStart,
+           complete: loadStop,
+           success: function(option)
+           {  
+               $("#show_address_"+OPTION_ID).css("height", "125px");
+               $("#jumbalakka_nmj_"+OPTION_ID).css("margin-top", "85px");
+               $("#show_address_inside_"+OPTION_ID).html(option);
+               $("#company_phone_closer_"+ID).mask("999-999-9999");
+               $("#company_zip_closer_"+ID).mask("99999");
+               $("#save_only_"+OPTION_ID).hide();
+               $("#show_save_new_"+OPTION_ID).hide();
+               $("#save_new_"+OPTION_ID).show();
+               $("#show_save_new_cancel_"+OPTION_ID).show();               
+           }
+        });     
+         
+ }
+ 
+ function save_new_address_to(ID, OPTION_ID)
+ {  
+    $.ajax
+        ({
+           type: "POST",
+           url: "add_new_address_closer.php",
+           data: "address_closer=1_1&address_id="+ID,
+           beforeSend: loadStart,
+           complete: loadStop,
+           success: function(option)
+           {  
+               $("#show_address").css("height", "125px");
+               //$("#jumbalakka_nmj_"+OPTION_ID).css("margin-top", "85px");
+               $("#show_address").html(option);
+               $("#company_phone_closer_"+ID).mask("999-999-9999");
+               $("#company_zip_closer_"+ID).mask("99999");
+               $("#save_only").hide();
+               $("#show_save_new").hide();
+               $("#save_new").show();
+               $("#show_save_new_cancel").show();               
+           }
+        });     
+         
+ }
+ 
+ function save_new_address_cancel(ID, option_id)
+ {  
+    var shipping_id     = ID;
+    if(shipping_id == "P1"){
+       $("#show_address").html("381 Broome Street New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "P2"){
+       $("#show_address").html("307 7th Ave, 5th Floor New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "NEW"){
+       window.location = "service_add_address.php?serivice_plotting=1"; 
+    }else if(shipping_id == "NEW-MULTI"){
+       window.location = "service_add_address.php?serivice_plotting=1&multi=1"; 
+    }else{
+        $.ajax
+            ({
+                type: "POST",
+                url: "shipping_address_rec_nmjk.php",
+                data: "shipping_id_rp="+shipping_id+"&option_id="+option_id,
+                success: function(option)
+                {  
+                    var myarr = option.split("~");
+                    $("#show_address_"+option_id).html(myarr[0]);
+                    $("#shipp_att_"+option_id).val(myarr[1]);
+                    $("#edit_address_"+option_id).fadeIn();
+                }
+            });
+    }    
+ }
+ 
+ function save_new_address_cancel_to(ID)
+ {  
+    var send_everything_to = document.getElementById('send_everything_to').checked;
+    var address_book_se    = document.getElementById('address_book_se').value;
+     if(send_everything_to == true){
+         if(address_book_se != '0'){
+             $.ajax
+                ({
+                    type: "POST",
+                    url: "everything_return_to.php",
+                    data: "everything_return_to=1&address_book_se="+address_book_se,
+                    beforeSend: loadStart,
+                    complete: loadStop,
+                    success: function(option)
+                    {  
+                        $('#multi_recipients').slideDown();
+                        $('#multi_recipients').html(option);
+                        $('#add_recipients').slideDown();
+                        $('.addrecipientActionLink').hide();
+                        $(".addproductActionLink").hide();
+                    }
+                });
+         }else{
+            alert("Select the address.");
+            document.getElementById('address_book_se').focus();
+            document.getElementById('send_everything_to').checked = false;
+         }
+     }else{
+         $('#multi_recipients').slideUp();
+         $('#add_recipients').slideUp();
+     } 
+ }
+ 
+ 
+ function save_new_address_cancel_to_2(ID)
+ {
+     var shipping_id     = ID;
+    
+    if(shipping_id == "P1"){
+       $("#show_address").html("381 Broome Street New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "P2"){
+       $("#show_address").html("307 7th Ave, 5th Floor New York, NY 10013"); 
+       $("#shipp_att_"+option_id).val("");
+    }else if(shipping_id == "NEW"){
+       window.location = "service_add_address.php?serivice_plotting=1"; 
+    }else if(shipping_id == "NEW-MULTI"){
+       window.location = "service_add_address.php?serivice_plotting=1&multi=1"; 
+    }else{
+        $.ajax
+            ({
+                type: "POST",
+                url: "shipping_address_rec_nmjk.php",
+                data: "shipping_id_rp="+shipping_id+"&option_id=0",
+                success: function(option)
+                {  
+                    var myarr = option.split("~");
+                    $("#show_address").show();
+                    $("#show_address").html(myarr[0]);
+                    $("#shipp_att").val(myarr[1]);
+                    $("#edit_address").fadeIn(); 
+                    send_everything_to_cancel();
+                }
+            });
+    }  
+ }
+ 
+ 
+ function save_new_record(ID,OPTION_ID)
+ {
+     var company_name               = $("#company_name_closer_"+ID).val();
+     var attention_to               = $("#attention_to_closer_"+ID).val();
+     var address_1                  = $("#address_1_closer_"+ID).val();
+     var address_2                  = $("#address_2_closer_"+ID).val();
+     var address_3                  = $("#address_3_closer_"+ID).val();
+     var address_city               = $("#city_closer_"+ID).val();
+     var address_state_select       = $("#state_closer_"+ID).val();
+     var address_zip                = $("#company_zip_closer_"+ID).val();
+     var phone                      = $("#company_phone_closer_"+ID).val();
+     
+     if(company_name == ''){
+         $("#company_name_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#company_name_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#company_name_closer_"+ID).css("border", "1px solid #ccc");        
+     }
+     
+     if(attention_to == ''){
+         $("#attention_to_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#attention_to_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#attention_to_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(address_1 == ''){
+         $("#address_1_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#address_1_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#address_1_closer_"+ID).css("border", "1px solid #ccc");
+     }
+          
+     if(address_city == ''){
+         $("#city_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#city_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#city_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(address_state_select == '0'){
+         $("#state_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#state_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#state_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(address_zip == ''){
+         $("#company_zip_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#company_zip_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#company_zip_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(phone == ''){
+         $("#company_phone_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#company_phone_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#company_phone_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     $.ajax
+        ({
+           type: "POST",
+           url: "get_recipients.php",
+           data: "recipients=86&company_name="+encodeURIComponent(company_name)+"&attention_to="+encodeURIComponent(attention_to)+"&address_1="+encodeURIComponent(address_1)+"&address_2="+encodeURIComponent(address_2)+"&address_3="+encodeURIComponent(address_3)+"&address_city="+encodeURIComponent(address_city)+"&address_state_select="+encodeURIComponent(address_state_select)+"&address_zip="+encodeURIComponent(address_zip)+"&phone="+phone+"&address_id="+ID,
+           beforeSend: loadStart,
+           complete: loadStop,
+           success: function(option)
+           {  
+               var options_divide = option.split('~');
+               $("#address_book_rp").html(options_divide[3]);
+               if(OPTION_ID != ''){
+               $("#address_book_rp_"+OPTION_ID).html(options_divide[3]);
+               }
+               if(options_divide[0] == true){
+                   
+                   $("#add_new_address_block_"+ID).hide();
+                   $("#show_address_inside_"+OPTION_ID).html(options_divide[1]);
+                   $("#shipp_att_"+OPTION_ID).val(options_divide[2]);
+                   $("#show_address_buttons_to_"+ID).slideUp();
+                   $("#show_address").css("height", "80px");
+                   $("#save_new_"+OPTION_ID).hide();
+                   $("#show_save_new_"+OPTION_ID).show();
+                   var drop_down_val    = $("#last_entered_add_id").val();
+                   $("#show_save_new_"+OPTION_ID).attr("onclick", "save_new_address("+drop_down_val+","+OPTION_ID+");");
+                   $("#save_new_"+OPTION_ID).attr("onclick", "save_new_record("+drop_down_val+","+OPTION_ID+");");
+                   $("#show_save_new_cancel_"+OPTION_ID).attr("onclick", "save_new_address_cancel("+drop_down_val+","+OPTION_ID+");");
+               }else{
+                   alert('Company Name Already Exist.');
+                   $("#company_name_closer_"+ID).focus();
+               }
+           }
+        }); 
+ }
+ 
+ function save_new_record_to(ID,OPTION_ID)
+ {
+     var company_name               = $("#company_name_closer_"+ID).val();
+     var attention_to               = $("#attention_to_closer_"+ID).val();
+     var address_1                  = $("#address_1_closer_"+ID).val();
+     var address_2                  = $("#address_2_closer_"+ID).val();
+     var address_3                  = $("#address_3_closer_"+ID).val();
+     var address_city               = $("#city_closer_"+ID).val();
+     var address_state_select       = $("#state_closer_"+ID).val();
+     var address_zip                = $("#company_zip_closer_"+ID).val();
+     var phone                      = $("#company_phone_closer_"+ID).val();
+     
+     if(company_name == ''){
+         $("#company_name_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#company_name_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#company_name_closer_"+ID).css("border", "1px solid #ccc");        
+     }
+     
+     if(attention_to == ''){
+         $("#attention_to_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#attention_to_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#attention_to_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(address_1 == ''){
+         $("#address_1_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#address_1_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#address_1_closer_"+ID).css("border", "1px solid #ccc");
+     }
+          
+     if(address_city == ''){
+         $("#city_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#city_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#city_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(address_state_select == '0'){
+         $("#state_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#state_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#state_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(address_zip == ''){
+         $("#company_zip_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#company_zip_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#company_zip_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     if(phone == ''){
+         $("#company_phone_closer_"+ID).css("border", "1px solid #EA4335");
+         $("#company_phone_closer_"+ID).focus();
+         return false;
+     }else{
+         $("#company_phone_closer_"+ID).css("border", "1px solid #ccc");
+     }
+     
+     $.ajax
+        ({
+           type: "POST",
+           url: "get_recipients.php",
+           data: "recipients=86&company_name="+encodeURIComponent(company_name)+"&attention_to="+encodeURIComponent(attention_to)+"&address_1="+encodeURIComponent(address_1)+"&address_2="+encodeURIComponent(address_2)+"&address_3="+encodeURIComponent(address_3)+"&address_city="+encodeURIComponent(address_city)+"&address_state_select="+encodeURIComponent(address_state_select)+"&address_zip="+encodeURIComponent(address_zip)+"&phone="+phone+"&address_id="+ID,
+           beforeSend: loadStart,
+           complete: loadStop,
+           success: function(option)
+           {  
+               var options_divide = option.split('~');
+               $("#address_book_rp").html(options_divide[3]);
+               $("#address_book_se").html(options_divide[3]);
+               if(OPTION_ID != ''){
+               $("#address_book_rp_"+OPTION_ID).html(options_divide[3]);
+               }
+               if(options_divide[0] == true){
+                   
+                   $("#add_new_address_block_"+ID).hide();
+                   $("#show_address").html(options_divide[1]);
+                   $("#shipp_att").val(options_divide[2]);
+                   $("#show_address_buttons_to").slideUp();
+                   $("#show_address").css("height", "80px");
+                   $("#save_new").hide();
+                   $("#show_save_new").show();
+                   
+                   var drop_down_val    = $("#last_entered_add_id").val();
+                   $("#show_save_new").attr("onclick", "save_new_address_to("+drop_down_val+","+OPTION_ID+");");
+                   $("#save_new").attr("onclick", "save_new_record_to("+drop_down_val+","+OPTION_ID+");");
+                   $("#show_save_new_cancel").attr("onclick", "send_everything_to_cancel("+drop_down_val+","+OPTION_ID+");");
+                   //$("show_address_buttons_to_"+ID).hide();
+               }else{
+                   alert('Company Name Already Exist.');
+                   $("#company_name_closer_"+ID).focus();
+               }
+           }
+        }); 
+ }
+ 
+ function update_recipient_dynamic(ID)
+ {
+     var shipping_id            = $("#address_book_rp_"+ID).val();
+     var user_session           = $("#user_session").val(); 
+     var user_session_comp      = $("#user_session_comp").val(); 
+     
+     var avl_sets_1             = $("#avl_sets_1").val();
+     var need_sets_1            = $("#need_sets_1").val();
+     var size_sets_1            = $("#size_sets_1").val();
+     var output_sets_1          = $("#output_sets_1").val();
+     var binding_sets_1_pre     = $("#binding_sets_1").val();
+     var binding_sets_1         = (binding_sets_1_pre != '') ? binding_sets_1_pre : '0' ;
+     var folding_sets_1         = $("#folding_sets_1").val();
+     
+     var avl_sets_2             = $("#avl_sets_2").val();
+     var need_sets_2            = $("#need_sets_2").val();
+     var size_sets_2            = $("#size_sets_2").val();
+     var output_sets_2          = $("#output_sets_2").val();
+     var binding_sets_2_pre     = $("#binding_sets_2").val();
+     var binding_sets_2         = (binding_sets_2_pre != '') ? binding_sets_2_pre : '0' ;
+     var folding_sets_2         = $("#folding_sets_2").val();
+     var date_needed            = $("#date_needed").val();
+     var time_needed            = $("#time_picker_icon").val();
+     var spl_recipient          = $("#spl_recipient").val();
+     
+     var shipp_att              = $("#shipp_att").val();
+     
+     var size_custom_details    = (size_sets_1 == 'Custom') ? document.getElementById("size_custom_details").value : '0';
+     
+     var arrange_del            = document.getElementById('arrange_del_'+ID).checked;
+     var delivery_comp          = (arrange_del == false) ? document.getElementById("delivery_comp").value : '0';
+     var bill_number            = (arrange_del == false) ? document.getElementById("bill_number").value : '0';
+     if(arrange_del == false)
+     {
+        var shipp_comp_1        =   document.getElementById('shipp_comp_1').checked;
+            var shipp_comp_1_f  =   (shipp_comp_1 == true) ? document.getElementById("shipp_comp_1").value : '0';
+        var shipp_comp_2        =   document.getElementById('shipp_comp_2').checked;
+            var shipp_comp_2_f  =   (shipp_comp_2 == true) ? document.getElementById("shipp_comp_2").value : '0';
+        var shipp_comp_3        =   document.getElementById('shipp_comp_3').checked;
+            var shipp_comp_3_f  =   (shipp_comp_3 == true) ? document.getElementById("other_shipp_type").value : '0';
+     }else{
+            var shipp_comp_1_f  =   '0';
+            var shipp_comp_2_f  =   '0';
+            var shipp_comp_3_f  =   '0';
+     }      
+     
+     
+     if(shipping_id == '0'){
+         alert('Please select send to address');
+         $("#address_book_rp").focus();
+         return false;
+     }
+     
+     if(date_needed == ''){
+         alert('Please select when needed');
+         $("#date_needed").focus();
+         return false;
+     }
+     
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=502&shipping_id_rec="+encodeURIComponent(shipping_id)+"&avl_sets_1="+encodeURIComponent(avl_sets_1)+"&need_sets_1="+encodeURIComponent(need_sets_1)+"&size_sets_1="+encodeURIComponent(size_sets_1)+"&output_sets_1="+encodeURIComponent(output_sets_1)+"&binding_sets_1="+encodeURIComponent(binding_sets_1)+"&avl_sets_2="+encodeURIComponent(avl_sets_2)+"&need_sets_2="+encodeURIComponent(need_sets_2)+"&size_sets_2="+encodeURIComponent(size_sets_2)+"&output_sets_2="+encodeURIComponent(output_sets_2)+"&binding_sets_2="+encodeURIComponent(binding_sets_2)+"&user_session="+encodeURIComponent(user_session)+"&user_session_comp="+encodeURIComponent(user_session_comp)+"&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&edit_recipient_id="+ID+"&delivery_type="+encodeURIComponent(delivery_comp)+"&bill_number="+encodeURIComponent(bill_number)+"&shipp_comp_1_f="+encodeURIComponent(shipp_comp_1_f)+"&shipp_comp_2_f="+encodeURIComponent(shipp_comp_2_f)+"&shipp_comp_3_f="+encodeURIComponent(shipp_comp_3_f)+"&folding_sets_1="+encodeURIComponent(folding_sets_1)+"&folding_sets_2="+encodeURIComponent(folding_sets_2)+"&time_needed="+encodeURIComponent(time_needed)+"&size_custom_details="+encodeURIComponent(size_custom_details)+"&attention_to="+encodeURIComponent(shipp_att)+"&jumbalakka_id="+ID,
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+                $('#dynamic_edit_'+ID).html(option);
+            }
+        });
+ }
+ 
+ 
+ function continue_recipient_everyting_return_4()
+ {  
+     var pickup_soho_add        = $("#pickup_soho_add").val();  
+     var date_needed            = $("#date_needed").val();
+     var time_needed            = $("#time_picker_icon").val();
+     var spl_recipient          = $("#spl_recipient").val();
+     
+     if(date_needed == ''){
+         alert('Please select when needed');
+         $("#date_needed").focus();
+         return false;
+     }
+     
+     $.ajax
+        ({
+            type: "POST",
+            url: "get_recipients.php",                  
+            data: "recipients=786&date_needed="+encodeURIComponent(date_needed)+"&spl_recipient="+encodeURIComponent(spl_recipient)+"&time_needed="+encodeURIComponent(time_needed)+"&pickup_soho_add="+pickup_soho_add+"&delivery_type_option=3",
+            beforeSend: loadStart,
+            complete: loadStop,
+            success: function(option)
+            {  
+                if(option == '1'){
+                    window.location = "view_all_recipients.php";
+                }
+            }
+        });
+ }
+ 
+ 
  </script>
 
 

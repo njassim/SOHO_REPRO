@@ -571,6 +571,23 @@ if ($_GET['filter'] == '1') {
                                             }
                                             $start_search = ($page_search - 1) * $limit_search;
                                             $ProductsFilterS = getProductsFilterS($search_val, $start_search, $limit_search);
+											if(count($ProductsFilterS) > 0)
+											{
+											 $ProductsFilterS = getProductsFilterS($search_val, $start_search, $limit_search);
+											} 
+											else if(count($ProductsFilterS) == 0)
+											{
+											$getSupercatId= getSupercatFilters($search_val);
+											$id = $getSupercatId[0]['id'];
+											$ProductsFilterS = getcatFilter($id);
+											
+								           }
+											else{
+											
+											 //echo "Mohamed"
+											
+											}
+										    
                                             $count_search = CountSearch($search_val);
                                             $rows_search = count($count_search);
                                             $i = 1;
@@ -626,7 +643,11 @@ if ($_GET['filter'] == '1') {
             <?php
             $i++;
         }
-    } else {
+    }
+   
+      
+	
+	else {
         ?>
                                                 <tr align="center">
                                                     <td colspan="7">There is no products</td>

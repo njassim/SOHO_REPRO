@@ -670,6 +670,25 @@ function getProductsFilterS($search_val,$start,$limit) {
     return $value;
 }
 
+function getSupercatFilters($search_val) {
+    $val = mysql_real_escape_string($search_val);
+     $select_products = "SELECT * FROM `sohorepro_category` WHERE `category_name` LIKE '%$val%'";
+    $products = mysql_query($select_products);
+    while ($object = mysql_fetch_assoc($products)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+function getcatFilter($id) {
+    $val = mysql_real_escape_string($search_val);
+     $select_products = "SELECT * FROM `sohorepro_products` WHERE supercategory_id = '".$id."'";
+    $products = mysql_query($select_products);
+    while ($object = mysql_fetch_assoc($products)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
 function SearchUserEnd($search_val) {
     $split_val   = explode("(",$search_val);
     $val = trim(mysql_real_escape_string($split_val[0]));
@@ -1867,6 +1886,16 @@ function SelectIdAddressService($id)
     return $value;
     }   
     
+function SelectIdAddressServiceInside($company_name) 
+    {
+    $select_mail = "SELECT * FROM sohorepro_address_service WHERE company_name = '$company_name'";
+    $mail = mysql_query($select_mail);
+    while ($object = mysql_fetch_assoc($mail)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+    }   
+    
 //Primary Shipping Address 
 function PrimaryShipping($id) 
     {
@@ -2395,6 +2424,25 @@ function AddressBookCompanyService($id){
     return $value;  
 }
 
+function AddressBookCompanyService_option2($id){
+    $address_book = "SELECT * FROM sohorepro_address_service WHERE id = '".$id."'" ;
+    $book = mysql_query($address_book);
+    while ($object = mysql_fetch_assoc($book)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+function SelectLastEnteredAddress($id){
+    $address_book = "SELECT * FROM sohorepro_address_service WHERE id = '".$id."'" ;
+    $book = mysql_query($address_book);
+    while ($object = mysql_fetch_assoc($book)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+
 function CompIdFromAddress($cus_id) {
     $select_category = "SELECT * FROM sohorepro_address WHERE id = '".$cus_id."' ";
     $number = mysql_query($select_category);
@@ -2608,7 +2656,25 @@ function EnteredPlotRecipients($comp_id, $user_id) {
     return $value;
 }
 
+function EnteredPlotRecipientsTotalOptions($comp_id, $user_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' ORDER BY id DESC" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
 function EnteredPlotRecipientsMulti($comp_id, $user_id, $order_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND referece_id = '".$order_id."' AND order_id = '0' ORDER BY plot_arch DESC" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function EnteredPlotRecipientsMultiOriginal($comp_id, $user_id, $order_id) {
     $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '".$order_id."' ORDER BY plot_arch DESC" ;
     $details       = mysql_query($select_fav);
     while ($object = mysql_fetch_assoc($details)):
@@ -2640,6 +2706,46 @@ function EnteredPlotttingPrimary($comp_id, $user_id) {
         $value[] = $object;
     endwhile;
     return $value;
+}
+
+function EnteredPlotttingPrimary19($comp_id, $user_id) {
+    $select_price = "SELECT SUM(print_ea) as needed FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed'];
+    return $catg;
+}
+
+function EnteredPlotttingPrimary195($comp_id, $user_id, $id) {
+    $select_price = "SELECT SUM(print_ea) as needed FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND id = '".$id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed'];
+    return $catg;
+}
+
+function EnteredPlotttingPrimary1957($comp_id, $user_id, $option_id) {
+    $select_price = "SELECT SUM(print_ea) as needed FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND options = '".$option_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['needed'];
+    return $catg;
+}
+
+function AvlOptionsRemaining19($comp_id, $user_id) {
+    $select_price = "SELECT (SUM(plot_needed)+SUM(arch_needed)) as entered FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND order_id = '0' " ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['entered'];
+    return $catg;
+}
+
+function LastOrderId($comp_id, $user_id) {
+    $select_price = "SELECT options FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' ORDER BY options DESC" ;
+    $price = mysql_query($select_price);
+    $object = mysql_fetch_assoc($price);
+    $catg = $object['options'];
+    return $catg;
 }
 
 function UploadFileExist($comp_id, $usr_id){
@@ -2730,6 +2836,24 @@ function NeededSets($comp_id, $user_id) {
     return $value;
 }
 
+function NeededSets_option_4($id) {
+    $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE id = '".$id."' AND order_id = '0' " ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function NeededSetsDynamic($comp_id, $user_id, $option_id) {
+    $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."' AND order_id = '0' " ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
 function EditNeededSets($comp_id, $user_id,$edit_id) {
     $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE comp_id = '".$comp_id."' AND usr_id = '".$user_id."' AND id = '".$edit_id."' " ;
     $details       = mysql_query($select_fav);
@@ -2803,7 +2927,14 @@ function SetsOrderedFinalizeOriginal($ordere_id) {
     return $value;
 }
 
-
+function AutoPopUp($ordere_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE ((order_id = '".$ordere_id."' AND pick_up != '0') OR ((order_id = '".$ordere_id."' AND drop_off != '0')) )" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
 
 function SetsOrderedFinalizeCountOfSets($ordere_id) {
     $select_fav = "SELECT sum(plot_needed) as total_sets FROM sohorepro_sets_needed WHERE order_id = '".$ordere_id."'" ;
@@ -3065,6 +3196,44 @@ function EnteredPlotRecipientsCurrentOption($id) {
     return $value;
 }
 
+
+function EnteredPlotRecipientsCurrentOptionDynamic($company_id, $user_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' ORDER BY id ASC LIMIT 1" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function EnteredPlotRecipientsCurrentOptionYnamic($company_id, $user_id, $option_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND options = '".$option_id."' AND recipients_set = '1'  ORDER BY id ASC LIMIT 1" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function CheckOptionIdwithRec($company_id, $user_id, $option_id) {
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND options = '".$option_id."'" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function CheckOptionThere($company_id, $user_id, $option_id) {
+    $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE comp_id = '".$company_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."'" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+
 function SettedOptions($company_id, $user_id) {
     $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE comp_id = '".$company_id."' AND usr_id = '".$user_id."' AND order_id = '0'" ;
     $details       = mysql_query($select_fav);
@@ -3110,6 +3279,18 @@ function CheckInvoiceCompanyFilter() {
     endwhile;
     return $value;
 } 
+
+//CheckIfExist
+function CheckIfExist($company_id, $user_id, $option_id, $rand_id) {    
+    $select_orders = "SELECT * FROM sohorepro_sets_needed WHERE comp_id = '".$company_id."' AND usr_id = '".$user_id."' AND option_id = '".$option_id."' AND rand_id = '".$rand_id."' AND order_id = '0' "; 
+    $orders = mysql_query($select_orders);
+    while ($object = mysql_fetch_assoc($orders)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+} 
+
+
 
 //Group by Order Id
 function InvoiceOrders_Reference($id) {    
@@ -3165,5 +3346,44 @@ function Specials($id) {
     $object = mysql_fetch_assoc($category);
     $catg = $object['caption']; 
     return $catg;
+}
+
+
+function GetLastRandomId($id) {
+    $select_category = "SELECT rand_id FROM sohorepro_sets_needed WHERE id = '".$id."'";
+    $category = mysql_query($select_category);
+    $object = mysql_fetch_assoc($category);
+    $catg = $object['rand_id']; 
+    return $catg;
+}
+
+
+function Options_4($id) {
+    $select_fav = "SELECT * FROM sohorepro_sets_needed WHERE id = '".$id."'" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+function AllBindingOptions($company_id, $user_id, $reference) {
+    $select_fav = "SELECT * FROM sohorepro_service_binding WHERE comp_id = '".$company_id."' AND user_id = '".$user_id."' AND reference = '".$reference."'" ;
+    $details       = mysql_query($select_fav);
+    while ($object = mysql_fetch_assoc($details)):
+        $value[] = $object;
+    endwhile;
+    return $value;
+}
+
+
+
+function LastFileOptionEntered($company_id, $user_id){
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' ORDER BY options DESC LIMIT 1" ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
 }
 ?>

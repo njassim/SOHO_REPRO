@@ -869,7 +869,20 @@ exit;
                                                                                                         </tr>
                                                                                                     </table>     
                                                                                                 </div>
-
+                                                                                                <?php
+                                                                                                $rand_1         = rand(0,10);
+                                                                                                $rand_2         = rand(0,10);
+                                                                                                $ran_tot        = ($rand_1 + $rand_2);
+                                                                                                $ran_tot_show   = $rand_1.' + '.$rand_2;
+                                                                                                ?>
+                                                                                                 <div class="label_regview">Please Confirm you are not a ROBOT:</div>
+                                                                                                 <div style="float: left;border: 1px solid #e4e4e4;padding: 3px;margin-left: 13px;"><?php echo $ran_tot_show; ?></div>
+                                                                                                 <div style="float: left;padding: 3px;margin-left: 10px;">=</div>
+                                                                                                 <input name="reg_captcha_v" id="reg_captcha_v" type="hidden" style="width: 30px;" value="<?php echo $ran_tot; ?>" />
+                                                                                                 <input class="reginput comp_det_view" name="reg_captcha" id="reg_captcha" type="text" style="width: 30px;" value="" />
+                                                                                                 
+                                                                                                 <div style="clear: both;"></div>
+                                                                                                 
                                                                                                 <!--Instruction 1 Start-->
                                                                                                 <div id="instruction_1">    	
                                                                                                     <div class="close"></div>
@@ -949,13 +962,23 @@ exit;
 
                                                                                             function validate()
                                                                                             {
-                                                                                                if (document.getElementById('jobref').value == '')
-                                                                                                {
-                                                                                                    alert("Please enter the job reference number");
-                                                                                                    document.getElementById('jobref').focus;
-                                                                                                    return false;
-                                                                                                }
-                                                                                                return true;
+//                                                                                                if (document.getElementById('jobref').value == '')
+//                                                                                                {
+//                                                                                                    alert("Please enter the job reference number");
+//                                                                                                    document.getElementById('jobref').focus;
+//                                                                                                    return false;
+//                                                                                                }
+//                                                                                                return true;
+                                                                                                 var captcha_v      = $("#reg_captcha_v").val();
+                                                                                                 var reg_captcha    = $("#reg_captcha").val();
+                                                                                                 if(captcha_v != reg_captcha){
+                                                                                                     //alert('Please enter the correct value.');
+                                                                                                     $("#reg_captcha").css("border","1px solid red");
+                                                                                                     return false;
+                                                                                                 }else{
+                                                                                                     $("#reg_captcha").css("border","1px solid #e4e4e4");
+                                                                                                 }
+                                                                                                 
                                                                                             }
 
 

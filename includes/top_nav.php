@@ -27,7 +27,7 @@ $comp_name       = getCompName($_SESSION['sohorepro_companyid']);
             </li>
             <li class="navLargeFormat" style=" border-bottom: none !important;"><a href="addressbook.php" style="<?php if($page_name_new=='addressbook.php') { echo "font-weight: bold;"; } ?>">ADDRESS BOOK</a></li>
             <li class="navLargeFormat" style=" border-bottom: none !important;"><a href="shoppingcart.php" style="<?php if($page_name_new=='shoppingcart.php') { echo "font-weight: bold;"; } ?>">CART</a></li>
-            <li class="navLargeFormat" style=" border-bottom: none !important;"><a href="help_box_logged.php" style="color:  #007F2A !important;<?php if($page_name_new=='help_box_logged.php') { echo "font-weight: bold;"; } ?>">HELP BOX</a></li>            
+            <!--<li class="navLargeFormat" style=" border-bottom: none !important;"><a href="help_box_logged.php" style="color:  #007F2A !important;<?php if($page_name_new=='help_box_logged.php') { echo "font-weight: bold;"; } ?>">HELP BOX</a></li>-->            
             <li class="navLargeFormat" style=" border-bottom: none !important;"><a href="logout.php">LOGOUT</a></li>            
         </ul>
         <div style="clear:both"></div> 
@@ -39,7 +39,7 @@ $comp_name       = getCompName($_SESSION['sohorepro_companyid']);
             <li class="navLargeFormat" style=" border-bottom: none !important;"><a href="help_box.php" style="cursor: pointer;color:  #007F2A !important;">HELP BOX</a></li>            
         </ul>
         <div style="clear:both"></div> 
-    </div>   
+</div>   
 <?php
 } ?>                                                                                                                    
 
