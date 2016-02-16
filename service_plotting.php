@@ -1359,7 +1359,7 @@ function delete_upload_file()
  </div>
  </div>
  <div class="clear"></div>
-
+<div class="clear"></div>
 
 
  </div>
