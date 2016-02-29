@@ -1880,6 +1880,7 @@ if ($_POST['everything_return'] == '1') {
                             //$enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
                             $enteredPlot = EnteredPlotRecipientsMulti($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid'], $_SESSION['ref_val']);                            
                             $i = 1;
+                            /*
                             foreach ($enteredPlot as $entered) {
                                 $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
                                 $binding = strtoupper($entered['binding']);
@@ -1967,6 +1968,7 @@ if ($_POST['everything_return'] == '1') {
                                 }
                                 $i++;
                             }
+                            */
                             ?>
                     <?php
                     $all_days_off = AllDayOff();
@@ -2065,7 +2067,7 @@ if ($_POST['everything_return'] == '1') {
                 <div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;font-weight: bold;">PACKING LIST: </div>
                 <div style="float: left;width: 92%;margin-left: 30px;margin-top: 5px;">
                     <?php
-                    $cust_original_order    = EnteredPlotRecipients($user_session_comp, $user_session);
+                    $cust_original_order    = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
                     
                     //$cust_needed_originals  = $cust_original_order[0]['origininals'];
                     
@@ -2122,6 +2124,7 @@ if ($_POST['everything_return'] == '1') {
                             //$enteredPlot = EnteredPlotRecipients($company_id_view_plot, $user_id_add_set);
                             $enteredPlot = EnteredPlotRecipientsMulti($_SESSION['sohorepro_companyid'],$_SESSION['sohorepro_userid'], $_SESSION['ref_val']);
                             $i = 1;
+                            /*
                             foreach ($enteredPlot as $entered) {
                                 $rowColor = ($i % 2 != 0) ? '#ffeee1' : '#fff6f0';
                                 $binding = strtoupper($entered['binding']);
@@ -2208,6 +2211,7 @@ if ($_POST['everything_return'] == '1') {
                         <?php
                                 }
                             }
+                            */
                             ?>
                             <div style="float: left;width: 65%;margin-left: 30px;margin-top: 7px;">
                     <?php

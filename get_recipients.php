@@ -90,7 +90,7 @@ if ($_POST['recipients'] == '1') {
                             <td><?php echo $needen_sets; ?></td>
                             <td><?php echo $type; ?></td>                            
                             <td><?php echo $entered_sets['size']; ?></td>
-                            <td><?php echo $entered_sets['output']; ?></td>
+                            <td style="text-transform: uppercase;"><?php echo $entered_sets['output']; ?></td>
                             <td><?php echo $entered_sets['media']; ?></td>
                             <td>
                                 <span onclick="return edit_binding('<?php echo $entered_sets['id']; ?>');" id="binding_<?php echo $entered_sets['id']; ?>" style="cursor: pointer;"><?php echo $entered_sets['binding']; ?></span>
@@ -272,7 +272,7 @@ if ($_POST['recipients'] == '1') {
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
+                                    <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
                                     <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['media']; ?>" /></td>
                                     <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $binding; ?>" /></td>
                                     <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $folding; ?>" /></td>
@@ -292,7 +292,7 @@ if ($_POST['recipients'] == '1') {
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
+                                    <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
                                     <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['media']; ?>" /></td>
                                     <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $binding; ?>" /></td>
                                     <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $folding; ?>" /></td>
@@ -401,7 +401,7 @@ if ($_POST['recipients'] == '1') {
                     $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
                     
                     ?>
-                <select  name="address_book_rp" id="address_book_rp_<?php echo $current_opt['options']; ?>" style="width: 75% !important;" onclick="return add_prvious('<?php echo ($current_opt['options'] - 1); ?>');" onchange="return show_address_dynamic_nmjk('<?php echo $current_opt['options']; ?>');">
+                <select  name="address_book_rp" id="address_book_rp_<?php echo $current_opt['options']; ?>" class="remove_current" style="width: 75% !important;" onclick="return add_prvious('<?php echo ($current_opt['options'] - 1); ?>');" onchange="return show_address_dynamic_nmjk('<?php echo $current_opt['options']; ?>');">
                         <option value="0">Address Book</option>
                         <option value="<?php echo $address_book[0]['id']; ?>">Return Everything To My Office</option>
                         <option value="P1">Pickup @ 381 Broome St</option>
@@ -1731,7 +1731,7 @@ if ($_POST['recipients'] == '1') {
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $option_id; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $option_id; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $option_id; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $option_id; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
+                                    <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
                                     <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $i; ?>" value="<?php echo $entered['media']; ?>" /></td>
                                     <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $i; ?>" value="<?php echo $binding; ?>" /></td>
                                     <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $i; ?>" value="<?php echo $folding; ?>" /></td>
@@ -4377,9 +4377,10 @@ if ($_POST['recipients'] == '1') {
     }else{
     $message .= '<div style="float: left;width: 100%;">';
     $message .= '<div style="float: left;width: 100%;margin-top: 7px;font-weight: bold;margin-bottom: 20px;">DELIVERY METHOD: DISTRIBUTE TO ONE OR MORE LOCATIONS</div>';
-    $message .= '</div>';   
+    $message .= '</div>'; 
+    $message .= '<hr style="border-top: 1px solid #FF7E00;">';
     }
-    
+        
     if($entered_needed_sets_final[0]['delivery_type_option'] == '1'){        
     $message .= '<div style="float: left;" class="shaddows">';
     $message .= '<div class="ribbon" id="ribbon_final" style="font-weight: bold;"><span>RECIPIENT:</span></div>';
@@ -4417,19 +4418,33 @@ if ($_POST['recipients'] == '1') {
     $message .= '<div style="float: left;">'.$shipp_add_p[0]['address'].'</div>';   
     }               
     $message .= '</div>';
-    
+    $message .= '<div style="float: left;width: 65%;margin-top: 7px;">';
+    $date_asap  = ($entered_needed_sets_final[0]['shipp_time'] != 'ASAP') ? '&nbsp;&nbsp;&nbsp;' . $entered_needed_sets_final[0]['shipp_time'] : '';
+    $message .= '<span style="font-weight: bold;">When Needed: </span>'.$entered_needed_sets_final[0]['shipp_date'].$date_asap.'</div>';
+    if($entered_needed_sets_final[0]['spl_inc'] != ''){
+    $message .= '<div style="width: 100%;float: left;margin-top: 7px;">';
+    $message .= '<span style="font-weight: bold;">Special Instructions: </span></div>';
+    $message .= '<div style="width: 100%;float: left;margin-top: 7px;">'.$entered_needed_sets_final[0]['spl_inc'].'</div></div></div></div>';
+    }
     }elseif($entered_needed_sets_final[0]['delivery_type_option'] == '3'){
         
         
         $pickup_from_soho_add = $_SESSION['pickup_from_soho_add'];
         $address_caption    =   AddressBookPickupSoho($pickup_from_soho_add);
-                            
+        
+        $cust_user_add = UserLoginDtls($_SESSION['sohorepro_userid']);
+        $cust_user_name = $cust_user_add[0]['cus_fname'] . '&nbsp;' . $cust_user_add[0]['cus_lname'];
+        $cust_mail_id = $cust_user_add[0]['cus_email'];
+        $cust_phone_num = $cust_user_add[0]['cus_contact_phone'];
+        //$message .= $cust_user_name . '<br>' . $cust_mail_id . '<br>' . $cust_phone_num;  
+        //$message .= $cust_add[0]['comp_name'] . '<br>' . $cust_add[0]['comp_business_address1'] . ',<br>' . $cust_add_2 . $cust_add[0]['comp_city'] . ',&nbsp;' . $cust_add[0]['comp_state'] . '&nbsp;' . $cust_add[0]['comp_zipcode'].'<br>'.$cust_add[0]['comp_contact_phone'];
+        
         $message .= '<div style="float: left;" class="shaddows">';
         $message .= '<div class="ribbon" id="ribbon_final" style="font-weight: bold;"><span>RECIPIENT</span></div>';
         $message .= '<div style="width: 100%;float: left;margin-top: 10px;margin-bottom: 10px;"><div class="details_div">';
         $message .= '<div style="float: left;width: 65%;margin-top: 7px;font-weight: bold;">Pickup at: </div>';
         $message .= '<div style="float: left;width: 65%;">';        
-        $message .= '<div style="float: left;">'. $address_caption[0]['address'].'</div>';
+        $message .= '<div style="float: left;">'. $cust_add[0]['comp_name'] . '<br>' . $cust_add[0]['comp_business_address1'] . ',<br>' . $cust_add_2 . $cust_add[0]['comp_city'] . ',&nbsp;' . $cust_add[0]['comp_state'] . '&nbsp;' . $cust_add[0]['comp_zipcode'].'<br>'.$cust_add[0]['comp_contact_phone'].'</div>';
                       
             $message .= '</div>';
             $message .= '<div style="float: left;width: 65%;margin-top: 7px;font-weight: bold;">PACKING LIST: </div>';
@@ -4652,6 +4667,9 @@ if ($_POST['recipients'] == '1') {
         }
         $message .= '</div></div>';
         $r++;
+        $message .= '<div style="width: 100%;float: left;">';
+        $message .= '<hr style="border-top: 1px solid #FF7E00;">';
+        $message .= '</div>';
     }
     }
     
@@ -5618,8 +5636,21 @@ if ($_POST['recipients'] == '1') {
         <option value="<?php echo $address['id']; ?>" <?php if ($address['id'] == $address_book_se) { ?> selected="selected" <?php } ?>><?php echo $address['company_name']; ?></option>
         <?php
         }        
-        }      
+        }
+        echo '~';
+        ?>
+        <option value="0">Address Book</option>
+        <option value="<?php echo $address_book_drop[0]['id']; ?>">Return Everything To My Office</option>
+        <option value="P1">Pickup @ 381 Broome St</option>
+        <option value="P2">Pickup @ 307 7th Ave, 5th Flr</option>
+        <option class="select-dash" disabled="disabled">-----------------------------------------</option>
+        <?php 
+        foreach ($address_book_drop as $address) {
+        ?>                                                                                        
+        <option value="<?php echo $address['id']; ?>"><?php echo $address['company_name']; ?></option>
         
+        <?php
+        }
 }else{
     echo '0';
 }
@@ -6222,7 +6253,7 @@ if ($_POST['recipients'] == '1') {
                             <td><?php echo $originals[0]['origininals']; ?></td>
                             <td><?php echo $type; ?></td>                            
                             <td><?php echo $entered_sets['size']; ?></td>
-                            <td><?php echo $entered_sets['output']; ?></td>
+                            <td style="text-transform: uppercase;"><?php echo $entered_sets['output']; ?></td>
                             <td><?php echo $entered_sets['media']; ?></td>
                             <td>
                                 <span onclick="return edit_binding('<?php echo $entered_sets['id']; ?>');" id="binding_<?php echo $entered_sets['id']; ?>" style="cursor: pointer;"><?php echo $entered_sets['binding']; ?></span>
@@ -6434,7 +6465,7 @@ if ($_POST['recipients'] == '1') {
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
+                                    <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
                                     <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['media']; ?>" /></td>
                                     <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $binding; ?>" /></td>
                                     <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $folding; ?>" /></td>
@@ -6454,7 +6485,7 @@ if ($_POST['recipients'] == '1') {
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
-                                    <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
+                                    <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
                                     <td><?php echo $entered['media']; ?><input type="hidden" name="media_sets_<?php echo $i; ?>" id="media_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['media']; ?>" /></td>
                                     <td><?php echo $binding; ?><input type="hidden" name="binding_sets_<?php echo $i; ?>" id="binding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $binding; ?>" /></td>
                                     <td><?php echo $folding; ?><input type="hidden" name="folding_sets_<?php echo $i; ?>" id="folding_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $folding; ?>" /></td>

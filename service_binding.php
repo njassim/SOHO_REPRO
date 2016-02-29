@@ -36,7 +36,131 @@ if($_SESSION['sohorepro_companyid']  == '')
  <script src="store_files/jquery.min.js"></script>
  <script type="text/javascript" src="js/jquery.timepicker.js"></script>
  <link rel="stylesheet" type="text/css" href="js/jquery.timepicker.css" media="screen" />
-        <style>
+ <link rel="stylesheet" href="js/jquery-ui.css" />
+<script src="js/jquery-ui_service.js"></script>
+
+<script>
+$(function() {
+    var all_exist_date       = $("#all_exist_date").val();
+    var split_element        = all_exist_date.split(","); 
+    var disabledSpecificDays = [split_element[0],split_element[1],split_element[2],split_element[3],split_element[4],split_element[5],split_element[6],split_element[7],split_element[8],split_element[8],split_element[9],split_element[10],split_element[11],split_element[12],split_element[13],split_element[14],split_element[15],split_element[16],split_element[17],split_element[18],split_element[19]];
+
+    function disableSpecificDaysAndWeekends(date) {
+    var m = date.getMonth();
+    var d = date.getDate();
+    var y = date.getFullYear();
+
+    for (var i = 0; i < disabledSpecificDays.length; i++) {
+    if ($.inArray((m + 1) + '-' + d + '-' + y, disabledSpecificDays) != -1 ) {
+    return [false];
+    }
+    }
+
+    var noWeekend = $.datepicker.noWeekends(date);
+    return !noWeekend[0] ? noWeekend : [true];
+    }
+  $( "#date_for_alt").datepicker({minDate: 0,
+            dateFormat: 'mm/dd/yy',
+            inline: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            beforeShowDay: disableSpecificDaysAndWeekends}); 
+        
+   $( ".date_for_alt").datepicker({minDate: 0,
+            dateFormat: 'mm/dd/yy',
+            inline: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            beforeShowDay: disableSpecificDaysAndWeekends}); 
+   
+   
+}); 
+
+function date_revele()
+{
+    $("#date_for_alt").focus();
+    var all_exist_date       = $("#all_exist_date").val();
+    var split_element        = all_exist_date.split(","); 
+    var disabledSpecificDays = [split_element[0],split_element[1],split_element[2],split_element[3],split_element[4],split_element[5],split_element[6],split_element[7],split_element[8],split_element[8],split_element[9],split_element[10],split_element[11],split_element[12],split_element[13],split_element[14],split_element[15],split_element[16],split_element[17],split_element[18],split_element[19]];
+
+    function disableSpecificDaysAndWeekends(date) {
+    var m = date.getMonth();
+    var d = date.getDate();
+    var y = date.getFullYear();
+
+    for (var i = 0; i < disabledSpecificDays.length; i++) {
+    if ($.inArray((m + 1) + '-' + d + '-' + y, disabledSpecificDays) != -1 ) {
+    return [false];
+    }
+    }
+
+    var noWeekend = $.datepicker.noWeekends(date);
+    return !noWeekend[0] ? noWeekend : [true];
+    }
+    
+   $( "#date_for_alt").datepicker({minDate: 0,
+            dateFormat: 'mm/dd/yy',
+            inline: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            beforeShowDay: disableSpecificDaysAndWeekends}); 
+}
+
+function date_picker_jas(ID)
+{  
+   $("#date_for_alt_"+ID).datepicker({minDate: 0,
+            dateFormat: 'mm/dd/yy',
+            inline: true,
+            dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']});  
+ 
+}
+
+function show_date_picker(ID)
+{  
+    $('#bar').css('width','0%');
+    $('#percent').html('');
+    $('#status').html('');
+    $("#up_form").slideUp(1000);
+    $("#date_for_alt").show();
+    $("#date_for_alt").focus();
+    $("#date_time").slideDown(1000);
+    $("#provide_link").slideUp(1000);
+    $("#drop_off").slideUp(1000);
+    $("#drop_off_select_val").val('0');
+    $("#validate_imp").val('1');
+    
+    $("#ftp_link").val('');
+    $("#user_name").val('');
+    $("#pass_word").val('');
+    
+    $("#drop_val").val('');
+    $("#drop_val_1").val('');
+    
+    $(".filename").html('');
+    
+    $("#date_for_alt").val('');
+    $("#time_for_alt").val(''); 
+}
+
+function show_date_picker_arch()
+{    
+    $("#date_time_arch").slideDown(1000);    
+    $("#drop_off_arch").slideUp(1000);
+    $("#validate_imp").val('1');
+    
+    $("#date_for_alt_arc").val('');
+    $("#time_for_alt_arc").val(''); 
+    
+    $("#drop_val_arc").val('381 Broome Street');
+    $("#drop_val_arc_1").val('307 7th Ave, 5th Floor');
+}
+
+$(function() {
+    $('.time_picker_icon').timepicker({
+        'minTime': '8:00am',
+        'maxTime': '7:00pm',
+        'showDuration': true
+    });
+});
+</script>
+<style>
      #result_ref
 {
     background-color: #f3f3f3;
@@ -283,6 +407,17 @@ color: red;
         <div id="loading" class="none"  style="position: fixed;top: 10%;left: 40%;padding: 5px;z-index: 1002;">
             <img src="admin/images/loading_rainbow.gif" border="0" style="width: 200px;height: 200px;" />
         </div>
+        <div id="asap_popup" style="display: none;font-size: 15px;position: fixed;top: 35%;left: 35%;padding: 5px;z-index: 10;z-index: 1000;width: 45%;background: white;border-bottom: 1px solid #aaa;border-radius: 4px;box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);border: 1px solid rgba(0, 0, 0, 0.1);background-clip: padding-box;">
+            <div style="width: 96%;padding: 2%;float: left;font-size: 14px;line-height: 18px;text-align: justify;">
+                All orders placed online are assumed to be ready for today and available for collection immediately. Requests placed outside of our normal business hours will be fulfilled on the next business day.
+            If you wish to place an order for another date and time, or for today but at a later time, 
+            please edit the date and time for collection.
+            </div>
+            <div style="float: right;width: 98%;background-color: #EEE;padding: 1%;">
+                <!--<span style="float: left;color: #000;font-weight: bold;margin-top: 5px;margin-left: 15px;">Note: All orders placed after hours will be picked up on the next business day.</span>-->
+                <span style="float: right;border: 1px solid #BBB;padding: 3px 10px;border-radius: 3px;cursor: pointer;" onclick="return close_asap();">Close</span>
+            </div>
+        </div> 
         <div id="body_container">
             <div id="body_content" class="body_wrapper">
                 <div id="body_content-inner" class="body_wrapper-inner">
@@ -303,7 +438,7 @@ color: red;
                                 </h2>
                                 <div class="bkgd-stripes-orange">&nbsp;</div>
                                 <form id="binding" enctype="application/x-www-form-urlencoded" action="service/binding/" method="post" class="systemForm orderform"><ul>
-                                        <li class="clear">
+                <li class="clear">
                     <label style="font-weight: bold;" for="jobref" class="optional">
                       Job Reference<span class="ref_div_star">*</span>
                     </label>                    
@@ -317,8 +452,7 @@ color: red;
                         <input type="hidden" name="drop_off_select_val" id="drop_off_select_val" value="" />
                         <input type="hidden" name="continue_ok" id="continue_ok" value="0" />
                     </div>
-                  </li>
-                   
+                  </li>                   
                   <div style="width:100%;float:left;font-size: 13px !important;font-weight: bold;">Job Options</div>
                   <div style="width:730px;border-bottom: 1px solid #FF7E00;float: left;margin-top:5px;"></div>
                   
@@ -407,13 +541,13 @@ color: red;
                       </div>
                       
                       <div style="width:24%;float:left;">
-                            <label style="margin-top: 10px;">&nbsp;</label>
+                            <label style="margin-top: 10px;">Front Cover Options</label>
                             <select class="order_0_set1_0_bindingVariation kdSelect " style="width:120px;" id="binding_child_option_front" name="">
                                 <option value="0">None</option>
                                 <option value="N/A">N/A</option>
                              </select>
                             
-                            <label style="margin-top: 10px;">&nbsp;</label>
+                            <label style="margin-top: 10px;">Back Cover Options</label>
                             <select class="order_0_set1_0_bindingVariation kdSelect " style="width:120px;" id="binding_child_option_back" name="">
                                 <option value="0">None</option>
                                 <option value="N/A">N/A</option>
@@ -460,6 +594,65 @@ color: red;
                     </div>
                 </div>
                  <!--Special Instruction End-->
+                 
+                <!--<div id="options_arch" class="check" style="width:730px;border-top: 1px solid #FF7E00;">-->
+                <div class="spl_option" style="width: 100%;">
+                        <div>
+                            <input class="filetrigger" name="alt_file_option" value="pickUp" id="pick"  type="radio" onclick="return show_date_picker_arch();" />
+                            <label for="pick" >
+                              Schedule a pick up
+                            </label></br>
+                            <?php 
+                            $all_days_off = AllDayOff();                                                        
+                            foreach ($all_days_off as $days_off_split){
+                                $all_days_in[]  = $days_off_split['date'];
+                            }                                                        
+                            $all_date  = implode(",", $all_days_in);                                                        
+                            $all_date_exist = str_replace("/", "-", $all_date);
+                            ?>
+
+                        </div>
+
+                    <div>
+                        <input class="filetrigger" name="alt_file_option" value="dropOff" id="dropoff"  type="radio" onclick="return drop_sohorepro_arch();" />
+                      <label for="drop" >
+                        Drop off at Soho Repro
+                      </label>                    
+                    </div>                               
+                </div>
+              <br>
+
+                  <!--Pickup Details Start-->
+
+                  <div id="date_time_arch" style="width: 95%;float: left;margin-left: 25px;margin-top: 10px;display:none;">
+                            <input type="hidden" name="all_exist_date" id="all_exist_date" value="<?php echo $all_date_exist; ?>" />                                
+                            <div style="width: 34%;float: left;"> 
+
+                                <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;border-bottom: 0px;text-align: center;">
+                                    <span id="asap_status_arch" class="asap_orange" onclick="return asap_arc();">READY NOW</span>
+                                </div>
+
+                                <div style="width: 100%;float: left;border: 1px #F99B3E solid;padding: 6px;height: 30px;">
+                                    <input class="date_for_alt picker_icon" value="" type="text" name="date_needed" id="date_for_alt_arc" style="width: 100px;height: inherit;margin-left: 15px;" onclick="return date_reveal();" />
+                                    <input id="time_for_alt_arc" value="" type="text" style="width: 100px;height: inherit;margin-left: 4px;" class="time time_picker_icon" alt="Time Picker" title="Time Picker" onclick="return show_time();" />
+                                </div>
+
+                            </div>
+                        </div>
+                  <!--Pickup Details End-->
+
+                  <!--Drop off Details Start-->
+                  <div style="padding-top: 10px;border: 1px #FF7E00 solid;margin-top: 7px;display:none;float: left;width: 100%;padding-bottom: 10px;" id="drop_off_arch">
+                    <div style="margin: auto;width: 60%;">
+                        <div style="margin: auto;width: 75%;float:right;">
+                            <input style="width: 10% !important;" type="radio" name="drop_val" id="drop_val_arc" value="381 Broome Street" />381 Broome Street
+                            <input style="width: 10% !important;margin-left: 35px !important;" type="radio" name="drop_val" id="drop_val_arc_1" value="307 7th Ave, 5th Floor" />307 7th Ave, 5th Floor                      
+                        </div>                            
+                    </div>   
+                  </div>
+                  <!--Drop off Details End-->
+
+            </div>
                  <div style="width:730px;border-bottom: 1px solid #FF7E00;float: left;margin-top:15px;"></div> 
                  <div style="float:left;width:100%;text-align:right;margin-top: 10px;">                  
                   <input class="addproductActionLink" value="Save and Continue" style="cursor: pointer; float: right; font-size: 12px; padding: 1.5px; width: 135px; margin-right: 14px; -moz-border-radius: 5px; -webkit-border-radius: 5px;border:1px solid #8f8f8f;margin-top: -1px !important;" type="button" onclick="return validate_binding_cont();">                  
@@ -1283,4 +1476,33 @@ function custome_size_3()
         $("#fron_back").fadeOut();        
     }
 }
+
+function show_date_picker_arch()
+{    
+    $("#date_time_arch").slideDown(1000);    
+    $("#drop_off_arch").slideUp(1000);
+    $("#validate_imp").val('1');
+    
+    $("#date_for_alt_arc").val('');
+    $("#time_for_alt_arc").val(''); 
+    
+    $("#drop_val_arc").val('381 Broome Street');
+    $("#drop_val_arc_1").val('307 7th Ave, 5th Floor');
+}
+
+function drop_sohorepro_arch()
+{      
+    $( "#date_time_arch").slideUp(1000);
+    $("#drop_off_arch").slideDown(1000);
+    document.getElementById("drop_val_arc").checked = true;
+    $("#drop_off_select_val").val('1');  
+    $("#validate_imp").val('1');
+    
+    $("#date_for_alt_arc").val('');
+    $("#time_for_alt_arc").val(''); 
+    
+    $("#drop_val_arc").val('381 Broome Street');
+    $("#drop_val_arc_1").val('307 7th Ave, 5th Floor');
+}
+
  </script>

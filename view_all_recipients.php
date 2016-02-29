@@ -1171,7 +1171,10 @@ $upload_file_exist       = UploadFileExist($user_session_comp, $user_session);
                 <div style="float: left;width: 33%;margin-left: 30px;">  
                     <?php                   
                     //$cust_add_2 = ($cust_add[0]['comp_business_address2'] != '') ? $cust_add[0]['comp_business_address2']. '<br>'  : '';                    
-                    echo $cust_add[0]['address'];
+                    //echo $cust_add[0]['address'];
+                    $cust_add_p = getCustomeInfo($user_session_comp);
+                    $cust_add_2 = ($cust_add_p[0]['comp_business_address2'] != '') ? $cust_add_p[0]['comp_business_address2']. '<br>'  : '';                    
+                    echo $cust_add_p[0]['comp_name'] . '<br>' . $cust_add_p[0]['comp_business_address1'] . '<br>' . $cust_add_2 . $cust_add_p[0]['comp_city'] . ',&nbsp;' . $cust_add_p[0]['comp_state'] . '&nbsp;' . $cust_add_p[0]['comp_zipcode'].'<br>'.$cust_add_p[0]['comp_contact_phone'];
                     ?>                   
                 </div>                
                 <!-- Customer Details End -->                    
@@ -2452,6 +2455,7 @@ $("#date_needed").datepicker({minDate: 0,
             dayNamesMin: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             beforeShowDay: disableSpecificDaysAndWeekends}); 
 $("#date_needed").focus();
+show_time_return();
 }
 
 

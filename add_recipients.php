@@ -428,7 +428,7 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                             </div>
                             <div>
                                 <input type="radio" name="del_type" id="send_everything_to" value="1" style="width: 15% !important;" onclick="return send_everything_to();" /><span style="text-transform: uppercase;font-weight: bold;">Send everything to :</span>                                
-                                <select  name="address_book_se" id="address_book_se" style="width: 20% !important;" onchange="return send_everything_to();">
+                                <select  name="address_book_se" id="address_book_se" class="remove_current" style="width: 20% !important;" onchange="return send_everything_to();">
                                     <option value="0">Address Book</option>
                                     <?php
                                     $address_book = AddressBookCompanyService($_SESSION['sohorepro_companyid']);
@@ -2139,7 +2139,8 @@ function show_address_dynamic_nmjk(option_id)
                     $("#shipp_att_"+option_id).val(myarr[1]);
                     $("#edit_address_"+option_id).fadeIn();
                     $("."+myarr[2]).hide();
-                    $(".all_are_done").show();    
+                    $(".all_are_done").show();
+                    $("#address_book_rp_"+option_id).removeClass("remove_current");
                     $(".all_are_done").attr('onclick', 'return add_recipients_dynamic_go_next_jk('+myarr[2]+');');
                 }
             });
@@ -2990,7 +2991,7 @@ function ste_function(){
                $("#address_book_rp_"+OPTION_ID).html(options_divide[3]);
                }
                if(options_divide[0] == true){
-                   
+                   $('.remove_current').html(options_divide[4]);
                    $("#add_new_address_block_"+ID).hide();
                    $("#show_address_inside_"+OPTION_ID).html(options_divide[1]);
                    $("#shipp_att_"+OPTION_ID).val(options_divide[2]);

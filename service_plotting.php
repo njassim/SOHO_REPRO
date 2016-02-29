@@ -7,9 +7,6 @@ if($_SESSION['sohorepro_companyid']  == '')
   header("Location:index.php");
   exit;
 }
-
-
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -414,8 +411,8 @@ function show_date_picker_arch()
     $("#date_for_alt_arc").val('');
     $("#time_for_alt_arc").val(''); 
     
-    $("#drop_val_arc").val('381 Broome Street');
-    $("#drop_val_arc_1").val('307 7th Ave, 5th Floor');
+    $("#drop_val_arc").val('0');
+    $("#drop_val_arc_1").val('0');
 }
 
 
@@ -915,8 +912,8 @@ function delete_upload_file()
                                 <!--Check Box Start-->
                                 <div style="float:left;width:100%;">
                                     <ul class="arch_radio">
-                                        <li><input type="radio" name="plotting_check" id="plotting_check" style="width:2% !important;" value="1" onclick="return active_plot();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">PLOTTING</span></li>
-                                        <li><input type="radio" name="plotting_check" id="plotting_check_0" style="width:2% !important;" value="0" onclick="return active_arch();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">ARCHITECTURAL COPIES</span></li>
+                                        <li><input type="radio" name="plotting_check" id="plotting_check" style="width:2% !important;" value="1" onclick="return active_plot();" /><span id="plotting_check_spn" style="font-size: 13px;padding-left: 7px;font-weight: bold;">PLOTTING</span></li>
+                                        <li><input type="radio" name="plotting_check" id="plotting_check_0" style="width:2% !important;" value="0" onclick="return active_arch();" /><span id="plotting_check_0_spn" style="font-size: 13px;padding-left: 7px;font-weight: bold;">ARCHITECTURAL COPIES</span></li>
                                     </ul>
                                     <span id="errmsg"></span>
                                 </div>
@@ -1464,20 +1461,31 @@ function delete_upload_file()
     if(jobreference == ''){
         alert('Please enter the Job Reference');
         document.getElementById("jobref").focus();
+        $("#jobref").css("background-color", "#FFFF00");
         return false;
+    }else{
+        $("#jobref").css("background-color", "#FFF");
     }
     
     if($('input[name=plotting_check]:checked').length<=0)
     {
         alert('Please select a job type');
         document.getElementById("plotting_check").focus();
+        $("#plotting_check_spn").css("background-color", "#FFFF00");
+        $("#plotting_check_0_spn").css("background-color", "#FFFF00");
         return false;
+    }else{
+        $("#plotting_check_spn").css("background-color", "#FFF");
+        $("#plotting_check_0_spn").css("background-color", "#FFF");
     }
     
     if(print_ea == ''){
         alert('Please enter Prints of Each');
         document.getElementById("print_ea").focus();
+        $("#print_ea").css("background-color", "#FFFF00");
         return false;
+    }else{
+        $("#print_ea").css("background-color", "#FFF");
     }  
 //    if(output == 'Both'){
 //        if(special_instruction == ''){
@@ -1490,14 +1498,20 @@ function delete_upload_file()
        if(size_custom == ''){
         alert('Please enter the custom size');
         document.getElementById("size_custom").focus();
+        $("#size_custom").css("background-color", "#FFFF00");
         return false;  
-        }      
+        }else{
+        $("#size_custom").css("background-color", "#FFFF");    
+        }        
     }
     //(dropoff == '') ||
     //|| (ftp_link == '')
     if(validate_imp == ''){
         alert('Please select the file option');
+        $(".spl_option").css("background-color", "#FFFF00");
         return false;
+    }else{
+        $(".spl_option").css("background-color", "#FFF");
     }
     
     if (jobreference != '')
@@ -1624,18 +1638,29 @@ function validate_plotting_cont()
     if(jobreference == ''){
         alert('Please enter the Job Reference');
         document.getElementById("jobref").focus();
+        $("#jobref").css("background-color", "#FFFF00");
         return false;
+    }else{
+        $("#jobref").css("background-color", "FFF");
     }
     
     if($('input[name=plotting_check]:checked').length<=0)
     {
         alert('Please select a job type');
         document.getElementById("plotting_check").focus();
+        $("#plotting_check_spn").css("background-color", "#FFFF00");
+        $("#plotting_check_0_spn").css("background-color", "#FFFF00");
         return false;
-    }   
+    }else{
+        $("#plotting_check_spn").css("background-color", "#FFF");
+        $("#plotting_check_0_spn").css("background-color", "#FFF");
+    }  
         if(validate_imp == ''){
         alert('Please select the file option');
+        $(".spl_option").css("background-color", "#FFFF00");
         return false;
+        }else{
+        $(".spl_option").css("background-color", "#FFFF");    
         }
     
     if(continue_ok != '1'){
@@ -1655,8 +1680,11 @@ function validate_plotting_cont()
        if(size_custom == ''){
         alert('Please enter the custom size');
         document.getElementById("size_custom").focus();
+        $("#size_custom").css("background-color", "#FFFF00");
         return false;  
-        }      
+        }else{
+        $("#size_custom").css("background-color", "#FFFF");    
+        }   
     }
     }
     if (jobreference != '')

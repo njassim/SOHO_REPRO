@@ -34,6 +34,7 @@ if ($_POST['service_plotting_add'] == '1') {
     $ftp_link_val               = $_SESSION['ftp_link'];
     $user_name_val              = $_SESSION['user_name'];
     $password_val               = $_SESSION['password']; 
+    $use_same_alt               = $_SESSION['use_the_same'];
     }  else {        
     $uploadedfile_option        = ($_POST['uploadedfile_option'] != "undefined") ? $_POST['uploadedfile_option'] : '';
     
@@ -44,7 +45,8 @@ if ($_POST['service_plotting_add'] == '1') {
     
     $ftp_link_val               = $_POST['ftp_link_val'];
     $user_name_val              = $_POST['user_name_val'];
-    $password_val               = $_POST['password_val'];        
+    $password_val               = $_POST['password_val'];    
+    $use_same_alt               = '0';
     }
     
     
@@ -88,7 +90,8 @@ if ($_POST['service_plotting_add'] == '1') {
                                 user_name       = '" . $user_name_val . "',
                                 password        = '" . $password_val . "',
                                 company_id      = '" . $company_id_view_plot . "',
-                                user_id         = '" . $user_id_add_set . "' ";
+                                user_id         = '" . $user_id_add_set . "',
+                                use_same_alt    = '" . $use_same_alt ."'     ";
     $sql_result = mysql_query($query);
     if($sql_result){
                                 $_SESSION['upload_file']    =   '';
@@ -142,6 +145,7 @@ if ($_POST['service_plotting_add'] == '1') {
                     <div style="float: left;width: 100%;margin-top: 5px;font-weight: bold;">File Options</div>
                     <?php } ?>
                     <?php
+                    if($plot['use_same_alt'] == '0'){
                     if ($plot['upload_file'] != '') {
                         ?>
                         <div style="float: left;width: 100%;">
@@ -178,9 +182,19 @@ if ($_POST['service_plotting_add'] == '1') {
                             <?php }} elseif ($plot['drop_off'] != '0') { ?>
                         <div style="float: left;width: 100%;">
                             <div style="float: left;width: 100%;text-decoration: underline;">Drop off at Soho Repro</div>                       
-                            <div style="float: left;width: 100%;">Drop off at : <?php echo $plot['drop_off']; ?></div>
+                            <div style="float: left;width: 100%;margin-bottom: 10px;">Drop off at : <?php echo $plot['drop_off']; ?></div>
                         </div>   
-                    <?php } ?>
+                    <?php
+                    }
+                    }else{
+                    ?>
+                    <div style="float: left;width: 100%;">
+                        <div style="float: left;width: 100%;margin-bottom: 10px;">Use the Same File as in Job Option <?php echo ($plot['use_same_alt']); ?></div>
+                    </div>   
+                    <?php
+                    }
+                    ?>
+                    
                 </div>
                     <?php if($plot['spl_instruction'] != ''){ ?>
                 <div style="width: 100%;float: left;margin-top: 7px;">                    
@@ -215,8 +229,8 @@ if ($_POST['service_plotting_add'] == '1') {
                         <!--Check Box Start-->
                         <div style="float:left;width:100%;">
                             <ul class="arch_radio">
-                                <li><input type="radio" name="plotting_check" id="plotting_check" style="width:2% !important;" value="1" onclick="return active_plot_new();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">PLOTTING</span></li>
-                                <li><input type="radio" name="plotting_check" id="plotting_check_0" style="width:2% !important;" value="0" onclick="return active_arch();" /><span style="font-size: 13px;padding-left: 7px;font-weight: bold;">ARCHITECTURAL COPIES</span></li>
+                                <li><input type="radio" name="plotting_check" id="plotting_check" style="width:2% !important;" value="1" onclick="return active_plot_new();" /><span id="plotting_check_spn" style="font-size: 13px;padding-left: 7px;font-weight: bold;">PLOTTING</span></li>
+                                <li><input type="radio" name="plotting_check" id="plotting_check_0" style="width:2% !important;" value="0" onclick="return active_arch();" /><span id="plotting_check_0_spn" style="font-size: 13px;padding-left: 7px;font-weight: bold;">ARCHITECTURAL COPIES</span></li>
                             </ul>
                             <span id="errmsg"></span>
                         </div>

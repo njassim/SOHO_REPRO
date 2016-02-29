@@ -1113,8 +1113,10 @@ padding-bottom: 0px !important;
                     <?php
                     
                     //$cust_add_2 = ($cust_add[0]['comp_business_address2'] != '') ? $cust_add[0]['comp_business_address2']. '<br>'  : '';                    
-                    echo $cust_add[0]['address'];
-                    
+                    //echo $cust_add[0]['address'];
+                    $cust_add_p = getCustomeInfo($user_session_comp);
+                    $cust_add_2 = ($cust_add_p[0]['comp_business_address2'] != '') ? $cust_add_p[0]['comp_business_address2']. '<br>'  : '';                    
+                    echo $cust_add_p[0]['comp_name'] . '<br>' . $cust_add_p[0]['comp_business_address1'] . '<br>' . $cust_add_2 . $cust_add_p[0]['comp_city'] . ',&nbsp;' . $cust_add_p[0]['comp_state'] . '&nbsp;' . $cust_add_p[0]['comp_zipcode'].'<br>'.$cust_add_p[0]['comp_contact_phone'];
                     ?>                   
                 </div>                
                 <!-- Customer Details End -->                    

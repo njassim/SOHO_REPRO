@@ -10,7 +10,7 @@ if ($_POST['use_thesame_file'] == '1') {
     $user_id        =   $_SESSION['sohorepro_userid'];
     
     $last_date      =   LastFileOptionEntered($comp_id, $user_id);
-    
+    $use_the_same   =   LastFileOptionEnteredSame($comp_id, $user_id);
     if(count($last_date) != 0){    
     $_SESSION['upload_file']    =   $last_date[0]['upload_file'];
     $_SESSION['pick_up']        =   $last_date[0]['pick_up'];
@@ -19,7 +19,7 @@ if ($_POST['use_thesame_file'] == '1') {
     $_SESSION['ftp_link']       =   $last_date[0]['ftp_link'];
     $_SESSION['user_name']      =   $last_date[0]['user_name'];
     $_SESSION['password']       =   $last_date[0]['password']; 
-    $_SESSION['use_the_same']   =   '1';
+    $_SESSION['use_the_same']   =   $use_the_same[0]['options'];
     echo '1';
     }
     

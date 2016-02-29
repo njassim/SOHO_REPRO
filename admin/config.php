@@ -2700,7 +2700,7 @@ function EnteredSetsAllArch($option_id,$comp_id, $user_id) {
 }
 
 function EnteredPlotttingPrimary($comp_id, $user_id) {
-    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0' ORDER BY plot_arch DESC" ;
+    $select_fav = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$comp_id."' AND user_id = '".$user_id."' AND order_id = '0'" ;
     $details       = mysql_query($select_fav);
     while ($object = mysql_fetch_assoc($details)):
         $value[] = $object;
@@ -3380,6 +3380,16 @@ function AllBindingOptions($company_id, $user_id, $reference) {
 
 function LastFileOptionEntered($company_id, $user_id){
     $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' ORDER BY options DESC LIMIT 1" ;
+    $set = mysql_query($plotting_set);
+    while ($object = mysql_fetch_assoc($set)):
+        $value[] = $object;
+    endwhile;
+    return $value;  
+}
+
+
+function LastFileOptionEnteredSame($company_id, $user_id){
+    $plotting_set = "SELECT * FROM sohorepro_plotting_set WHERE company_id = '".$company_id."' AND user_id = '".$user_id."' AND order_id = '0' AND recipients_set = '0' AND use_same_alt = '0' ORDER BY options DESC" ;
     $set = mysql_query($plotting_set);
     while ($object = mysql_fetch_assoc($set)):
         $value[] = $object;
