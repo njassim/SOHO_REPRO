@@ -269,7 +269,7 @@ if ($_POST['recipients'] == '1') {
                                 <tr bgcolor="#ffeee1">
                                     <td>Plotting on Bond</td>
                                     <td><?php echo $entered['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
+                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl_dis('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
                                     <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
@@ -289,7 +289,7 @@ if ($_POST['recipients'] == '1') {
                                 <tr bgcolor="#ffeee1">
                                     <td>Architectural Copies</td>
                                     <td><?php echo $available_order[0]['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
+                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl_dis('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
                                     <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
@@ -3358,9 +3358,9 @@ if ($_POST['recipients'] == '1') {
     $available_sets     = $_POST['available_sets'];
     
     
-//    $sql_last_id = mysql_query("SELECT id FROM sohorepro_plotting_set ORDER BY id DESC LIMIT 1");
-//    $object_last_id = mysql_fetch_assoc($sql_last_id);
-//    $last_id = $object_last_id['id'] + 1;
+    $sql_last_id = mysql_query("SELECT print_ea FROM sohorepro_plotting_set WHERE company_id = '" . $user_session_comp . "' AND user_id = '".$user_session."' AND options = '".$option_id."' AND order_id = '0'");
+    $object_last_id = mysql_fetch_assoc($sql_last_id);
+    $last_id = $object_last_id['print_ea'] + 1;
 //
 //    $sql_1 = "CREATE TEMPORARY TABLE tmp SELECT * FROM sohorepro_plotting_set WHERE plot_arch = '" . $type . "' LIMIT 1 ";
 //    mysql_query($sql_1);
@@ -3370,7 +3370,7 @@ if ($_POST['recipients'] == '1') {
 //    mysql_query($sql_3);
     
     
-    $sql_inc = "UPDATE sohorepro_plotting_set SET print_ea = '" . $available_sets . "' WHERE company_id = '" . $user_session_comp . "' AND user_id = '".$user_session."' AND options = '".$option_id."' AND order_id = '0' ";
+    $sql_inc = "UPDATE sohorepro_plotting_set SET print_ea = '" . $last_id . "' WHERE company_id = '" . $user_session_comp . "' AND user_id = '".$user_session."' AND options = '".$option_id."' AND order_id = '0' ";
     mysql_query($sql_inc);
     ?>
     <table border="1" style="width: 100%;">
@@ -4328,20 +4328,31 @@ if ($_POST['recipients'] == '1') {
             $link       = ($original['ftp_link'] != '0') ? $original['ftp_link'] : '';
             $user_name  = ($original['user_name'] != '0') ? $original['user_name'] : '';
             $password   = ($original['password'] != '0') ? $original['password'] : '';
-        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">File Option: Provide Link to a File</div>';     
-        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">FTP Link:&nbsp;'.$link.'</div>';     
-        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">User Name:&nbsp;'.$user_name.'</div>';     
-        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Password:&nbsp;'.$password.'</div>';     
-     }
+        if($original['use_same_alt'] == "0"){
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">File Option: Provide Link to a File</div>';     
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">FTP Link:&nbsp;'.$link.'</div>';     
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">User Name:&nbsp;'.$user_name.'</div>';     
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Password:&nbsp;'.$password.'</div>';     
+     }else{
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">File Option: Provide Link to a File</div>';     
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Use same file as Option&nbsp;'.$original['use_same_alt'].'</div>'; 
+     }}
      
      if ($original['upload_file'] != "") {
+         if($original['use_same_alt'] == "0"){
         $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">File Option: Upload a file</div>';     
         $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;"><a href="http://cipldev.com/supply-new.sohorepro.com/uploads/'.$original['upload_file'].'" target="_blank">'.$original['upload_file'].'</a></div>';   
-     }
+     }else{
+        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">File Option: Upload a file</div>';     
+        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Use same file as Option&nbsp;'.$original['use_same_alt'].'</div>';    
+     }}
      
      if ($original['drop_off'] != "0") {
-        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Drop-Off Option:&nbsp;'.$original['drop_off'].'</div>';
-     }
+         if($original['use_same_alt'] == "0"){
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Drop-Off Option:&nbsp;'.$original['drop_off'].'</div>';
+     }else{
+            $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Drop-Off Option:&nbsp;Use same file as Option&nbsp;'.$original['use_same_alt'].'</div>';
+     }}
      
      if ($original['pick_up'] != "0") {
          if(($original['pick_up'] == "ASAP") && ($original['pick_up_time'] == "ASAP")){
@@ -4349,8 +4360,11 @@ if ($_POST['recipients'] == '1') {
          }else{
              $pickup_details = $original['pick_up'].'&nbsp;'.$original['pick_up_time'];
          }
-        $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Pickup Option:&nbsp;'.$pickup_details.'</div>';
-     }
+         if($original['use_same_alt'] == "0"){
+             $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Pickup Option:&nbsp;'.$pickup_details.'</div>';
+     }else{
+             $message .= '<div style="float:left;width: 95%;color: #000;margin-top: 7px;">Pickup Option:&nbsp;Use same file as Option&nbsp;'.$original['use_same_alt'].'</div>';
+     }}
      
      $message .= '</div>';  
     }    
@@ -4999,7 +5013,7 @@ if ($_POST['recipients'] == '1') {
                                 <tr bgcolor="#ffeee1">
                                     <td>Plotting on Bond</td>
                                     <td><?php echo $entered['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $entered['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $entered['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $entered['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
+                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $entered['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $entered['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl_dis('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $entered['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $entered['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $entered['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $i; ?>" value="<?php echo $entered['size']; ?>" /></td>
                                     <td><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $i; ?>" value="<?php echo $entered['output']; ?>" /></td>
@@ -6462,7 +6476,7 @@ if ($_POST['recipients'] == '1') {
                                 <tr bgcolor="#ffeee1">
                                     <td>Plotting on Bond</td>
                                     <td><?php echo $entered['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
+                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl_dis('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
                                     <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>
@@ -6482,7 +6496,7 @@ if ($_POST['recipients'] == '1') {
                                 <tr bgcolor="#ffeee1">
                                     <td>Architectural Copies</td>
                                     <td><?php echo $available_order[0]['origininals']; ?></td>
-                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
+                                    <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="avl_sets_8" id="avl_sets_<?php echo $current_opt['options']; ?>" class="avl_sets"  value="<?php echo ($entered['print_ea'] - $needed_sets); ?>" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_avl_plot('8', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '1', '<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_avl_dis('<?php echo $i; ?>', '<?php echo $user_id_add_set; ?>', '<?php echo $company_id_view_plot; ?>', '<?php echo $type; ?>', '<?php echo $entered['id']; ?>', '<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><input style="width: 25px;float: left;padding: 2px;" type="text" name="need_sets_8" id="need_sets_<?php echo $current_opt['options']; ?>" class="need_sets" value="1" /><div class="increse_act"><img src="images/plus_icon.png" style="cursor: pointer;" onclick="return increase_qty_dy('<?php echo $current_opt['options']; ?>');" title="Increase Quantity" alt="Increase Quantity" /><img src="images/minus_icon.png" style="cursor: pointer;" onclick="return decrease_qty_dy('<?php echo $current_opt['options']; ?>');" title="Decrease Quantity" alt="Decrease Quantity" /></div></td>
                                     <td><?php echo $entered['size']; ?><input type="hidden" name="size_sets_<?php echo $i; ?>" id="size_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['size']; ?>" /></td>
                                     <td style="text-transform: uppercase;"><?php echo $entered['output']; ?><input type="hidden" name="output_sets_<?php echo $i; ?>" id="output_sets_<?php echo $current_opt['options']; ?>" value="<?php echo $entered['output']; ?>" /></td>

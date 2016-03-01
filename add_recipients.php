@@ -1796,7 +1796,8 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
  
  function increase_qty_avl_plot(ID,USR_ID,COMP_ID,TYPE,OPTION_ID)
  {
-     var avl_sets       =   $("#avl_sets_"+OPTION_ID).val();
+    var avl_sets       =   $("#avl_sets_"+OPTION_ID).val();
+    var avl_sets_span  =   $("#available_"+OPTION_ID).html();
     avl_sets++;
     if(avl_sets != '0'){    
         $('#avl_sets_'+ID).val(avl_sets);
@@ -1808,8 +1809,9 @@ $cust_original_order    = EnteredPlotRecipientsMulti($_SESSION['sohorepro_compan
                 success: function(option)
                 {                    
                     //$('#sets_grid_new').html(option); 
+                    var increase_set    =   '1';
                     $("#avl_sets_"+OPTION_ID).val(avl_sets);
-                    $("#available_"+OPTION_ID).html(avl_sets);
+                    $("#available_"+OPTION_ID).html(Number(avl_sets_span) + Number(increase_set));
                 }
             });
     }

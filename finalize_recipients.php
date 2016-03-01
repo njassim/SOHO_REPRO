@@ -490,6 +490,7 @@ padding-bottom: 0px !important;
                         }//if ($entered['plot_arch'] == '0') {
                             if ($entered['pick_up_time'] != '0') {
                                 $pickup_option = ($entered['pick_up'] == "ASAP") ? $entered['pick_up'] : $entered['pick_up'] . ' ' . $entered['pick_up_time'];
+                                if($entered['use_same_alt'] == '0'){
                                 ?>
                                 <div style="width: 22%;float: left;border: 1px solid #BFC5CD;">
                                     <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">
@@ -500,7 +501,19 @@ padding-bottom: 0px !important;
                                         <?php echo $pickup_option; ?>
                                     </div>
                                 </div>
-                            <?php }if ($entered['drop_off'] != '0') { ?>
+                            <?php }else{ ?>
+                                <div style="width: 22%;float: left;border: 1px solid #BFC5CD;">
+                                    <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">
+                                        Schedule a Pickup
+                                    </div>
+                                    <div style="padding-top: 3px;width: 100%;float: left;">
+                                        <input type="hidden" name="pick_up_time" id="pick_up_time" value="<?php echo $entered['pick_up_time']; ?>" />
+                                        Use same file as Option <?php echo $entered['use_same_alt']; ?>
+                                    </div>
+                                </div>
+                            <?php }}if ($entered['drop_off'] != '0') {
+                                     if($entered['use_same_alt'] == '0'){
+                                ?>
                                 <div style="width: 22%;float: left;border: 1px solid #BFC5CD;">
                                     <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">
                                         Drop-off Option
@@ -510,11 +523,21 @@ padding-bottom: 0px !important;
                                         <?php echo $entered['drop_off']; ?>
                                     </div>
                                 </div>
-                            <?php
-                            }if ($entered['ftp_link'] != '0') {
+                            <?php }  else {?>
+                                <div style="width: 22%;float: left;border: 1px solid #BFC5CD;">
+                                    <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">
+                                        Drop-off Option
+                                    </div>
+                                    <div style="padding-top: 3px;width: 100%;float: left;">
+                                        <input type="hidden" name="drop_off" id="drop_off" value="<?php echo $entered['drop_off']; ?>" />
+                                        Use same file as Option <?php echo $entered['use_same_alt']; ?>
+                                    </div>
+                                </div>
+                            <?php }}if ($entered['ftp_link'] != '0') {
                                 $link       = ($entered['ftp_link'] != '0') ? $entered['ftp_link'] : '';
                                 $user_name  = ($entered['user_name'] != '0') ? $entered['user_name'] : '';
                                 $password   = ($entered['password'] != '0') ? $entered['password'] : '';
+                                if($entered['use_same_alt'] == '0'){
                             ?>
                                 <div style="width: 45%;float: left;border: 1px solid #BFC5CD;">
                                     <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">
@@ -534,17 +557,34 @@ padding-bottom: 0px !important;
                                     </div>
                                     </div>
                                 </div>
-                            <?php }if($entered['upload_file'] != ''){?>
-                                <div style="width: 45%;float: left;border: 1px solid #BFC5CD;">              
+                            <?php }else{?>
+                                <div style="width: 45%;float: left;border: 1px solid #BFC5CD;">
+                                    <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">
+                                        Provide Link to File
+                                    </div>
+                                    <div style="margin-left: 10px;">
+                                        <div style="float: left;width: 65%;margin-top: 5px;">
+                                            Use same file as Option <?php echo $entered['use_same_alt']; ?>
+                                        </div>
+                                    </div>
+                                </div>
                         
+                            <?php }   }if($entered['upload_file'] != ''){
+                                 if($entered['use_same_alt'] == '0'){
+                                ?>
+                                <div style="width: 45%;float: left;border: 1px solid #BFC5CD;">
                                     <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">File Options</div>  
                                     <div style="float: left;width: 65%;margin-left: 10px;margin-top: 7px;text-decoration: underline;">Upload File: </div>  
-
-                                  <div style="float: left;width: 65%;margin-left: 10px;margin-top: 5px;">
-                                      <a href="http://cipldev.com/supply-new.sohorepro.com/uploads/<?php echo $entered['upload_file']; ?>" target="_blank"><?php echo $entered['upload_file']; ?></a>
-                                  </div>                
-                                    </div>
-                            <?php } ?>
+                                    <div style="float: left;width: 65%;margin-left: 10px;margin-top: 5px;">
+                                        <a href="http://cipldev.com/supply-new.sohorepro.com/uploads/<?php echo $entered['upload_file']; ?>" target="_blank"><?php echo $entered['upload_file']; ?></a>
+                                    </div>                
+                                </div>
+                            <?php }else{?>
+                                <div style="width: 45%;float: left;border: 1px solid #BFC5CD;">
+                                    <div style="padding-top: 3px;font-weight: bold;width: 100%;float: left;background-color: #BFC5CD;color: #5C5C5C;text-align: center;">File Options</div>  
+                                    <div style="float: left;width: 65%;margin-left: 10px;margin-top: 7px;">Use same file as Option <?php echo $entered['use_same_alt']; ?></div>                                                    
+                                </div>
+                           <?php }} ?>
                         </div>
                         <?php
                                 //}
